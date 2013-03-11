@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+    "name": "Auxilio",
+    "description": "Helper tools",
+    "version": "0.0.2",
+    "icons": { "16": "img/icon16.png", "48": "img/icon48.png", "128": "img/icon128.png" },
+    "devtools_page": "devtools.html",
+    "permissions": ["tabs"],
+    "background": { "scripts": ["js/background.js"], "persistent": false },
+    "content_scripts": [
+        {
+            "matches": ["http://*/*", "https://*/*"], 
+            "js": ["js/content.js"]
+        }
+    ]
+}

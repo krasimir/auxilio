@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Auxilio</title>
+        <link rel="stylesheet" type="text/css" href="css/auxilio.css">
+    </head>
+    <body>
+    	<div id="content"></div>
+        <script src="js/jquery-1.9.1.min.js"></script>
+        <script src="js/underscore.js"></script>
+        <script src="js/views/Views.js"></script>
+        <script src="js/views/Navigation.js"></script>
+        <script src="js/views/ResponsiveResolution.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+
+	<!-- ********************************************************************** TEMPLATES -->
+
+	<script type="data-template" id="Navigation_template">
+		<ul class="navigation">
+			<li class="nav-header">Responsive design</li>
+			<li><a href="#" id="ResponsiveResolution"><span>&#187; Resolution</span></a></li>
+		</ul>
+	</script>
+
+	<script type="data-template" id="ResponsiveResolution_template">
+		<ul class="navigation">
+			<li><a href="#" id="Navigation"><span>&#187; Back</span></a></li>
+		</ul>
+		<table class="table">
+			<tr>
+				<td class="label">Choose size:</td>
+				<td class="content">
+					<select id="predefined-sizes" tabindex="1">
+						<option value="">...</option>
+						<option value="320x480">320x480 (iPhone3)</option>
+						<option value="960x640">960x640 (iPhone4)</option>
+						<option value="1024x768">1024x768 (iPad)</option>
+						<option value="1280x1024">1280x1024</option>
+						<option value="1680x1050">1680x1050</option>
+						<option value="1024x600">1024x600</option>
+						<option value="1280x800">1280x800</option>
+						<option value="1366x768">1366x768</option>
+						<option value="1440x900">1440x900</option>
+						<option value="880x1200">880x1200</option>
+					</select>
+				</td>
+				<td rowspan="10" class="content">
+					<a href="#" id="change" class="btn btn-primary"><i class="icon-resize-full"></i> change resolution</a>
+					<a href="#" id="swap" class="btn"><i class="icon-retweet"></i> swap</a>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">
+					Width
+					<hr />
+					<a href="#" id="wAdd">( + )</a>&nbsp;&nbsp;
+					<a href="#" id="wRemove">( - )</a>
+				</td>
+				<td class="content">
+					<input type="text" id="width" tabindex="2"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">
+					Height
+					<hr />
+					<a href="#" id="hAdd">( + )</a>&nbsp;&nbsp;
+					<a href="#" id="hRemove">( - )</a>
+				</td>
+				<td class="content"><input type="text" id="height" tabindex="3"/></td>
+			</tr>
+		</table>
+	</script>
+
+</html>
