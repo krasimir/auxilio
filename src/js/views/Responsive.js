@@ -112,23 +112,20 @@ Views.register("Responsive", {
         });
     },
     showMediaQueries: function() {
-        var html = '<div><h3 class="responsive-media-queries-title">Media queries:</h3><hr />';
+        var html = '<div><h3 class="responsive-media-queries-title">CSS files & Media queries:</h3><hr />';
         if(this.mediaQueries == null || this.mediaQueries.length == 0) {
             html += 'none';
         } else {
             for(var i=0; i<this.mediaQueries.length; i++) {
-                html += '<strong>File: ' + this.mediaQueries[i].file + '</strong><br />';
-                var isThereAnyMediaQueries = false;
-                if(this.mediaQueries[i].medias && this.mediaQueries[i].medias.length > 0) {
-                    for(var j=0; j<this.mediaQueries[i].medias.length; j++) {
-                        if(this.mediaQueries[i].medias[j].mediaText && this.mediaQueries[i].medias[j].mediaText != "") {
-                            html += '<i>' + this.mediaQueries[i].medias[j].mediaText + '</i><br />';
-                            isThereAnyMediaQueries = true;
+                if(this.mediaQueries[i].file != null) {
+                    html += '<strong>File: ' + this.mediaQueries[i].file + '</strong><br />';
+                    if(this.mediaQueries[i].medias && this.mediaQueries[i].medias.length > 0) {
+                        for(var j=0; j<this.mediaQueries[i].medias.length; j++) {
+                            if(this.mediaQueries[i].medias[j].mediaText && this.mediaQueries[i].medias[j].mediaText != "") {
+                                html += '<i>' + this.mediaQueries[i].medias[j].mediaText + '</i><br />';
+                            }
                         }
                     }
-                }
-                if(!isThereAnyMediaQueries) {
-                    html += 'none';
                 }
             }
         }
