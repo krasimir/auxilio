@@ -6,26 +6,30 @@
     </head>
     <body>
     	<div id="content"></div>
-        <script src="js/jquery-1.9.1.min.js"></script>
-        <script src="js/underscore.js"></script>
+        <script src="js/vendor/jquery-1.9.1.min.js"></script>
+        <script src="js/vendor/underscore.js"></script>
+        <script src="js/vendor/dragdealer.js"></script>
         <script src="js/views/Views.js"></script>
         <script src="js/views/Navigation.js"></script>
-        <script src="js/views/ResponsiveResolution.js"></script>
+        <script src="js/views/Responsive.js"></script>
         <script src="js/app.js"></script>
     </body>
 
-	<!-- ********************************************************************** TEMPLATES -->
+	<!-- ********************************************************************** TEMPLATE navigation -->
 
 	<script type="data-template" id="Navigation_template">
 		<ul class="navigation">
-			<li class="nav-header">Responsive design</li>
-			<li><a href="#" id="ResponsiveResolution"><span>&#187; Resolution</span></a></li>
+			<li><a href="#" id="Responsive"><span>&#187; Responsive layout</span></a></li>
 		</ul>
 	</script>
 
-	<script type="data-template" id="ResponsiveResolution_template">
+	<!-- ********************************************************************** TEMPLATE responsive layout -->
+
+	<script type="data-template" id="Responsive_template">
 		<ul class="navigation">
-			<li><a href="#" id="Navigation"><span>&#187; Back</span></a></li>
+			<li>
+				<a href="#" id="Navigation"><span>&#187; Back</span>
+			</li>
 		</ul>
 		<table class="table">
 			<tr>
@@ -44,31 +48,39 @@
 						<option value="1440x900">1440x900</option>
 						<option value="880x1200">880x1200</option>
 					</select>
+					<a href="#" id="swap"><img src="img/swap.png" alt="swap" /></a>
 				</td>
-				<td rowspan="10" class="content">
-					<a href="#" id="change" class="btn btn-primary"><i class="icon-resize-full"></i> change resolution</a>
-					<a href="#" id="swap" class="btn"><i class="icon-retweet"></i> swap</a>
+				<td rowspan="10" class="content content-rightborder">
+					<div id="media-queries"></div>
 				</td>
 			</tr>
 			<tr>
 				<td class="label">
-					Width
-					<hr />
 					<a href="#" id="wAdd">( + )</a>&nbsp;&nbsp;
-					<a href="#" id="wRemove">( - )</a>
+					<a href="#" id="wRemove">( - )</a>&nbsp;&nbsp;
+					Width
 				</td>
 				<td class="content">
-					<input type="text" id="width" tabindex="2"/>
+					<input type="text" id="width" tabindex="2" class="responsive-input" />
+					<div id="w-slider" class="dragdealer responsive-slider">
+						<div class="red-bar handle">&nbsp;</div>
+					</div>
+					<br class="clear" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label">
-					Height
-					<hr />
 					<a href="#" id="hAdd">( + )</a>&nbsp;&nbsp;
-					<a href="#" id="hRemove">( - )</a>
+					<a href="#" id="hRemove">( - )</a>&nbsp;&nbsp;
+					Height
 				</td>
-				<td class="content"><input type="text" id="height" tabindex="3"/></td>
+				<td class="content">
+					<input type="text" id="height" tabindex="3" class="responsive-input"/>
+					<div id="h-slider" class="dragdealer responsive-slider">
+						<div class="red-bar handle">&nbsp;</div>
+					</div>
+					<br class="clear" />
+				</td>
 			</tr>
 		</table>
 	</script>

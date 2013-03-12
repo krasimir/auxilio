@@ -32,16 +32,21 @@ table {
 		}
 		.label {
 			text-align: right;
-			border-top: dotted 1px #999;
+			border-bottom: dotted 1px #999;
 			padding: 10px 20px 10px 10px;
 		}
 		.content {
 			vertical-align: top;
-			border-top: dotted 1px #999;
-			border-left: dotted 1px #999;
+			border-bottom: dotted 1px #999;
 			padding: 10px 10px 10px 20px;
 		}
+		.content-rightborder {
+			border-left: dotted 1px #999;
+		}
 	}
+}
+.clear {
+	clear: both;
 }
 .btn {
 	.transition(200ms, ease-out);
@@ -58,4 +63,27 @@ table {
 	&:hover {
 		.gradient(#73BD78, #73BD78, #BFE1C1);
 	};
+}
+.dragdealer {
+	position: relative;
+	height: 20px;
+	background: url(/../../img/sliderbg.png) repeat-x;
+	border-radius: 6px;
+	.handle {
+		position: absolute;
+		cursor: pointer;
+	}
+	.red-bar {
+		width: 20px;
+		height: 20px;
+		background: url(/../../img/slider.png) repeat-x;
+		color: #FFF;
+		line-height: 30px;
+		text-align: center;
+		border-radius: 6px;
+		.box-shadow(0 1px 2px #000);
+	}
+	.disabled {
+		background: #898989;
+	}
 }

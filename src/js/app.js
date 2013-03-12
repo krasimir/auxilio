@@ -11,4 +11,5 @@ var App = {
 
 $(document).ready(function() {
 	App.addView("Navigation");
+	// App.addView("Responsive");
 });
