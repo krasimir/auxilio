@@ -1,5 +1,6 @@
 var responsiveResolutionPort = null;
 var currentWindowSize = {w: 0, h: 0};
+var currentWindow = null;
 
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 	switch(request.type) {
@@ -20,12 +21,12 @@ chrome.extension.onConnect.addListener(function (port) {
 				responsiveResolutionPort = port;
 				switch(message.type) {
 					case "update-window-size":
-						chrome.windows.getCurrent({}, function(currentWindow) {
+						if(currentWindow) {
 						    chrome.windows.update(currentWindow.id, {
 						        width: message.data.w,
 						        height: message.data.h
-						    })
-						});
+						    });
+						}
 					break;
 					case "give-me-current-window-size":
 						responsiveResolutionPort.postMessage({data: currentWindowSize});
@@ -34,4 +35,8 @@ chrome.extension.onConnect.addListener(function (port) {
 			break;
 		}
     });
+});
+
+chrome.windows.getCurrent({}, function(w) {
+    currentWindow = w;
 });
