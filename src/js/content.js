@@ -1,8 +1,8 @@
-// common
+// ----------------------------------------------------------------------------------- common
 var responsiveSize = {};
 var mediaQueries = [];
 
-// main
+// ----------------------------------------------------------------------------------- main
 var onWindowLoad = function() {
 	reportMediaQueries();
 	reportSize();
@@ -18,14 +18,14 @@ var responsiveUpdateUI = function() {
 	});
 }
 
-// screen size
+// ----------------------------------------------------------------------------------- screen size
 var reportSize = function() {
 	responsiveSize.w = window.outerWidth;
 	responsiveSize.h = window.outerHeight;
 	responsiveUpdateUI();
 }
 
-// Page info
+// ----------------------------------------------------------------------------------- page info
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     switch(message.type) {
         case "GetPageInfoData":
@@ -35,7 +35,19 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
         	if(message.tag) {
         		var elements = document.querySelectorAll(message.tag);
 	        	for(var i=0; i<elements.length; i++) {
-	                elements[i].style.backgroundColor = message.color;
+	        		if(message.tag != "img") {
+	                	elements[i].style.backgroundColor = message.color;
+	            	} else {
+	            		if(message.color == "") {
+	            			elements[i].style.boxShadow = "";
+		            		elements[i].style.MozBoxShadow = "";
+		            		elements[i].style.WebkitBoxShadow = "";
+	            		} else {
+	            			elements[i].style.boxShadow = "5px 5px 1px #FF0000";
+		            		elements[i].style.MozBoxShadow = "5px 5px 1px #FF0000";
+		            		elements[i].style.WebkitBoxShadow = "5px 5px 1px #FF0000";
+	            		}
+	            	}
 	            }
         	}
         break;
@@ -75,7 +87,7 @@ var convertListToStrings = function(list) {
 	return arr;
 }
 
-// media queries
+// ----------------------------------------------------------------------------------- media queries
 var reportMediaQueries = function() {
 	mediaQueries = [];	
 	if(document && document.styleSheets) {
@@ -116,7 +128,7 @@ var normilizeMediaQuaeries = function(medias) {
 }
 
 
-// initialization
+// ----------------------------------------------------------------------------------- initialization
 if(window) {
 	window.addEventListener("resize", reportSize, false);
 	if(document && document.readyState == "complete") {

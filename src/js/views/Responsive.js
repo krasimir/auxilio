@@ -112,13 +112,13 @@ Views.register("Responsive", {
         });
     },
     showMediaQueries: function() {
-        var html = '<section class="data">';
+        var html = '<section>';
         if(this.mediaQueries == null || this.mediaQueries.length == 0) {
             html += 'none';
         } else {
             for(var i=0; i<this.mediaQueries.length; i++) {
                 if(this.mediaQueries[i].file != null) {
-                    html += '<strong><small>' + this.mediaQueries[i].file + '</small></strong>';
+                    html += '<strong>' + this.mediaQueries[i].file + '</strong>';
                     if(this.mediaQueries[i].medias && this.mediaQueries[i].medias.length > 0) {
                         html += '<ul>';
                         for(var j=0; j<this.mediaQueries[i].medias.length; j++) {
@@ -126,7 +126,7 @@ Views.register("Responsive", {
                                 html += '<li>' + this.mediaQueries[i].medias[j].mediaText + '</li>';
                             }
                         }
-                        html += '<ul>';
+                        html += '</ul>';
                     }
                 }
             }

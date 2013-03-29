@@ -91,8 +91,10 @@ Views.register("PageInfo", {
         this.el.html(this.template);
         this.el.find("#Navigation").on("click", function() { view.dispatch("change-view", "Navigation"); });
         this.el.find("#get-data").on("click", function() {
+            view.el.find("#pageinfo-data-holder").empty().html('<section>loading ...</section>');
             view.port.postMessage({ type: "GetPageInfoData"});
         });
+        view.el.find("#pageinfo-data-holder").empty().html('<section>loading ...</section>');
         this.port.postMessage({ type: "GetPageInfoData"});
         return this;
     }
