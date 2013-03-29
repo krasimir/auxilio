@@ -1,28 +1,30 @@
 .navigation {
+	width: 100%;
 	padding: 0;
 	margin: 0;
+	list-style-type: none;
+	.gradient(#E2E2E2, #D0D0D0, #E2E2E2);
+	border-bottom: solid 1px #AAAAAA;
 	li {
+		display: inline-block;
 		padding: 0;
 		margin: 0;
-		list-style-type: none;
-		background: #E0EAD5;
-		border-top: solid 1px #FFF;
-		border-bottom: solid 1px #999;
-		&:hover {
-			background: #CBDCB8;
-		};
+		border-right: solid 1px #A8A8A8;
 		a {
+			color: #595959;
 			display: block;
 			padding: 6px 10px 6px 10px;
-			span {
-				.transition(200ms, ease-out);
-				display: block;
-			}
+			.transition(200ms, ease-out);
 			&:hover {
-				span {
-					.translate(10px, 0);
-				}
-			};
+				background: #929292;
+				color: #FFF;
+			}
+		}
+		h1 {
+			padding: 6px 10px 6px 10px;
+			font-size: 14px;
+			font-weight: normal;
+			margin: 0;
 		}
 	}
 	.nav-header {

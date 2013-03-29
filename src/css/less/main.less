@@ -4,12 +4,12 @@ body {
 	width: 100%;
 	height: 100%;
 	font-size: 14px;
-	color: #6E6E6E;
+	color: #505050;
 	font-family: Arial;
 }
 a {
 	.transition(200ms, ease-out);
-	color: #26691B;
+	color: #999;
 	text-decoration: none;
 	font-weight: bold;
 	&:hover {
@@ -20,11 +20,23 @@ hr {
 	border-top: solid 1px #DFDFDF;
 	border-bottom: none;
 }
+ul {
+	margin: 0;
+	padding: 0 0 0 18px;
+}
+h3 {
+	.gradient(#FFF, #E4E4E4, #FFF);
+	padding: 6px 10px 6px 10px;
+	margin: 0 0 4px 0;
+	border-top: solid 1px #e4e4e4;
+	font-weight: normal;
+}
 input, textarea, select {
 	padding: 6px;
 	width: 200px;
 }
 table {
+	width: 100%;
 	tr {
 		td {
 			vertical-align: middle;
@@ -33,17 +45,13 @@ table {
 		.label {
 			width: 130px;
 			text-align: right;
-			border-bottom: dotted 1px #999;
-			padding: 10px 20px 10px 10px;
 		}
 		.content {
 			width: 220px;
 			vertical-align: top;
-			border-bottom: dotted 1px #999;
-			padding: 10px 10px 10px 20px;
 		}
 		.content-rightborder {
-			border-left: dotted 1px #999;
+
 		}
 	}
 }
@@ -51,20 +59,22 @@ table {
 	clear: both;
 }
 .btn {
+	color: #595959;
 	.transition(200ms, ease-out);
-	width: 150px;
-	text-align: center;
-	display: block;
-	background: #73BD78;
-	padding: 8px 12px 8px 12px;
+	display: inline-block;
+	padding: 4px 6px 4px 6px;
 	border-radius: 6px;
-	.gradient(#73BD78, #73BD78, #D1E9D3);
-	border: solid 1px #73BD78;
-	margin: 0 10px 10px 0;
-	.drop-shadow(0, 1px, 2px, 0.8);
+	.gradient(#E2E2E2, #D0D0D0, #E2E2E2);
+	border-bottom: solid 1px #999;
+	border-right: solid 1px #999;
+	margin: 0 6px 0 0;
 	&:hover {
-		.gradient(#73BD78, #73BD78, #BFE1C1);
-	};
+		background: #929292;
+		color: #FFF;
+	}
+}
+.btn.disabled {
+	.opacity(0.4);
 }
 .dragdealer {
 	position: relative;

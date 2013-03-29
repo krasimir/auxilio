@@ -33,6 +33,22 @@ chrome.extension.onConnect.addListener(function (port) {
 					break;
 				}
 			break;
+			case "PageInfo":
+				switch(message.type) {
+					case "GetPageInfoData":
+						chrome.tabs.getSelected(null, function(tab){
+			                chrome.tabs.sendMessage(tab.id, {type: "GetPageInfoData"}, function(response) {
+			                	port.postMessage({data: response});
+			                });
+			            });
+					break;
+					case "PageInfoHighlightTag":
+						chrome.tabs.getSelected(null, function(tab){
+			                chrome.tabs.sendMessage(tab.id, message);
+			            });
+					break;
+				}				
+			break;
 		}
     });
 });

@@ -12,6 +12,7 @@
         <script src="js/views/Views.js"></script>
         <script src="js/views/Navigation.js"></script>
         <script src="js/views/Responsive.js"></script>
+        <script src="js/views/PageInfo.js"></script>
         <script src="js/app.js"></script>
     </body>
 
@@ -19,19 +20,23 @@
 
 	<script type="data-template" id="Navigation_template">
 		<ul class="navigation">
-			<li><a href="#" id="Responsive"><span>&#187; Responsive layout</span></a></li>
+			<li><h1>Auxilio</h1></li>
+			<li><a href="#" id="Responsive">Responsive layout</a></li>
+			<li><a href="#" id="PageInfo">Page info</a></li>
 		</ul>
+		<br class="clear" />
 	</script>
 
-	<!-- ********************************************************************** TEMPLATE responsive layout -->
+	<!-- ********************************************************************** TEMPLATE responsive -->
 
 	<script type="data-template" id="Responsive_template">
 		<ul class="navigation">
 			<li>
-				<a href="#" id="Navigation"><span>&#187; Back</span>
+				<a href="#" id="Navigation">&#171; Back</a>
 			</li>
 		</ul>
-		<table class="table">
+		<h3>Window size</h3>
+		<table class="table" cellspacing="0" cellpadding="0">
 			<tr>
 				<td class="label">Choose size:</td>
 				<td class="content">
@@ -50,6 +55,7 @@
 					</select>
 					<a href="#" id="swap"><img src="img/swap.png" alt="swap" /></a>
 				</td>
+				<td></td>
 			</tr>
 			<tr>
 				<td class="label">
@@ -64,6 +70,7 @@
 					</div>
 					<br class="clear" />
 				</td>
+				<td></td>
 			</tr>
 			<tr>
 				<td class="label">
@@ -78,13 +85,19 @@
 					</div>
 					<br class="clear" />
 				</td>
-			</tr>
-			<tr>
-				<td colspan="10" class="content content-rightborder">
-					<div id="media-queries"></div>
-				</td>
+				<td></td>
 			</tr>
 		</table>
+		<h3>CSS files &amp; Media queries:</h3>
+		<div id="media-queries"></div>
+	</script>
+
+	<script type="data-template" id="PageInfo_template">
+		<ul class="navigation">
+			<li><a href="#" id="Navigation">&#171; Back</a></li>
+			<li><a href="#" id="get-data">Get/Update data</a></li>
+		</ul>
+		<div id="pageinfo-data-holder"></div>
 	</script>
 
 </html>

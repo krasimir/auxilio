@@ -112,25 +112,27 @@ Views.register("Responsive", {
         });
     },
     showMediaQueries: function() {
-        var html = '<div><h3 class="responsive-media-queries-title">CSS files & Media queries:</h3><hr />';
+        var html = '<section class="data">';
         if(this.mediaQueries == null || this.mediaQueries.length == 0) {
             html += 'none';
         } else {
             for(var i=0; i<this.mediaQueries.length; i++) {
                 if(this.mediaQueries[i].file != null) {
-                    html += '<strong>File: ' + this.mediaQueries[i].file + '</strong><br />';
+                    html += '<strong><small>' + this.mediaQueries[i].file + '</small></strong>';
                     if(this.mediaQueries[i].medias && this.mediaQueries[i].medias.length > 0) {
+                        html += '<ul>';
                         for(var j=0; j<this.mediaQueries[i].medias.length; j++) {
                             if(this.mediaQueries[i].medias[j].mediaText && this.mediaQueries[i].medias[j].mediaText != "") {
-                                html += '<i>' + this.mediaQueries[i].medias[j].mediaText + '</i><br />';
+                                html += '<li>' + this.mediaQueries[i].medias[j].mediaText + '</li>';
                             }
                         }
+                        html += '<ul>';
                     }
                 }
             }
         }
-        html += '</div>';
-        this.el.find("#media-queries").html(html);
+        html += '</section>';
+        this.el.find("#media-queries").empty().html(html);
     }
     
 })
