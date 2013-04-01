@@ -8,10 +8,8 @@
     	<div id="content"></div>
         <script src="js/vendor/jquery-1.9.1.min.js"></script>
         <script src="js/vendor/underscore.js"></script>
-        <script src="js/vendor/dragdealer.js"></script>
         <script src="js/views/Views.js"></script>
         <script src="js/views/Navigation.js"></script>
-        <script src="js/views/Responsive.js"></script>
         <script src="js/views/PageInfo.js"></script>
         <script src="js/app.js"></script>
     </body>
@@ -20,77 +18,13 @@
 
 	<script type="data-template" id="Navigation_template">
 		<ul class="navigation">
-			<li><h1>Auxilio (v. 0.1)</h1></li>
-			<li><a href="#" id="Responsive">Responsive</a></li>
+			<li><h1>Auxilio (v. 0.1.2)</h1></li>
 			<li><a href="#" id="PageInfo">Page info</a></li>
 		</ul>
 		<br class="clear" />
 	</script>
 
-	<!-- ********************************************************************** TEMPLATE responsive -->
-
-	<script type="data-template" id="Responsive_template">
-		<ul class="navigation">
-			<li>
-				<a href="#" id="Navigation">&#171; Back</a>
-			</li>
-		</ul>
-		<h3>Window size</h3>
-		<table class="table" cellspacing="0" cellpadding="0">
-			<tr>
-				<td class="label">Choose size:</td>
-				<td class="content">
-					<select id="predefined-sizes" tabindex="1">
-						<option value="">...</option>
-						<option value="320x480">320x480 (iPhone3)</option>
-						<option value="960x640">960x640 (iPhone4)</option>
-						<option value="1024x768">1024x768 (iPad)</option>
-						<option value="1280x1024">1280x1024</option>
-						<option value="1680x1050">1680x1050</option>
-						<option value="1024x600">1024x600</option>
-						<option value="1280x800">1280x800</option>
-						<option value="1366x768">1366x768</option>
-						<option value="1440x900">1440x900</option>
-						<option value="880x1200">880x1200</option>
-					</select>
-					<a href="#" id="swap"><img src="img/swap.png" alt="swap" /></a>
-				</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td class="label">
-					<a href="#" id="wAdd">( + )</a>&nbsp;&nbsp;
-					<a href="#" id="wRemove">( - )</a>&nbsp;&nbsp;
-					Width
-				</td>
-				<td class="content">
-					<input type="text" id="width" tabindex="2" class="responsive-input" />
-					<div id="w-slider" class="dragdealer responsive-slider">
-						<div class="red-bar handle">&nbsp;</div>
-					</div>
-					<br class="clear" />
-				</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td class="label">
-					<a href="#" id="hAdd">( + )</a>&nbsp;&nbsp;
-					<a href="#" id="hRemove">( - )</a>&nbsp;&nbsp;
-					Height
-				</td>
-				<td class="content">
-					<input type="text" id="height" tabindex="3" class="responsive-input"/>
-					<div id="h-slider" class="dragdealer responsive-slider">
-						<div class="red-bar handle">&nbsp;</div>
-					</div>
-					<br class="clear" />
-				</td>
-				<td></td>
-			</tr>
-		</table>
-		<h3>CSS files &amp; Media queries:</h3>
-		<div id="media-queries"></div>
-	</script>
+	<!-- ********************************************************************** TEMPLATE PageInfo -->
 
 	<script type="data-template" id="PageInfo_template">
 		<ul class="navigation">

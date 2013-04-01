@@ -1,34 +1,7 @@
-// ----------------------------------------------------------------------------------- common
-var responsiveSize = {};
-var mediaQueries = [];
-
 // ----------------------------------------------------------------------------------- main
-var onWindowLoad = function() {
-	reportMediaQueries();
-	reportSize();
-}
-var responsiveUpdateUI = function() {
-	chrome.extension.sendMessage({
-		type: "ResponsiveResolutionUpdateUI", 
-		data: {
-			w: responsiveSize.w,
-			h: responsiveSize.h,
-			mediaQueries: mediaQueries
-		}
-	});
-}
-
-// ----------------------------------------------------------------------------------- screen size
-var reportSize = function() {
-	responsiveSize.w = window.outerWidth;
-	responsiveSize.h = window.outerHeight;
-	responsiveUpdateUI();
-}
-
-// ----------------------------------------------------------------------------------- page info
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     switch(message.type) {
-        case "GetPageInfoData":
+        case "PageInfoGet":
 			sendResponse(getPageInfo());
         break;
         case "PageInfoHighlightTag":
@@ -53,6 +26,11 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
         break;
     }
 });
+var onWindowLoad = function() {
+	
+}
+
+// ----------------------------------------------------------------------------------- page info
 var getPageInfo = function() {
 	var data = {
 		url: window.location.href,
@@ -72,7 +50,8 @@ var getPageInfo = function() {
 		footer: convertListToStrings(document.querySelectorAll("footer")),
 		links: convertListToStrings(document.querySelectorAll("a")),
 		paragraphs: convertListToStrings(document.querySelectorAll("p")),
-		images: convertListToStrings(document.querySelectorAll("img"))
+		images: convertListToStrings(document.querySelectorAll("img")),
+		mediaQueries: getMediaQueries()
 	}
 	return data;
 }
@@ -88,8 +67,8 @@ var convertListToStrings = function(list) {
 }
 
 // ----------------------------------------------------------------------------------- media queries
-var reportMediaQueries = function() {
-	mediaQueries = [];	
+var getMediaQueries = function() {
+	var mediaQueries = [];	
 	if(document && document.styleSheets) {
 		for(var i=0; i<document.styleSheets.length; i++) {
 			var stylesheet = document.styleSheets[i];
@@ -108,6 +87,7 @@ var reportMediaQueries = function() {
 			});
 		}
 	}
+	return mediaQueries;
 }
 var collectMediaQueries = function(media) {
 	if(media) {
@@ -130,11 +110,9 @@ var normilizeMediaQuaeries = function(medias) {
 
 // ----------------------------------------------------------------------------------- initialization
 if(window) {
-	window.addEventListener("resize", reportSize, false);
 	if(document && document.readyState == "complete") {
 		onWindowLoad();
 	} else {
 		window.addEventListener("load", onWindowLoad, true);
 	}
 }
-

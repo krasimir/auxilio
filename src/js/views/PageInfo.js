@@ -1,21 +1,33 @@
 Views.register("PageInfo", {
     initialize: function() {
+    },
+    processResponse: function(response) {
+        var view = this;        
+        var html = "";
+        if(response) {
+            html += view.getDataBlock("Page", response.url);
+            html += view.getDataBlock("Meta data", view.formatMetaData(response.meta));
+            html += view.getDataBlock("Titles", view.formatTitlesData(response.titles));
+            html += view.getDataBlock("Sections and articles", view.formatSectionsAndArticlesData(response));
+            html += view.getDataBlock("Header, footer and navigation", view.formatHeaderFooterAndNav(response));
+            html += view.getDataBlock("Other", view.formatOther(response));
+            html += view.getDataBlock("CSS (media queries)", view.formatCSS(response));
+        } else {
+            html += "Error getting data ...";
+        }
+        view.el.find("#pageinfo-data-holder").empty().html(html);
+        view.setShowTagsEvents();
+    },
+    requestData: function() {
         var view = this;
-        this.port = chrome.extension.connect({ name: "PageInfo" });      
-        this.port.onMessage.addListener(function (response) {
-            var html = "";
-            if(response) {
-                html += view.getDataBlock("Page", response.data.url);
-                html += view.getDataBlock("Meta data", view.formatMetaData(response.data.meta));
-                html += view.getDataBlock("Titles", view.formatTitlesData(response.data.titles));
-                html += view.getDataBlock("Sections and articles", view.formatSectionsAndArticlesData(response.data));
-                html += view.getDataBlock("Header, footer and navigation", view.formatHeaderFooterAndNav(response.data));
-                html += view.getDataBlock("Other", view.formatOther(response.data));
-            } else {
-                html += "Error getting data ...";
-            }
-            view.el.find("#pageinfo-data-holder").empty().html(html);
-            view.setShowTagsEvents();
+        this.el.find("#pageinfo-data-holder").empty().html('<section>loading ...</section>');
+        chrome.runtime.sendMessage({type: "PageInfoGet"}, function(response) {
+            view.processResponse(response);
+        });
+    },
+    requestHighlight: function(tag, color) {
+        chrome.runtime.sendMessage({ type: "PageInfoHighlightTag", tag: tag, color: color}, function(response) {
+            // ...
         });
     },
     getDataBlock: function(title, data) {
@@ -67,6 +79,21 @@ Views.register("PageInfo", {
         html += this.formatTagData("img", data.images);
         return html;
     },
+    formatCSS: function(data) {
+        var html = '';
+        if(data && data.mediaQueries) {
+            for(var i=0; i<data.mediaQueries.length; i++) {
+                var o = data.mediaQueries[i];
+                html += '<strong>' + o.file + '</strong><br />';
+                for(var j=0; j<o.medias.length; j++) {
+                    if(o.medias[j].mediaText && o.medias[j].mediaText != '') {
+                        html += o.medias[j].mediaText + "<br />";
+                    }
+                }
+            }
+        }
+        return html;
+    },
     formatTagData: function(tag, arr) {
         var disabled = (arr.length == 0 ? ' disabled' : '');
         return '<a href="#" class="show-tags btn' + disabled + '" data="' + tag + '">' + tag + ' (' + arr.length + ')</a>';        
@@ -77,12 +104,10 @@ Views.register("PageInfo", {
         for(var i=0; i<buttons.length; i++) {
             var button = buttons.eq(i);
             button.on("mouseover", function() {
-                var tag = $(this).attr("data");
-                view.port.postMessage({ type: "PageInfoHighlightTag", tag: tag, color: "#F00"});
+                view.requestHighlight($(this).attr("data"), "#F00");
             });
             button.on("mouseout", function() {
-                var tag = $(this).attr("data");
-                view.port.postMessage({ type: "PageInfoHighlightTag", tag: tag, color: ""});
+                view.requestHighlight($(this).attr("data"), "");
             });
         }
     },
@@ -91,11 +116,9 @@ Views.register("PageInfo", {
         this.el.html(this.template);
         this.el.find("#Navigation").on("click", function() { view.dispatch("change-view", "Navigation"); });
         this.el.find("#get-data").on("click", function() {
-            view.el.find("#pageinfo-data-holder").empty().html('<section>loading ...</section>');
-            view.port.postMessage({ type: "GetPageInfoData"});
+            view.requestData();
         });
-        view.el.find("#pageinfo-data-holder").empty().html('<section>loading ...</section>');
-        this.port.postMessage({ type: "GetPageInfoData"});
+        this.requestData();
         return this;
     }
 });

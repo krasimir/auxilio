@@ -8,7 +8,6 @@ Extension to Google Chrome Developer Tools.
 
   - Download the source code of the extension (you will use the content of the *src* folder)
   - Open Google Chrome and type the following thing in the address bar
-	
 
 		chrome://extensions
 
