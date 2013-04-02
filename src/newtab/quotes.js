@@ -177,5 +177,6 @@ quotes =[
 	["640K ought to be enough for anybody.", "Bill Gates, 1981"],
 	["Windows NT addresses 2 Gigabytes of RAM, which is more than any application will ever need."  , "Microsoft, on the development of Windows NT, 1992"],
 	["We will never become a truly paper-less society until the Palm Pilot folks come out with WipeMe 1.0.", "Andy Pierson"],
+	["Mobile didn’t create more unknowns for web designers. It just forced us to recognize the unknowns that were already there.", "Jeremy Keith"],
 	["If it keeps up, man will atrophy all his limbs but the push-button finger.", "Frank Lloyd Wright"]
 ];

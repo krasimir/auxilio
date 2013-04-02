@@ -11,25 +11,29 @@ h1 {
 	color: #999999;
 	text-align: center;
 	margin: 0 auto;
-	padding: 0 0 20px 0;
+	padding: 0 0 12px 0;
 	max-width: 700px;
 }
 h4 {
 	max-width: 300px;
-	border-top: dotted 1px #999;
-	border-bottom: dotted 1px #999;
-	padding: 20px 0 20px 0;
-	margin: 0 auto 20px auto;
+	padding: 0;
+	margin: 0 auto;
 	font-size: 18px;
 	font-weight: normal;
-	color: #999999;
+	color: #999;
 	text-align: center;	
+}
+hr {
+	border-top: dotted 1px #999;
+	border-bottom: none;
+	width: 600px;
+	margin: 10px auto 10px auto;
 }
 .content {
 	text-align: center;
 	margin: 200px 0 0 0;
 }
-#get-the-old {
+.btn {
 	display: inline-block;
 	font-size: 18px;
 	text-decoration: none;
@@ -45,6 +49,13 @@ h4 {
 	background: linear-gradient(to bottom, #FFF 0%,#F2F2F2 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFF', endColorstr='#F2F2F2',GradientType=0 ); /* IE6-9 */
 }
-#get-the-old:hover {
+.btn:hover {
 	color: #000;
+}
+#sound {
+	display: inline-block;
+	margin: 0 0 0 4px;
+	width: 16px;
+	height: 16px;
+	background: url(../img/audio.png) no-repeat;
 }
