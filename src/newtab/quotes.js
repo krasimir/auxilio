@@ -178,5 +178,7 @@ quotes =[
 	["Windows NT addresses 2 Gigabytes of RAM, which is more than any application will ever need."  , "Microsoft, on the development of Windows NT, 1992"],
 	["We will never become a truly paper-less society until the Palm Pilot folks come out with WipeMe 1.0.", "Andy Pierson"],
 	["Mobile didn’t create more unknowns for web designers. It just forced us to recognize the unknowns that were already there.", "Jeremy Keith"],
-	["If it keeps up, man will atrophy all his limbs but the push-button finger.", "Frank Lloyd Wright"]
+	["If it keeps up, man will atrophy all his limbs but the push-button finger.", "Frank Lloyd Wright"],
+	["Making responsiveness only about grids, responsive images and media queries is a disservice to customers and brands. It needs to be about providing readable content for any device, and that means starting with type.", "typecast.com"],
+	["Responsive web design isn’t your site working on phones and tablets. It’s about your site working everywhere.", "Scott Kellum"]
 ];

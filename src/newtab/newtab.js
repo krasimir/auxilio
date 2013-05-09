@@ -14,7 +14,7 @@ window.onload = function() {
 	}
 	chrome.tts.stop();
 
-	// time and date
+	// time and date	
 	var formatDigit = function(d) {
 		if(d < 10) {
 			return "0" + d;
@@ -22,9 +22,13 @@ window.onload = function() {
 			return d;
 		}
 	}
-	var currentDate = new Date();
-	var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	document.getElementById("time").innerHTML = formatDigit(currentDate.getHours()) + ":" + formatDigit(currentDate.getMinutes());
-	document.getElementById("date").innerHTML = currentDate.getDate() + " " + months[currentDate.getMonth()] + " " + currentDate.getFullYear();
+	var setDateAndTime = function() {
+		var currentDate = new Date();
+		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+		document.getElementById("time").innerHTML = formatDigit(currentDate.getHours()) + ":" + formatDigit(currentDate.getMinutes());
+		document.getElementById("date").innerHTML = currentDate.getDate() + " " + months[currentDate.getMonth()] + " " + currentDate.getFullYear();
+		setTimeout(setDateAndTime, 30000);
+	}
+	setDateAndTime();	
 
 }
