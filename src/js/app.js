@@ -10,6 +10,7 @@ var App = {
 		this.matches = [];
 		this.defineKeyboardEvents();
 		this.prepareDictionary();
+		this.command.focus();
 	},
 	prepareDictionary: function() {
 		// adding commands from Commands
@@ -80,6 +81,8 @@ var App = {
 		var command = commandParts.shift();
 		if(Commands[command]) {
 			Commands[command](commandParts);
+		} else {
+			this.remoteCommand();
 		}
 		this.command.val("");
 	},
@@ -94,6 +97,11 @@ var App = {
 	clear: function(str, clearPreviousContent) {
 		var previousContent = this.output.html();
 		this.output.html(clearPreviousContent ? str : previousContent + str);
+	},
+	remoteCommand: function() {
+		chrome.runtime.sendMessage({type: "request", url:"http://localhost"}, function(response) {
+            alert("response=" + response.responseText.length);
+        });
 	}
 }
 
