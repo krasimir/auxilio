@@ -1,14 +1,5 @@
 // Available commands
-var Commands = {
-	l: function() {
-		App.clear('', true);
-	},
-	page: function() {
-
-	}
-}
 var CommandsDictionary = ["lose-yourself", "ls", "log", "love-chrome"];
-
 
 // The main application logic
 var App = {
@@ -85,10 +76,12 @@ var App = {
 	},
 	key13: function(e) { // enter
 		var commandStr = this.command.val();
-		this.command.val("");
-		if(Commands[commandStr]) {
-			Commands[commandStr]();
+		var commandParts = commandStr.split(" ");
+		var command = commandParts.shift();
+		if(Commands[command]) {
+			Commands[command](commandParts);
 		}
+		this.command.val("");
 	},
 	key9: function(e) { // tab
 		e.preventDefault();
