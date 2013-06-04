@@ -35,8 +35,10 @@ var request = function(url, callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", url, true);
 	xhr.onreadystatechange = function() {
-		if (xhr.readyState == 4) {
+		if (xhr.readyState == 4 && xhr.status == 200) {
 			callback(xhr.responseText);
+		} else if(xhr.readyState == 4) {
+			callback("Error requesting '" + url + "'.");
 		}
 	}
 	xhr.send(null);

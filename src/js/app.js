@@ -39,8 +39,6 @@ var App = {
 		var self = this;
 		this.command.on("focus", function() {
 			self.command.on("keyup", function(e) {
-				var code = (e.keyCode ? e.keyCode : e.which);
-				if(self["key" + code]) self["key" + code](e);
 				self.autocomplete();
 			});
 			self.command.on("keydown", function(e) {
@@ -76,6 +74,7 @@ var App = {
 		}
 	},
 	key13: function(e) { // enter
+		e.preventDefault();
 		var commandStr = this.command.val();
 		var commandParts = commandStr.split(" ");
 		var command = commandParts.shift();
@@ -95,12 +94,18 @@ var App = {
 	},
 	// console output
 	clear: function(str, clearPreviousContent) {
+		this.result('', true);
+	},
+	result: function(str, clearPreviousContent) {
 		var previousContent = this.output.html();
 		this.output.html(clearPreviousContent ? str : previousContent + str);
 	},
+	// command
 	remoteCommand: function() {
+		var self = this;
+		var n = 0;
 		chrome.runtime.sendMessage({type: "request", url:"http://localhost"}, function(response) {
-            alert("response=" + response.responseText.length);
+			self.result(response.responseText);
         });
 	}
 }
