@@ -36,9 +36,9 @@ var request = function(url, callback) {
 	xhr.open("GET", url, true);
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
-			callback(xhr.responseText);
+			callback({responseText: xhr.responseText});
 		} else if(xhr.readyState == 4) {
-			callback("Error requesting '" + url + "'.");
+			callback({error: "Error requesting '" + url + "'."});
 		}
 	}
 	xhr.send(null);

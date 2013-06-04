@@ -2,6 +2,7 @@
 @color-a: #999;
 @color-b: #3F3F3F;
 @color-input: #000;
+@color-error: #F5A3A3;
 
 body, html {
 	margin: 0;
@@ -54,6 +55,9 @@ h1 .icon-emo-thumbsup {
 				outline: 0;
 			}
 		}
+		input[disabled] {
+			background: lighten(@color-a, 20%);
+		}
 	}
 	
 	.suggest {
@@ -64,5 +68,12 @@ h1 .icon-emo-thumbsup {
 	.command {
 		color: @color-input;
 		z-index: 3;
+		background: none;
 	}
+}
+.error {
+	background: @color-error;
+	color: darken(@color-error, 100%);
+	padding: 10px;
+	margin: 0 0 4px 0;
 }

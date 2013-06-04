@@ -81,7 +81,7 @@ var App = {
 		if(Commands[command]) {
 			Commands[command](commandParts);
 		} else {
-			this.remoteCommand();
+			this.error("Missing command <strike>" + command + "</strike>.");
 		}
 		this.command.val("");
 	},
@@ -94,19 +94,25 @@ var App = {
 	},
 	// console output
 	clear: function(str, clearPreviousContent) {
-		this.result('', true);
+		this.echo('', true);
 	},
-	result: function(str, clearPreviousContent) {
+	error: function(str) {
+		this.echo('<div class="error"><i class="icon-right-open"></i> ' + str + '</div>');
+	},
+	echo: function(str, clearPreviousContent) {
 		var previousContent = this.output.html();
 		this.output.html(clearPreviousContent ? str : previousContent + str);
 	},
+	disableInput: function() {
+		this.command.prop('disabled', true);
+	},
+	enableInput: function() {
+		this.command.prop('disabled', false);
+	},
 	// command
-	remoteCommand: function() {
-		var self = this;
-		var n = 0;
-		chrome.runtime.sendMessage({type: "request", url:"http://localhost"}, function(response) {
-			self.result(response.responseText);
-        });
+	remoteCommand: function(command) {
+		
+		
 	}
 }
 
@@ -114,3 +120,5 @@ var App = {
 $(document).ready(function() {
 	App.init();
 });
+
+// Debugging
