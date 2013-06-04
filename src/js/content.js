@@ -1,12 +1,7 @@
 // ----------------------------------------------------------------------------------- Auxilio Console
 function applyAuxilioConsole() {
-	var Auxilio = {
-		auxilio: function() {
-			console.log("Hello!");
-		}
-	}
-	for(var i in Auxilio) {
-		window[i] = Auxilio[i];
+	window.auxilio = function() {
+		console.log("What's up!");
 	}
 }
 
