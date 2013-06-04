@@ -1,5 +1,4 @@
 // ----------------------------------------------------------------------------------- Auxilio Console
-
 function applyAuxilioConsole() {
 	var Auxilio = {
 		auxilio: function() {
