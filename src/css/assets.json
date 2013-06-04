@@ -1,9 +1,0 @@
-[
-	{
-	    "type": "less",
-	    "watch": ["less"],
-	    "pack": "less/index.less",
-	    "output": "auxilio.css",
-	    "minify": true
-	}
-]
