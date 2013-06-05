@@ -59,9 +59,13 @@ var App = {
 		if(commandStr == "") return;
 		for(var i=0; i<CommandsDictionary.length; i++) {
 			var suggestion = CommandsDictionary[i];
-			var re = new RegExp("^" + commandStr.toLowerCase() + ".*?");
-			if(suggestion.toLowerCase().match(re)) {
-				this.matches.push(suggestion);
+			try {
+				var re = new RegExp("^" + commandStr.toLowerCase() + "(.*)?");
+				if(suggestion.toLowerCase().match(re)) {
+					this.matches.push(suggestion);
+				}
+			} catch(e) {
+				
 			}
 		}
 		if(this.matches.length > 0) {
@@ -92,7 +96,7 @@ var App = {
 			this.autocomplete();
 		}
 	},
-	// console output
+	// console output panel
 	clear: function(str, clearPreviousContent) {
 		this.echo('', true);
 	},
@@ -108,11 +112,6 @@ var App = {
 	},
 	enableInput: function() {
 		this.command.prop('disabled', false);
-	},
-	// command
-	remoteCommand: function(command) {
-		
-		
 	}
 }
 
@@ -120,5 +119,3 @@ var App = {
 $(document).ready(function() {
 	App.init();
 });
-
-// Debugging

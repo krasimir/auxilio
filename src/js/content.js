@@ -2,8 +2,8 @@
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     switch(message.type) {
     	case "request":
-    		request(message.url, function(responseText) {
-    			sendResponse({responseText: responseText});
+    		request(message.url, function(response) {
+    			sendResponse(response);
     		})
     	break;
         case "PageInfoHighlightTag":
