@@ -1,4 +1,4 @@
-Commands.open = function(args) {
+Commands.request = function(args) {
 	if(!args[0]) {
 		App.error("<u>open</u> requires at least one parameter. Format: open &lt;url&gt;");
 		return;

@@ -1,5 +1,5 @@
 // Available commands
-var CommandsDictionary = ["lose-yourself", "ls", "log", "love-chrome"];
+var CommandsDictionary = [];
 
 // The main application logic
 var App = {
@@ -65,7 +65,7 @@ var App = {
 					this.matches.push(suggestion);
 				}
 			} catch(e) {
-				
+
 			}
 		}
 		if(this.matches.length > 0) {
@@ -84,7 +84,7 @@ var App = {
 		var command = commandParts.shift();
 		if(Commands[command]) {
 			Commands[command](commandParts);
-		} else {
+		} else if(command != "" && command != " ") {
 			this.error("Missing command <strike>" + command + "</strike>.");
 		}
 		this.command.val("");
@@ -98,12 +98,21 @@ var App = {
 	},
 	// console output panel
 	clear: function(str, clearPreviousContent) {
-		this.echo('', true);
+		this.setOutputPanelContent('', true);
 	},
 	error: function(str) {
-		this.echo('<div class="error"><i class="icon-right-open"></i> ' + str + '</div>');
+		this.setOutputPanelContent('<div class="error">' + str + '</div>');
 	},
-	echo: function(str, clearPreviousContent) {
+	warning: function(str) {
+		this.setOutputPanelContent('<div class="warning">' + str + '</div>');
+	},
+	success: function(str) {
+		this.setOutputPanelContent('<div class="success">' + str + '</div>');	
+	},
+	echo: function(str) {
+		this.setOutputPanelContent('<div class="regular">' + str + '</div>');
+	},
+	setOutputPanelContent: function(str, clearPreviousContent) {
 		var previousContent = this.output.html();
 		this.output.html(clearPreviousContent ? str : previousContent + str);
 	},

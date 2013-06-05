@@ -6,6 +6,10 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     			sendResponse(response);
     		})
     	break;
+    	case "click":
+    		var element = document.querySelector(message.selector);
+    		if(element) element.click();
+    	break;
         case "PageInfoHighlightTag":
         	if(message.tag) {
         		var elements = document.querySelectorAll(message.tag);
@@ -44,17 +48,17 @@ var request = function(url, callback) {
 	xhr.send(null);
 }
 
-// ----------------------------------------------------------------------------------- Auxilio Console
-function applyAuxilioConsole() {
-	window.auxilio = function() {
-		console.log("What's up!");
-	}
-}
+// ------------------------------------------------------------------- Injecting script into the current page
+// function applyAuxilioConsole() {
+// 	window.auxilio = function() {
+// 		console.log("What's up!");
+// 	}
+// }
 
-var script = document.createElement('script');
-var code = document.createTextNode('(' + applyAuxilioConsole + ')();');
-script.appendChild(code);
-(document.body || document.head).appendChild(script);
+// var script = document.createElement('script');
+// var code = document.createTextNode('(' + applyAuxilioConsole + ')();');
+// script.appendChild(code);
+// (document.body || document.head).appendChild(script);
 
 // ----------------------------------------------------------------------------------- Boot code
 var onWindowLoad = function() {

@@ -3,6 +3,8 @@
 @color-b: #3F3F3F;
 @color-input: #000;
 @color-error: #F5A3A3;
+@color-warning: #FDF293;
+@color-success: #A7DD95;
 
 body, html {
 	margin: 0;
@@ -71,9 +73,24 @@ h1 .icon-emo-thumbsup {
 		background: none;
 	}
 }
-.error {
-	background: @color-error;
-	color: darken(@color-error, 100%);
+.regular {
+	background: lighten(@color-a, 30%);
+	color: darken(@color-a, 100%);
 	padding: 10px;
 	margin: 0 0 4px 0;
+}
+.error {
+	.regular();
+	background: @color-error;
+	color: darken(@color-error, 100%);
+}
+.warning {
+	.regular();
+	background: @color-warning;
+	color: darken(@color-warning, 100%);
+}
+.success {
+	.regular();
+	background: @color-success;
+	color: darken(@color-success, 100%);	
 }
