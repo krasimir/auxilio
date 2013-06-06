@@ -8,6 +8,8 @@ var App = {
 		this.command = $("#js-command");
 		this.output = $("#js-console-output-content");
 		this.matches = [];
+		this.commandsHistory = [];
+		this.commandsHistoryIndex = -1;
 		this.defineKeyboardEvents();
 		this.prepareDictionary();
 		this.command.focus();
@@ -38,10 +40,10 @@ var App = {
 	defineKeyboardEvents:function() {
 		var self = this;
 		this.command.on("focus", function() {
-			self.command.on("keyup", function(e) {
+			self.command.off("keyup").on("keyup", function(e) {
 				self.autocomplete();
 			});
-			self.command.on("keydown", function(e) {
+			self.command.off("keydown").on("keydown", function(e) {
 				var code = (e.keyCode ? e.keyCode : e.which);
 				if(self["key" + code]) self["key" + code](e);
 			});
@@ -80,6 +82,8 @@ var App = {
 	key13: function(e) { // enter
 		e.preventDefault();
 		var commandStr = this.command.val();
+		this.commandsHistory.push(commandStr);
+		this.commandsHistoryIndex = -1;
 		var args = commandStr.split(" ");
 		var command = args.shift();
 		var c = Commands[command];
@@ -96,6 +100,20 @@ var App = {
 			this.command.val(this.matches[0]);
 			this.autocomplete();
 		}
+	},
+	key38: function(e) { // up
+		e.preventDefault();
+		if(this.commandsHistory.length == 0) return;
+		if(this.commandsHistoryIndex == -1) this.commandsHistoryIndex = this.commandsHistory.length;
+		this.commandsHistoryIndex = this.commandsHistoryIndex - 1 > 0 ? this.commandsHistoryIndex -= 1 : 0;
+		this.command.val(this.commandsHistory[this.commandsHistoryIndex]);
+	},
+	key40: function(e) { // down
+		e.preventDefault();
+		if(this.commandsHistory.length == 0) return;
+		if(this.commandsHistoryIndex == -1) this.commandsHistoryIndex = this.commandsHistory.length-1;
+		this.commandsHistoryIndex = this.commandsHistoryIndex + 1 <= this.commandsHistory.length-1 ? this.commandsHistoryIndex += 1 : this.commandsHistory.length-1;
+		this.command.val(this.commandsHistory[this.commandsHistoryIndex]);
 	},
 	// console output panel
 	clear: function(str, clearPreviousContent) {
