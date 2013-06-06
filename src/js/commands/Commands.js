@@ -2,7 +2,7 @@ var CommandBase = {
 	name: '',
 	requiredArguments: 0,
 	format: '',
-	run: function(args) {
+	run: function(args, callback) {
 
 	},
 	man: function() {

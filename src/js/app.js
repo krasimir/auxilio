@@ -136,7 +136,7 @@ var App = {
 	},
 	setOutputPanelContent: function(str, clearPreviousContent) {
 		var previousContent = this.output.html();
-		this.output.html(clearPreviousContent ? str : previousContent + str);
+		this.output.html(clearPreviousContent ? str : str + previousContent);
 	},
 	disableInput: function() {
 		this.command.prop('disabled', true);
