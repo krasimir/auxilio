@@ -3,7 +3,7 @@ Commands.register("inject", {
 	format: '<pre>inject</pre>',
 	processing: false,
 	files: null,
-	proccessedFiles: 0,
+	proccessedFiles: -1,
 	commands: [],
 	run: function(args, callback) {
 		if(this.processing) {
@@ -45,12 +45,23 @@ Commands.register("inject", {
 			this.commands.push(c);
 		}
 		this.proccessedFiles += 1;
-		if(this.proccessedFiles == this.files.length) {
+		if(this.proccessedFiles == this.files.length-1) {
 			this.executeCommands();
 		}
 	},
-	executeCommands: function() {
-		console.log("executeCommands", this.commands);
+	executeCommands: function() {		
+		if(this.commands.length == 0) {
+			this.processing = false;
+			this.files = null;
+			this.proccessedFiles = -1;
+			this.commands = [];
+			return;
+		}
+		var commandStr = this.commands.shift();
+		var self = this;
+		App.execute(commandStr, function() {
+			self.executeCommands();
+		});
 	},
 	man: function() {
 		return 'Inject external javascript to be run in the context of Auxilio and current page.';
