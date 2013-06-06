@@ -81,17 +81,7 @@ var App = {
 	},
 	key13: function(e) { // enter
 		e.preventDefault();
-		var commandStr = this.command.val();
-		this.commandsHistory.push(commandStr);
-		this.commandsHistoryIndex = -1;
-		var args = commandStr.split(" ");
-		var command = args.shift();
-		var c = Commands[command];
-		if(c) {
-			if(c.validate(args)) Commands[command].run(args);
-		} else if(command != "" && command != " ") {
-			this.error("Missing command <strike>" + command + "</strike>.");
-		}
+		this.execute(this.command.val());
 		this.command.val("");
 	},
 	key9: function(e) { // tab
@@ -119,21 +109,6 @@ var App = {
 	clear: function(str, clearPreviousContent) {
 		this.setOutputPanelContent('', true);
 	},
-	error: function(str) {
-		this.setOutputPanelContent('<div class="error">' + str + '</div>');
-	},
-	warning: function(str) {
-		this.setOutputPanelContent('<div class="warning">' + str + '</div>');
-	},
-	success: function(str) {
-		this.setOutputPanelContent('<div class="success">' + str + '</div>');	
-	},
-	echo: function(str) {
-		this.setOutputPanelContent('<div class="regular">' + str + '</div>');
-	},
-	info: function(str) {
-		this.setOutputPanelContent('<div class="info">' + str + '</div>');
-	},
 	setOutputPanelContent: function(str, clearPreviousContent) {
 		var previousContent = this.output.html();
 		this.output.html(clearPreviousContent ? str : str + previousContent);
@@ -143,6 +118,26 @@ var App = {
 	},
 	enableInput: function() {
 		this.command.prop('disabled', false);
+	},
+	execute: function(commandStr, callback) {
+		this.addToHistory(commandStr);
+		var args = commandStr.split(" ");
+		var command = args.shift();
+		var c = Commands[command];
+		if(c) {
+			if(c.validate(args)) Commands[command].run(args, callback);
+		} else if(command != "" && command != " ") {
+			this.execute("error Missing command <b>" + command + "</b>.");
+		}
+	},
+	addToHistory: function(commandStr) {
+		var args = commandStr.split(" ");
+		var command = args.shift();
+		var commandsToAvoid = ["echo", "info", "error", "success", "warning"];
+		if(_.indexOf(commandsToAvoid, command) === -1) {
+			this.commandsHistory.push(commandStr);
+			this.commandsHistoryIndex = -1;
+		}
 	}
 }
 

@@ -9,9 +9,9 @@ Commands.register("request", {
 		var callback = function(response) {
 			App.enableInput();
 			if(response.error) {
-				App.error('request: ' + response.error);
+				App.execute('error request: ' + response.error);
 			} else {				
-				App.echo(response.responseText);
+				App.execute("echo " + response.responseText);
 			}
 		}
 		if(chrome && chrome.runtime) {

@@ -7,7 +7,7 @@ Commands.register("history", {
 			message += App.commandsHistory[i] + '\n';
 		}
 		message += '</pre>';
-		App.info(message);
+		App.execute("info " + message);
 	},
 	man: function() {
 		return 'Outputs the current console\'s history.';

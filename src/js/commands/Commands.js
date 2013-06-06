@@ -13,7 +13,7 @@ var CommandBase = {
 		else {
 			var message = '<u><b>' + this.name + '</b></u> requires at least ' + this.requiredArguments + ' arguments.';
 			this.format != '' ? message += '<br />' + this.format : null;
-			App.error(message);
+			App.execute("error " + message);
 		}
 	}
 }
