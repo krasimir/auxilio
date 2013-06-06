@@ -31,6 +31,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 			});
     	break;
     	case "newtab":
+    		console.log(message.url);
     		chrome.tabs.create({ active: true, url: message.url }, function(tab) {
     			TabCompleteNotifier.add(tab.id, sendResponse);
     		});

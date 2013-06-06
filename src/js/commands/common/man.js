@@ -1,7 +1,7 @@
 Commands.register("man", {
 	requiredArguments: 0, 
 	format: "<pre>man\nman [name of command]</pre>",
-	run: function(args) {
+	run: function(args, callback) {
 		var commandName = args[0];
 		if(commandName) {
 			this.showCommand(commandName);
@@ -10,6 +10,7 @@ Commands.register("man", {
 				this.showCommand(commandName);
 			}
 		}
+		callback();
 	},
 	showCommand:function(commandName) {
 		var c = Commands[commandName];

@@ -125,7 +125,10 @@ var App = {
 		var command = args.shift();
 		var c = Commands[command];
 		if(c) {
-			if(c.validate(args)) Commands[command].run(args, callback);
+			if(c.validate(args)) {
+				callback = callback ? callback : function() {};
+				Commands[command].run(args, callback);
+			}
 		} else if(command != "" && command != " ") {
 			this.execute("error Missing command <b>" + command + "</b>.");
 		}
@@ -145,3 +148,7 @@ var App = {
 $(document).ready(function() {
 	App.init();
 });
+
+var exec = function(commandStr, callback) {
+	App.execute(commandStr, callback);
+}

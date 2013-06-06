@@ -1,7 +1,7 @@
 Commands.register("request", {
 	requiredArguments: 1,
 	format: '<pre>request [url]</pre>',
-	run: function(args) {
+	run: function(args, finished) {
 		App.disableInput();
 		var self = this;
 		var url = args[0];
@@ -9,9 +9,9 @@ Commands.register("request", {
 		var callback = function(response) {
 			App.enableInput();
 			if(response.error) {
-				App.execute('error request: ' + response.error);
+				App.execute('error request: ' + response.error, finished);
 			} else {				
-				App.execute("echo " + response.responseText);
+				App.execute("echo " + response.responseText, finished);
 			}
 		}
 		if(chrome && chrome.runtime) {
