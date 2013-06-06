@@ -1,26 +1,29 @@
-Commands.request = function(args) {
-	if(!args[0]) {
-		App.error("<u>open</u> requires at least one parameter. Format: open &lt;url&gt;");
-		return;
-	}
-	App.disableInput();
-	var self = this;
-	var url = args[0];
-	if(url.indexOf("http") == -1) url = "http://" + url;
-	var callback = function(response) {
-		App.enableInput();
-		if(response.error) {
-			App.error(response.error);
-		} else {				
-			App.echo(response.responseText);
+Commands.register("request", {
+	requiredArguments: 1,
+	format: '<pre>request [url]</pre>',
+	run: function(args) {
+		App.disableInput();
+		var self = this;
+		var url = args[0];
+		if(url.indexOf("http") == -1) url = "http://" + url;
+		var callback = function(response) {
+			App.enableInput();
+			if(response.error) {
+				App.error('request: ' + response.error);
+			} else {				
+				App.echo(response.responseText);
+			}
 		}
-	}
-	if(chrome && chrome.runtime) {
-		chrome.runtime.sendMessage({type: "request", url: url}, callback);
-	} else {
-		request(url, callback);
-	}
-}
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "request", url: url}, callback);
+		} else {
+			request(url, callback);
+		}
+	},
+	man: function() {
+		return 'Sends ajax request and shows the result in the console.';
+	}	
+})
 
 // Used in development mode
 var request = function(url, callback) {

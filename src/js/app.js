@@ -80,10 +80,11 @@ var App = {
 	key13: function(e) { // enter
 		e.preventDefault();
 		var commandStr = this.command.val();
-		var commandParts = commandStr.split(" ");
-		var command = commandParts.shift();
-		if(Commands[command]) {
-			Commands[command](commandParts);
+		var args = commandStr.split(" ");
+		var command = args.shift();
+		var c = Commands[command];
+		if(c) {
+			if(c.validate(args)) Commands[command].run(args);
 		} else if(command != "" && command != " ") {
 			this.error("Missing command <strike>" + command + "</strike>.");
 		}
@@ -111,6 +112,9 @@ var App = {
 	},
 	echo: function(str) {
 		this.setOutputPanelContent('<div class="regular">' + str + '</div>');
+	},
+	info: function(str) {
+		this.setOutputPanelContent('<div class="info">' + str + '</div>');
 	},
 	setOutputPanelContent: function(str, clearPreviousContent) {
 		var previousContent = this.output.html();

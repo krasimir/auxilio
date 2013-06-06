@@ -1,0 +1,26 @@
+.regular {
+	background: lighten(@color-a, 30%);
+	color: darken(@color-a, 100%);
+	padding: 10px;
+	margin: 0 0 4px 0;
+}
+.error {
+	.regular();
+	background: @color-error;
+	color: darken(@color-error, 100%);
+}
+.warning {
+	.regular();
+	background: @color-warning;
+	color: darken(@color-warning, 100%);
+}
+.success {
+	.regular();
+	background: @color-success;
+	color: darken(@color-success, 100%);	
+}
+.info {
+	.regular();
+	background: @color-info;
+	color: darken(@color-info, 100%);	
+}

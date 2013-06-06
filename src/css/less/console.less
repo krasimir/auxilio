@@ -1,0 +1,50 @@
+.console {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 10px;
+	.console-output-content {
+		width: 100%;
+		overflow: hidden;
+		box-sizing: border-box;
+		border-radius: 4px;
+		margin: 30px 0 0 0;
+	}
+	.inputs {
+		width: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		input {
+			.transition(~"all 400ms ease-out");
+			display: block;
+			box-sizing: border-box;
+			font-family: @font;
+			padding: 4px 10px 6px 10px;
+			width: 100%;
+			border: none;
+			border-bottom: solid 2px lighten(@color-a, 30%);
+			position: absolute;
+			top: 0;
+			left: 0;
+			&:focus {
+				border: none;
+				border-bottom: solid 2px lighten(@color-a, 10%);
+				outline: 0;
+			}
+		}
+		input[disabled] {
+			background: lighten(@color-a, 20%);
+		}
+	}
+	
+	.suggest {
+		z-index: 2;
+		border: solid 2px #FFF;
+		color: lighten(@color-input, 70%);
+	}
+	.command {
+		color: @color-input;
+		z-index: 3;
+		background: none;
+	}
+}
