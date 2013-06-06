@@ -83,6 +83,7 @@ var App = {
 		e.preventDefault();
 		this.execute(this.command.val());
 		this.command.val("");
+		this.suggest.val("");
 	},
 	key9: function(e) { // tab
 		e.preventDefault();
@@ -105,7 +106,6 @@ var App = {
 		this.commandsHistoryIndex = this.commandsHistoryIndex + 1 <= this.commandsHistory.length-1 ? this.commandsHistoryIndex += 1 : this.commandsHistory.length-1;
 		this.command.val(this.commandsHistory[this.commandsHistoryIndex]);
 	},
-	// console output panel
 	clear: function(str, clearPreviousContent) {
 		this.setOutputPanelContent('', true);
 	},
@@ -133,7 +133,7 @@ var App = {
 	addToHistory: function(commandStr) {
 		var args = commandStr.split(" ");
 		var command = args.shift();
-		var commandsToAvoid = ["echo", "info", "error", "success", "warning"];
+		var commandsToAvoid = ["echo", "info", "error", "success", "warning", "hidden"];
 		if(_.indexOf(commandsToAvoid, command) === -1) {
 			this.commandsHistory.push(commandStr);
 			this.commandsHistoryIndex = -1;

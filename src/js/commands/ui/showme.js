@@ -3,7 +3,7 @@ Commands.register("showme", {
 	format: '<pre>showme [selector]</pre>',
 	run: function(args, callback) {
 		var selector = args.join(" ");
-		if(chrome && chrome.runtime) chrome.runtime.sendMessage({type: "showme", selector: selector, callback: callback});
+		if(chrome && chrome.runtime) chrome.runtime.sendMessage({type: "showme", selector: selector}, callback);
 	},
 	man: function() {
 		return 'Shows element/elements on the page.';

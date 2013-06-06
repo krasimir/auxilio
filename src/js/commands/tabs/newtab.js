@@ -6,9 +6,9 @@ Commands.register("newtab", {
 			if(args[0]) {
 				var url = args[0];
 				if(url.indexOf("http") == -1) url = "http://" + url;
-				chrome.runtime.sendMessage({type: "newtab", url: url, callback: callback});
+				chrome.runtime.sendMessage({type: "newtab", url: url}, callback);
 			}else {
-				chrome.runtime.sendMessage({type: "newtab", callback: callback});
+				chrome.runtime.sendMessage({type: "newtab"}, callback);
 			}
 		}
 	},

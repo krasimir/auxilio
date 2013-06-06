@@ -20,19 +20,19 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	switch(message.type) {
     	case "load": 
     		chrome.tabs.getSelected(null, function (tab) {
-    			TabCompleteNotifier.add(tab.id, message.callback);
+    			TabCompleteNotifier.add(tab.id, sendResponse);
 				chrome.tabs.update(tab.id, {url: message.url});
 			});
     	break;
     	case "refresh":
     		chrome.tabs.getSelected(null, function (tab) {
-    			TabCompleteNotifier.add(tab.id, message.callback);
+    			TabCompleteNotifier.add(tab.id, sendResponse);
 				chrome.tabs.update(tab.id, {url: tab.url});
 			});
     	break;
     	case "newtab":
     		chrome.tabs.create({ active: true, url: message.url }, function(tab) {
-    			TabCompleteNotifier.add(tab.id, message.callback);
+    			TabCompleteNotifier.add(tab.id, sendResponse);
     		});
     	break;
     	default:

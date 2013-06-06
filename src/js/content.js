@@ -7,8 +7,13 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     		})
     	break;
     	case "click":
-    		var element = document.querySelector(message.selector);
-    		if(element) element.click();
+    		var elements = document.querySelectorAll(message.selector);
+    		if(elements && elements.length > 0) {
+    			elements[0].click();
+    			sendResponse({elements: elements.length});
+    		} else {
+    			sendResponse({elements: 0});
+    		}
     	break;
         case "showme":
     		var elements = document.querySelectorAll(message.selector);
@@ -21,6 +26,7 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
             		elements[i].style.WebkitBoxShadow = "5px 5px 1px #FF0000";
             	}
             }
+            sendResponse({elements: elements.length});
         break;
     }
     return true;
