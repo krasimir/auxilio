@@ -10,25 +10,17 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     		var element = document.querySelector(message.selector);
     		if(element) element.click();
     	break;
-        case "PageInfoHighlightTag":
-        	if(message.tag) {
-        		var elements = document.querySelectorAll(message.tag);
-	        	for(var i=0; i<elements.length; i++) {
-	        		if(message.tag != "img") {
-	                	elements[i].style.backgroundColor = message.color;
-	            	} else {
-	            		if(message.color == "") {
-	            			elements[i].style.boxShadow = "";
-		            		elements[i].style.MozBoxShadow = "";
-		            		elements[i].style.WebkitBoxShadow = "";
-	            		} else {
-	            			elements[i].style.boxShadow = "5px 5px 1px #FF0000";
-		            		elements[i].style.MozBoxShadow = "5px 5px 1px #FF0000";
-		            		elements[i].style.WebkitBoxShadow = "5px 5px 1px #FF0000";
-	            		}
-	            	}
-	            }
-        	}
+        case "showme":
+    		var elements = document.querySelectorAll(message.selector);
+        	for(var i=0; i<elements.length; i++) {
+        		if(message.selector != "img") {
+                	elements[i].style.backgroundColor = '#FF0000';
+            	} else {
+            		elements[i].style.boxShadow = "5px 5px 1px #FF0000";
+            		elements[i].style.MozBoxShadow = "5px 5px 1px #FF0000";
+            		elements[i].style.WebkitBoxShadow = "5px 5px 1px #FF0000";
+            	}
+            }
         break;
     }
     return true;
@@ -62,7 +54,7 @@ var request = function(url, callback) {
 
 // ----------------------------------------------------------------------------------- Boot code
 var onWindowLoad = function() {
-	
+	// alert(window.File + window.FileReader + window.FileList + window.Blob);
 }
 if(window) {
 	if(document && document.readyState == "complete") {
