@@ -35,8 +35,17 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     			TabCompleteNotifier.add(tab.id, sendResponse);
     		});
     	break;
-    	case "click":
-    		
+    	case "clicknavigate":
+    		chrome.tabs.getSelected(null, function (tab) {
+    			var clickResponse = null;
+    			TabCompleteNotifier.add(tab.id, function() {
+    				sendResponse(clickResponse);
+    			});
+    			message.type = "click";
+				chrome.tabs.sendMessage(tab.id, message, function(response) {
+		        	clickResponse = response;
+		        });
+			});
     	break;
     	default:
     		chrome.tabs.getSelected(null, function(tab){

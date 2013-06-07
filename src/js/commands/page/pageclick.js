@@ -11,6 +11,6 @@ Commands.register("pageclick", {
 		}
 	},
 	man: function() {
-		return 'Clicks element on the page.';
+		return 'Clicks an element on the page and returns the result immediately.';
 	}	
 })
