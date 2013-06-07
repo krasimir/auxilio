@@ -3,7 +3,7 @@ Commands.register("refresh", {
 	format: '<pre>refresh</pre>',
 	run: function(args, callback) {
 		if(chrome && chrome.runtime) chrome.runtime.sendMessage({type: "refresh"}, function() {
-			exec("info refresh: current tab is refreshed");
+			exec("info current tab is refreshed");
 			callback();
 		});
 	},

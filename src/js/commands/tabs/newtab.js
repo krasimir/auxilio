@@ -7,7 +7,7 @@ Commands.register("newtab", {
 				var url = args[0];
 				if(url.indexOf("http") == -1) url = "http://" + url;
 				chrome.runtime.sendMessage({type: "newtab", url: url}, function() {
-					exec("info newtab: " + url + " is loaded");
+					exec("info " + url + " is loaded");
 					callback();
 				});
 			}else {

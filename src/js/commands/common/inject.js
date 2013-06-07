@@ -59,7 +59,7 @@ Commands.register("inject", {
 		}
 		var commandStr = this.commands.shift();
 		var self = this;
-		App.execute(commandStr, function() {
+		exec(commandStr, function() {
 			self.executeCommands();
 		});
 	},
