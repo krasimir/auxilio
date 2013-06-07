@@ -17,6 +17,7 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     	break;
         case "highlight":
     		var elements = document.querySelectorAll(message.selector);
+            sendResponse({elements: elements && elements.length > 0 ? elements.length : 0});
         	for(var i=0; i<elements.length; i++) {
         		if(message.selector != "img") {
                 	elements[i].style.backgroundColor = '#FF0000';
@@ -28,7 +29,10 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
             		elements[i].style.WebkitBoxShadow = "5px 5px 1px #FF0000";
             	}
             }
-            sendResponse({elements: elements.length});
+        break;
+        case "query":
+            var elements = document.querySelectorAll(message.selector);
+            sendResponse({elements: elements && elements.length > 0 ? elements.length : 0});
         break;
     }
     return true;

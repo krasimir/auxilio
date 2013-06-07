@@ -35,6 +35,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     			TabCompleteNotifier.add(tab.id, sendResponse);
     		});
     	break;
+    	case "click":
+    		
+    	break;
     	default:
     		chrome.tabs.getSelected(null, function(tab){
 		        chrome.tabs.sendMessage(tab.id, message, function(response) {
