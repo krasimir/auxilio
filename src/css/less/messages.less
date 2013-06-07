@@ -1,8 +1,9 @@
 .regular {
 	background: lighten(@color-a, 30%);
 	color: darken(@color-a, 100%);
-	padding: 10px;
+	padding: 6px;
 	margin: 0 0 4px 0;
+	border-radius: 4px;
 }
 .error {
 	.regular();
@@ -23,6 +24,11 @@
 	.regular();
 	background: @color-info;
 	color: darken(@color-info, 100%);	
+}
+.small {
+	margin: 0 0 4px 0;
+	font-size: 12px;
+	color: darken(@color-a, 50%);
 }
 .hidden {
 	display: none;

@@ -81,7 +81,9 @@ var App = {
 	},
 	key13: function(e) { // enter
 		e.preventDefault();
-		this.execute(this.command.val());
+		var commandStr = this.command.val();
+		this.addToHistory(commandStr);
+		this.execute(commandStr);
 		this.command.val("");
 		this.suggest.val("");
 	},
@@ -120,10 +122,10 @@ var App = {
 		this.command.prop('disabled', false);
 	},
 	execute: function(commandStr, callback) {
-		this.addToHistory(commandStr);
 		var args = commandStr.split(" ");
 		var command = args.shift();
 		var c = Commands[command];
+		!this.isMessageCommand(command) ? this.execute("small " + commandStr) : null;
 		if(c) {
 			if(c.validate(args)) {
 				callback = callback ? callback : function() {};
@@ -136,11 +138,14 @@ var App = {
 	addToHistory: function(commandStr) {
 		var args = commandStr.split(" ");
 		var command = args.shift();
-		var commandsToAvoid = ["echo", "info", "error", "success", "warning", "hidden"];
-		if(_.indexOf(commandsToAvoid, command) === -1) {
+		if(!this.isMessageCommand(command)) {
 			this.commandsHistory.push(commandStr);
 			this.commandsHistoryIndex = -1;
 		}
+	},
+	isMessageCommand: function(command) {
+		var commandsToAvoid = ["echo", "info", "error", "success", "warning", "hidden", "small"];
+		return _.indexOf(commandsToAvoid, command) >= 0;
 	}
 }
 
