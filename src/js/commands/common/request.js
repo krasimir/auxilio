@@ -2,12 +2,10 @@ Commands.register("request", {
 	requiredArguments: 1,
 	format: '<pre>request [url]</pre>',
 	run: function(args, finished) {
-		App.disableInput();
 		var self = this;
 		var url = args[0];
 		if(url.indexOf("http") == -1) url = "http://" + url;
 		var callback = function(response) {
-			App.enableInput();
 			if(response.error) {
 				App.execute('error request: ' + response.error, finished);
 			} else {				

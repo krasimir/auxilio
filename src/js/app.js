@@ -128,8 +128,7 @@ var App = {
 		!this.isMessageCommand(command) ? this.execute("small " + commandStr) : null;
 		if(c) {
 			if(c.validate(args)) {
-				callback = callback ? callback : function() {};
-				Commands[command].run(args, callback);
+				Commands[command].run(args, callback ? callback : function() {});
 			}
 		} else if(command != "" && command != " ") {
 			this.execute("error Missing command <b>" + command + "</b>.");
