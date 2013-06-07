@@ -1,0 +1,16 @@
+[
+	{
+	    "type": "less",
+	    "watch": ["src/css/less"],
+	    "pack": "src/css/less/index.less",
+	    "output": "src/css/auxilio.css",
+	    "minify": true
+	},
+	{
+	    "type": "js",
+	    "watch": "src/js",
+	    "pack": ["src/js/commands"],
+	    "output": "src/js/commands/commands.js",
+	    "minify": true
+	}
+]
