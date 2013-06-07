@@ -15,11 +15,13 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     			sendResponse({elements: 0});
     		}
     	break;
-        case "showme":
+        case "highlight":
     		var elements = document.querySelectorAll(message.selector);
         	for(var i=0; i<elements.length; i++) {
         		if(message.selector != "img") {
                 	elements[i].style.backgroundColor = '#FF0000';
+                    elements[i].style.boxShadow = "1px 2px 1px #000";
+                    elements[i].style.color = "#FFF";
             	} else {
             		elements[i].style.boxShadow = "5px 5px 1px #FF0000";
             		elements[i].style.MozBoxShadow = "5px 5px 1px #FF0000";
