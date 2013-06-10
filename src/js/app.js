@@ -133,19 +133,16 @@ var App = {
 		var processCommand = function(str) {
 			var args = str.split(" ");
 			var command = args.shift();
-			var c = Commands[command];
+			var c = Commands.get(command);
 			!self.isMessageCommand(command) ? self.execute("small " + str) : null;
 			if(c) {
 				if(c.validate(args)) {
-					Commands[command].run(args, function() {
+					c.run(args, function() {
 						getNextCommand();
 					});
 				} else {
 					getNextCommand();
 				}
-			} else if(command != "" && command != " ") {
-				self.execute("error Missing command <b>" + command + "</b>.");
-				getNextCommand();
 			}
 		}
 		var getNextCommand = function() {
@@ -159,12 +156,8 @@ var App = {
 
 	},
 	addToHistory: function(commandStr) {
-		var args = commandStr.split(" ");
-		var command = args.shift();
-		if(!this.isMessageCommand(command)) {
-			this.commandsHistory.push(commandStr);
-			this.commandsHistoryIndex = -1;
-		}
+		this.commandsHistory.push(commandStr);
+		this.commandsHistoryIndex = -1;
 	},
 	isMessageCommand: function(command) {
 		var commandsToAvoid = ["echo", "info", "error", "success", "warning", "hidden", "small"];
