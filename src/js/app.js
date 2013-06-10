@@ -7,10 +7,11 @@ var App = {
 		this.suggest = document.getElementById("js-suggest");
 		this.command = document.getElementById("js-command");
 		this.output = document.getElementById("js-console-output-content");
+		this.body = document.querySelector("body");
 		this.matches = [];
 		this.commandsHistory = [];
 		this.commandsHistoryIndex = -1;
-		this.defineKeyboardEvents();
+		this.defineUserEvents();
 		this.prepareDictionary();
 		this.command.focus();
 	},
@@ -37,7 +38,7 @@ var App = {
 			}
 		}
 	},
-	defineKeyboardEvents:function() {
+	defineUserEvents:function() {
 		var self = this;
 		this.command.addEventListener("focus", function() {
 			self.command.removeEventListener("keyup")
@@ -53,6 +54,11 @@ var App = {
 		this.command.addEventListener("blur", function(e) {
 			self.command.removeEventListener("keyup");
 			self.command.removeEventListener("keydown");
+		});
+		this.body.addEventListener("click", function(e) {
+			if(e.target.nodeName === "BODY") {
+				self.command.focus();
+			}
 		});
 	},
 	// keyboard handlers

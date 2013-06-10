@@ -66,7 +66,7 @@ var request = function(url, callback) {
 
 // ----------------------------------------------------------------------------------- Boot code
 var onWindowLoad = function() {
-	// alert(window.File + window.FileReader + window.FileList + window.Blob);
+	
 }
 if(window) {
 	if(document && document.readyState == "complete") {
