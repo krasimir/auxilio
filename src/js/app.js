@@ -4,9 +4,9 @@ var CommandsDictionary = [];
 // The main application logic
 var App = {
 	init: function() {
-		this.suggest = $("#js-suggest");
-		this.command = $("#js-command");
-		this.output = $("#js-console-output-content");
+		this.suggest = document.getElementById("js-suggest");
+		this.command = document.getElementById("js-command");
+		this.output = document.getElementById("js-console-output-content");
 		this.matches = [];
 		this.commandsHistory = [];
 		this.commandsHistoryIndex = -1;
@@ -39,25 +39,27 @@ var App = {
 	},
 	defineKeyboardEvents:function() {
 		var self = this;
-		this.command.on("focus", function() {
-			self.command.off("keyup").on("keyup", function(e) {
+		this.command.addEventListener("focus", function() {
+			self.command.removeEventListener("keyup")
+			self.command.addEventListener("keyup", function(e) {
 				self.autocomplete();
 			});
-			self.command.off("keydown").on("keydown", function(e) {
+			self.command.removeEventListener("keydown")
+			self.command.addEventListener("keydown", function(e) {
 				var code = (e.keyCode ? e.keyCode : e.which);
 				if(self["key" + code]) self["key" + code](e);
 			});
 		});
-		this.command.on("blur", function(e) {
-			self.command.off("keyup");
-			self.command.off("keydown");
+		this.command.addEventListener("blur", function(e) {
+			self.command.removeEventListener("keyup");
+			self.command.removeEventListener("keydown");
 		});
 	},
 	// keyboard handlers
 	autocomplete: function() {
-		this.suggest.val("");
+		this.suggest.value = "";
 		this.matches = [];
-		var commandStr = this.command.val();
+		var commandStr = this.command.value;
 		if(commandStr == "") return;
 		for(var i=0; i<CommandsDictionary.length; i++) {
 			var suggestion = CommandsDictionary[i];
@@ -76,21 +78,21 @@ var App = {
 				suggestionStr += this.matches[i];
 				suggestionStr += i < this.matches.length-1 ? ", " : "";
 			}
-			this.suggest.val(suggestionStr);
+			this.suggest.value = suggestionStr;
 		}
 	},
 	key13: function(e) { // enter
 		e.preventDefault();
-		var commandStr = this.command.val();
+		var commandStr = this.command.value;
 		this.addToHistory(commandStr);
 		this.execute(commandStr);
-		this.command.val("");
-		this.suggest.val("");
+		this.command.value = "";
+		this.suggest.value = "";
 	},
 	key9: function(e) { // tab
 		e.preventDefault();
 		if(this.matches.length > 0) {
-			this.command.val(this.matches[0]);
+			this.command.value = this.matches[0];
 			this.autocomplete();
 		}
 	},
@@ -99,21 +101,21 @@ var App = {
 		if(this.commandsHistory.length == 0) return;
 		if(this.commandsHistoryIndex == -1) this.commandsHistoryIndex = this.commandsHistory.length;
 		this.commandsHistoryIndex = this.commandsHistoryIndex - 1 > 0 ? this.commandsHistoryIndex -= 1 : 0;
-		this.command.val(this.commandsHistory[this.commandsHistoryIndex]);
+		this.command.value = this.commandsHistory[this.commandsHistoryIndex];
 	},
 	key40: function(e) { // down
 		e.preventDefault();
 		if(this.commandsHistory.length == 0) return;
 		if(this.commandsHistoryIndex == -1) this.commandsHistoryIndex = this.commandsHistory.length-1;
 		this.commandsHistoryIndex = this.commandsHistoryIndex + 1 <= this.commandsHistory.length-1 ? this.commandsHistoryIndex += 1 : this.commandsHistory.length-1;
-		this.command.val(this.commandsHistory[this.commandsHistoryIndex]);
+		this.command.value = this.commandsHistory[this.commandsHistoryIndex];
 	},
 	clear: function(str, clearPreviousContent) {
 		this.setOutputPanelContent('', true);
 	},
 	setOutputPanelContent: function(str, clearPreviousContent) {
-		var previousContent = this.output.html();
-		this.output.html(clearPreviousContent ? str : str + previousContent);
+		var previousContent = this.output.innerHTML;
+		this.output.innerHTML = clearPreviousContent ? str : str + previousContent;
 	},
 	disableInput: function() {
 		this.command.prop('disabled', true);
@@ -166,10 +168,11 @@ var App = {
 }
 
 // Boot
-$(document).ready(function() {
+window.onload = function() {
 	App.init();
-});
+};
 
+// shortcuts
 var exec = function(commandStr, callback) {
 	App.execute(commandStr, callback);
 }
