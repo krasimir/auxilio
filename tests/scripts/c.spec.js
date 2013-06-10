@@ -1,3 +1,3 @@
 load http://auxilio-test-site.dev/
-pageclick a
+pageclicknavigate a
 pagehighlight h1

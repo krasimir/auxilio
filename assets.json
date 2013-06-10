@@ -8,9 +8,9 @@
 	},
 	{
 	    "type": "js",
-	    "watch": "src/js",
+	    "watch": "src/js/commands",
 	    "pack": ["src/js/commands"],
-	    "output": "src/js/commands/commands.js",
+	    "output": "src/js/app-commands.js",
 	    "minify": true
 	}
 ]

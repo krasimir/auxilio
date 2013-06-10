@@ -8,6 +8,7 @@ Commands.register("inject", {
 	run: function(args, callback) {
 		if(this.processing) {
 			App.execute("error Sorry but <b>inject</b> command is working right now. Try again later.");
+			callback();
 			return;
 		}
 		var id = _.uniqueId("files");
@@ -49,18 +50,13 @@ Commands.register("inject", {
 			this.executeCommands();
 		}
 	},
-	executeCommands: function() {		
-		if(this.commands.length == 0) {
-			this.processing = false;
-			this.files = null;
-			this.proccessedFiles = -1;
-			this.commands = [];
-			return;
-		}
-		var commandStr = this.commands.shift();
+	executeCommands: function() {
 		var self = this;
-		exec(commandStr, function() {
-			self.executeCommands();
+		exec(this.commands.join(" & "), function() {
+			self.processing = false;
+			self.files = null;
+			self.proccessedFiles = -1;
+			self.commands = [];
 		});
 	},
 	man: function() {

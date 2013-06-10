@@ -122,17 +122,41 @@ var App = {
 		this.command.prop('disabled', false);
 	},
 	execute: function(commandStr, callback) {
-		var args = commandStr.split(" ");
-		var command = args.shift();
-		var c = Commands[command];
-		!this.isMessageCommand(command) ? this.execute("small " + commandStr) : null;
-		if(c) {
-			if(c.validate(args)) {
-				Commands[command].run(args, callback ? callback : function() {});
-			}
-		} else if(command != "" && command != " ") {
-			this.execute("error Missing command <b>" + command + "</b>.");
+
+		var lines = commandStr.split(" & ");
+		var commands = [];
+		var self = this;
+		for(var i=0; i<lines.length; i++) {
+			commands.push(lines[i]);
 		}
+
+		var processCommand = function(str) {
+			var args = str.split(" ");
+			var command = args.shift();
+			var c = Commands[command];
+			!self.isMessageCommand(command) ? self.execute("small " + str) : null;
+			if(c) {
+				if(c.validate(args)) {
+					Commands[command].run(args, function() {
+						getNextCommand();
+					});
+				} else {
+					getNextCommand();
+				}
+			} else if(command != "" && command != " ") {
+				self.execute("error Missing command <b>" + command + "</b>.");
+				getNextCommand();
+			}
+		}
+		var getNextCommand = function() {
+			if(commands.length == 0) {
+				callback ? callback() : null;
+			} else {
+				processCommand(commands.shift());
+			}
+		}
+		getNextCommand();
+
 	},
 	addToHistory: function(commandStr) {
 		var args = commandStr.split(" ");
