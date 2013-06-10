@@ -168,7 +168,7 @@ var App = {
 		this.commandsHistoryIndex = -1;
 	},
 	isMessageCommand: function(command) {
-		var commandsToAvoid = ["echo", "info", "error", "success", "warning", "hidden", "small"];
+		var commandsToAvoid = ["echo", "info", "error", "success", "warning", "hidden", "small", "formtextarea"];
 		return _.indexOf(commandsToAvoid, command) >= 0;
 	}
 }
@@ -176,6 +176,7 @@ var App = {
 // Boot
 window.onload = function() {
 	App.init();
+	exec("formtextarea Profile:");
 };
 
 // shortcuts
