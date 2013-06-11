@@ -16,6 +16,8 @@ var TabCompleteNotifier = {
 	}
 }
 
+var storage = chrome.storage.local;
+
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	switch(message.type) {
     	case "load": 
@@ -46,6 +48,26 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 		        	clickResponse = response;
 		        });
 			});
+    	break;
+    	case "storage":
+    		if(message.operation == "put") {
+    			var o = {};
+    			o[message.key] = message.value;
+    			storage.set(o, function() {
+					sendResponse({error: null});
+				});
+    		} else if(message.operation == "get") {
+    			var o = null;
+    			if(message.key) {
+    				o = {};
+    				o[message.key] = '';
+    			}
+    			storage.get(o, function(res) {
+					sendResponse({error: null, value: res});
+				});
+    		} else {
+    			sendResponse({error: "Wrong operation (" + message.operation + ")."});
+    		}
     	break;
     	default:
     		chrome.tabs.getSelected(null, function(tab){

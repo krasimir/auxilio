@@ -20,6 +20,7 @@ Commands.register("formtextarea", {
 		var form = document.getElementById(id);
 		var button = document.getElementById(id + '_button');
 		var textarea = document.getElementById(id + '_area');
+		textarea.focus();
 		button.addEventListener("click", function() {
 			form.parentNode.style.display = "none";
 			exec("success Data sent successfully.");

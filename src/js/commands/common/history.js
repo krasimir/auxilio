@@ -4,7 +4,7 @@ Commands.register("history", {
 	run: function(args, callback) {
 		var message = 'History:<pre>';
 		for(var i=App.commandsHistory.length-2; i>=0; i--) {
-			if(!App.isMessageCommand(App.commandsHistory[i])) {
+			if(!App.isHiddenCommand(App.commandsHistory[i])) {
 				message += App.commandsHistory[i] + '\n';
 			}
 		}

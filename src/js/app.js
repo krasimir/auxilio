@@ -159,7 +159,7 @@ var App = {
 			var args = CommandParser.parse(str, lookForQuotes);
 			var command = args.shift();
 			var c = Commands.get(command);
-			if(!self.isMessageCommand(command)) {
+			if(!self.isHiddenCommand(command)) {
 				exec("small " + str);
 			}
 			if(c) {
@@ -186,8 +186,8 @@ var App = {
 		this.commandsHistory.push(commandStr);
 		this.commandsHistoryIndex = -1;
 	},
-	isMessageCommand: function(command) {
-		var commandsToAvoid = ["echo", "info", "error", "success", "warning", "hidden", "small", "formtextarea"];
+	isHiddenCommand: function(command) {
+		var commandsToAvoid = ["echo", "info", "error", "success", "warning", "hidden", "small", "formtextarea", "formconfirm", "forminput"];
 		return _.indexOf(commandsToAvoid, command) >= 0;
 	}
 }
@@ -195,9 +195,6 @@ var App = {
 // Boot
 window.onload = function() {
 	App.init();
-	exec('formconfirm Are you sure ?', function(value) {
-		exec("echo you entered " + value);
-	}, true);
 };
 
 // shortcuts
