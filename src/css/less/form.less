@@ -18,12 +18,18 @@
 		display: inline-block;
 		text-decoration: none;
 		padding: 10px;
-		color: @color-c;
+		color: darken(@color-a, 100%);
 		background: @color-a;
 		border-radius: 4px;
 		font-weight: bold;
+	}
+	.confirm {
+		background: @color-success;
 		&:hover {
-			background: darken(@color-a, 30%);
+			background: darken(@color-success, 30%);
 		}
+	}
+	.buttons {
+		margin: 0 0 10px 0;
 	}
 }

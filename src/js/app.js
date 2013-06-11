@@ -116,12 +116,27 @@ var App = {
 		this.commandsHistoryIndex = this.commandsHistoryIndex + 1 <= this.commandsHistory.length-1 ? this.commandsHistoryIndex += 1 : this.commandsHistory.length-1;
 		this.command.value = this.commandsHistory[this.commandsHistoryIndex];
 	},
-	clear: function(str, clearPreviousContent) {
-		this.setOutputPanelContent('', true);
+	clear: function() {
+		this.setOutputPanelContent('clear', true);
 	},
 	setOutputPanelContent: function(str, clearPreviousContent) {
-		var previousContent = this.output.innerHTML;
-		this.output.innerHTML = clearPreviousContent ? str : str + previousContent;
+		if(!str || str == "" || str == " ") return;
+		var str2DOMElement = function(html) {
+			var frame = document.createElement('iframe');
+			frame.style.display = 'none';
+			document.body.appendChild(frame);			  
+			frame.contentDocument.open();
+			frame.contentDocument.write(html);
+			frame.contentDocument.close();
+			var el = frame.contentDocument.body.firstChild;
+			document.body.removeChild(frame);
+			return el;
+		}
+		if(clearPreviousContent) {
+			this.output.innerHTML = '';
+		} else {
+			this.output.insertBefore(str2DOMElement(str), this.output.firstChild);
+		}
 	},
 	disableInput: function() {
 		this.command.prop('disabled', true);
@@ -130,6 +145,8 @@ var App = {
 		this.command.prop('disabled', false);
 	},
 	execute: function(commandStr, callback) {
+
+		if(!commandStr || commandStr == "" || commandStr == " ") return;
 
 		var lines = commandStr.split(" & ");
 		var commands = [];
@@ -142,7 +159,9 @@ var App = {
 			var args = str.split(" ");
 			var command = args.shift();
 			var c = Commands.get(command);
-			!self.isMessageCommand(command) ? self.execute("small " + str) : null;
+			if(!self.isMessageCommand(command)) {
+				exec("small " + str);
+			}
 			if(c) {
 				if(c.validate(args)) {
 					c.run(args, function() {

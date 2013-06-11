@@ -6,12 +6,15 @@ Commands.register("formtextarea", {
 		var id = _.uniqueId("formtextarea");
 		var title = args[0];
 		var text = args[1] ? args[1] : '';
-		var html = '';
-		html += '<div id="' + id + '" class="form">';
-		html += '<a href="#" id="' + id + '_button" class="btn right"><i class="icon-magic"></i> SUBMIT</a>';
-		html += '<h1>' + title + '</h1>';
-		html += '<textarea id="' + id + '_area" class="clear">' + text + '</textarea>';
-		html += '</div>';
+		var html = '\
+			<div id="' + id + '" class="form">\
+				<div class="buttons right">\
+					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> SUBMIT</a>\
+				</div>\
+				<h1>' + title + '</h1>\
+				<textarea id="' + id + '_area" class="clear">' + text + '</textarea>\
+			</div>\
+		';
 		exec("echo " + html);
 		
 		var form = document.getElementById(id);
@@ -19,7 +22,7 @@ Commands.register("formtextarea", {
 		var textarea = document.getElementById(id + '_area');
 		button.addEventListener("click", function() {
 			form.parentNode.style.display = "none";
-			exec("success Data successfully sent.");
+			exec("success Data sent successfully.");
 			callback(textarea.value);
 		});
 

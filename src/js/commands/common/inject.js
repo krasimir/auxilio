@@ -27,7 +27,6 @@ Commands.register("inject", {
 		var message = '<b>Selected file(s):</b><br />';
 		var self = this;
 		for(var i=0, f; f=this.files[i]; i++) {
-			console.log(f);
 			message += f.name + "<br />";
 			var reader = new FileReader();
 			(function(reader, f) {
