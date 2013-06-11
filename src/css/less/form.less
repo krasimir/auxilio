@@ -2,7 +2,7 @@
 	width: 100%;
 	padding: 6px;
 	.box-sizing();
-	textarea {
+	.input{
 		.box-sizing();
 		display: block;
 		border-radius: 4px;
@@ -12,6 +12,13 @@
 		padding: 10px;
 		font-family: @font;
 		margin: 0 0 10px 0;
+	}
+	textarea  {
+		.input();
+	}
+	input {
+		.input();
+		height: auto;
 	}
 	.btn {
 		.transition(~"all 400ms ease-out");
@@ -27,6 +34,12 @@
 		background: @color-success;
 		&:hover {
 			background: darken(@color-success, 30%);
+		}
+	}
+	.deny {
+		background: @color-error;
+		&:hover {
+			background: darken(@color-error, 30%);
 		}
 	}
 	.buttons {

@@ -1,9 +1,9 @@
 Commands.register("forminput", {
 	requiredArguments: 1,
-	format: '<pre>forminput [title]\nformtextarea [title] [text]</pre>',
+	format: '<pre>forminput [title]\forminput [title] [text]</pre>',
 	run: function(args, callback) {
 		
-		var id = _.uniqueId("formtextarea");
+		var id = _.uniqueId("forminput");
 		var title = args.shift();
 		var text = args.length > 0 ? args.join(" ") : '';
 		var html = '\
@@ -12,7 +12,7 @@ Commands.register("forminput", {
 					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> SUBMIT</a>\
 				</div>\
 				<h1>' + title + '</h1>\
-				<textarea id="' + id + '_area" class="clear">' + text + '</textarea>\
+				<input id="' + id + '_area" class="clear" value="' + text + '"/>\
 			</div>\
 		';
 		exec("echo " + html);

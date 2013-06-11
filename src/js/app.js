@@ -195,7 +195,7 @@ var App = {
 // Boot
 window.onload = function() {
 	App.init();
-	exec('forminput "your profile here:" a test mest dsa', function(value) {
+	exec('formconfirm Are you sure ?', function(value) {
 		exec("echo you entered " + value);
 	}, true);
 };
