@@ -1,6 +1,6 @@
-Commands.register("formtextarea", {
+Commands.register("forminput", {
 	requiredArguments: 1,
-	format: '<pre>formtextarea [title]\nformtextarea [title] [text]</pre>',
+	format: '<pre>forminput [title]\nformtextarea [title] [text]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("formtextarea");
@@ -28,6 +28,6 @@ Commands.register("formtextarea", {
 
 	},
 	man: function() {
-		return 'Shows a simple form with textarea and button. Use the callback of the command to get the text submitted by the form.';
+		return 'Shows a simple form with input and button. Use the callback of the command to get the text submitted by the form.';
 	}	
 })

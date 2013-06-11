@@ -91,7 +91,7 @@ var App = {
 		e.preventDefault();
 		var commandStr = this.command.value;
 		this.addToHistory(commandStr);
-		this.execute(commandStr);
+		this.execute(commandStr, null, true);
 		this.command.value = "";
 		this.suggest.value = "";
 	},
@@ -144,7 +144,7 @@ var App = {
 	enableInput: function() {
 		this.command.prop('disabled', false);
 	},
-	execute: function(commandStr, callback) {
+	execute: function(commandStr, callback, lookForQuotes) {
 
 		if(!commandStr || commandStr == "" || commandStr == " ") return;
 
@@ -156,7 +156,7 @@ var App = {
 		}
 
 		var processCommand = function(str) {
-			var args = str.split(" ");
+			var args = CommandParser.parse(str, lookForQuotes);
 			var command = args.shift();
 			var c = Commands.get(command);
 			if(!self.isMessageCommand(command)) {
@@ -164,17 +164,17 @@ var App = {
 			}
 			if(c) {
 				if(c.validate(args)) {
-					c.run(args, function() {
-						getNextCommand();
+					c.run(args, function(res) {
+						getNextCommand(res);
 					});
 				} else {
 					getNextCommand();
 				}
 			}
 		}
-		var getNextCommand = function() {
+		var getNextCommand = function(res) {
 			if(commands.length == 0) {
-				callback ? callback() : null;
+				callback ? callback(res) : null;
 			} else {
 				processCommand(commands.shift());
 			}
@@ -195,10 +195,12 @@ var App = {
 // Boot
 window.onload = function() {
 	App.init();
-	exec("formtextarea Profile:");
+	exec('forminput "your profile here:" a test mest dsa', function(value) {
+		exec("echo you entered " + value);
+	}, true);
 };
 
 // shortcuts
-var exec = function(commandStr, callback) {
-	App.execute(commandStr, callback);
+var exec = function(commandStr, callback, lookForQuotes) {
+	App.execute(commandStr, callback, lookForQuotes);
 }
