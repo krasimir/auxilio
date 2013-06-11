@@ -2,9 +2,9 @@ Commands.register("storage", {
 	requiredArguments: 1,
 	format: '<pre>storage [operation] [key] [value]</pre>',
 	run: function(args, callback) {
-		var operation = args[0];
-		var key = args[1];
-		var value = args[2];
+		var operation = args.shift();
+		var key = args.length > 0 ? args.shift() : null;
+		var value = args.length > 0 ? args.join(" ") : null;
 		if(operation !== "put" && operation != "get" && operation != "remove") {
 			exec("error Operation parameter could be 'put', 'get' or 'remove' (not '" + operation + "').");
 			callback();

@@ -14,6 +14,7 @@ var App = {
 		this.defineUserEvents();
 		this.prepareDictionary();
 		this.command.focus();
+		this.loadProfile();
 	},
 	prepareDictionary: function() {
 		// adding commands from Commands
@@ -199,9 +200,17 @@ var App = {
 			"formconfirm", 
 			"forminput", 
 			"formfile",
-			"echocommand"
+			"echocommand",
+			"storage"
 		];
 		return _.indexOf(commandsToAvoid, command) >= 0;
+	},
+	loadProfile: function() {
+		exec("storage get profiledata", function(data) {
+			if(data.profiledata && data.profiledata !== "") {
+				exec(data.profiledata);
+			}
+		});
 	}
 }
 
