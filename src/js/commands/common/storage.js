@@ -26,7 +26,7 @@ Commands.register("storage", {
 					exec("error " + error.error);
 				} else {
 					if(operation === "get") {
-						exec("info " + JSON.stringify(res.value))
+						// exec("info " + JSON.stringify(res.value))
 						callback(res.value);
 					} else {
 						callback();

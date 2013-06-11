@@ -9,7 +9,7 @@ Commands.register("formtextarea", {
 		var html = '\
 			<div id="' + id + '" class="form">\
 				<div class="buttons right">\
-					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> SUBMIT</a>\
+					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> OK</a>\
 				</div>\
 				<h1>' + title + '</h1>\
 				<textarea id="' + id + '_area" class="clear">' + text + '</textarea>\

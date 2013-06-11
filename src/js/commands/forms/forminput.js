@@ -9,10 +9,10 @@ Commands.register("forminput", {
 		var html = '\
 			<div id="' + id + '" class="form">\
 				<div class="buttons right">\
-					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> SUBMIT</a>\
+					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> OK</a>\
 				</div>\
 				<h1>' + title + '</h1>\
-				<input id="' + id + '_area" class="clear" value="' + text + '"/>\
+				<input type="text" id="' + id + '_area" class="clear" value="' + text + '"/>\
 			</div>\
 		';
 		exec("echo " + html);
