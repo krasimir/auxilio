@@ -65,6 +65,14 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     			storage.get(o, function(res) {
 					sendResponse({error: null, value: res});
 				});
+			} else if(message.operation == "remove") {
+    			if(message.key) {
+    				storage.remove(message.key, function(res) {
+						sendResponse({error: null});
+					});
+    			} else {
+    				sendResponse({error: "Missing key."});
+    			}
     		} else {
     			sendResponse({error: "Wrong operation (" + message.operation + ")."});
     		}

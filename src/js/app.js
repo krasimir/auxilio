@@ -187,7 +187,20 @@ var App = {
 		this.commandsHistoryIndex = -1;
 	},
 	isHiddenCommand: function(command) {
-		var commandsToAvoid = ["echo", "info", "error", "success", "warning", "hidden", "small", "formtextarea", "formconfirm", "forminput", "formfile"];
+		var commandsToAvoid = [
+			"echo", 
+			"info", 
+			"error", 
+			"success", 
+			"warning", 
+			"hidden", 
+			"small", 
+			"formtextarea", 
+			"formconfirm", 
+			"forminput", 
+			"formfile",
+			"echocommand"
+		];
 		return _.indexOf(commandsToAvoid, command) >= 0;
 	}
 }
