@@ -7,7 +7,9 @@ Commands.register("man", {
 			this.showCommand(commandName);
 		} else {
 			for(var commandName in Commands) {
-				this.showCommand(commandName);
+				if(commandName != "get" && commandName != "register") {
+					this.showCommand(commandName);
+				}
 			}
 		}
 		callback();
