@@ -156,7 +156,7 @@ var App = {
 			commands.push(lines[i]);
 		}
 
-		var processCommand = function(str) {
+		var processCommand = function(str, resultFromPreviousCommand) {
 			var args = CommandParser.parse(str, lookForQuotes);
 			var command = args.shift();
 			var c = Commands.get(command);
@@ -164,6 +164,9 @@ var App = {
 				exec("small " + str);
 			}
 			if(c) {
+				if(resultFromPreviousCommand && args.length === 0) {
+					args = args.concat([resultFromPreviousCommand]);
+				}
 				if(c.validate(args)) {
 					c.run(args, function(res) {
 						getNextCommand(res);
@@ -177,7 +180,7 @@ var App = {
 			if(commands.length == 0) {
 				callback ? callback(res) : null;
 			} else {
-				processCommand(commands.shift());
+				processCommand(commands.shift(), res);
 			}
 		}
 		getNextCommand();

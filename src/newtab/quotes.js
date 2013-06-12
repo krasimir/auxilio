@@ -182,5 +182,6 @@ quotes =[
 	["Making responsiveness only about grids, responsive images and media queries is a disservice to customers and brands. It needs to be about providing readable content for any device, and that means starting with type.", "typecast.com"],
 	["Responsive web design isn’t your site working on phones and tablets. It’s about your site working everywhere.", "Scott Kellum"],
 	["If you can't explain it simply, you don't understand it well enough.", "Einstein"],
-	["You haven’t fixed it if you can’t explain it.", "Sam Stephenson"]
+	["You haven’t fixed it if you can’t explain it.", "Sam Stephenson"],
+	["We’re not designing pages, we’re designing systems of components.", "Stephen Hay"]
 ];
