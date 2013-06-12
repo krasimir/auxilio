@@ -40,7 +40,6 @@ Commands.register("formfile", {
 		button.addEventListener("click", function() {
 			if(value != null) {
 				form.parentNode.style.display = "none";
-				exec("success Data sent successfully.");
 				callback(value);
 			} else {
 				exec("error Please choose a file.")

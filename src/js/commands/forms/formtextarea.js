@@ -23,7 +23,6 @@ Commands.register("formtextarea", {
 		textarea.focus();
 		button.addEventListener("click", function() {
 			form.parentNode.style.display = "none";
-			exec("success Data sent successfully.");
 			callback(textarea.value);
 		});
 

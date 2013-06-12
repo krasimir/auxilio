@@ -46,7 +46,7 @@ Commands.register("inject", {
 	handleFileRead: function(file, content) {
 		var fileCommands = content.split("\n");
 		for(var i=0, c; c = fileCommands[i]; i++) {
-			this.commands.push(c);
+			this.commands.push(c.replace(/\n/g, '').replace(/\r/g, ''));
 		}
 		this.proccessedFiles += 1;
 		if(this.proccessedFiles == this.files.length-1) {

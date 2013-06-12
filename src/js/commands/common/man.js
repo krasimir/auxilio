@@ -17,7 +17,7 @@ Commands.register("man", {
 		if(c) {
 			var message = '(<b>' + commandName + '</b>) ' + (c.man ? c.man() : '');
 			c.format && c.format != '' ? message += '<br />' + c.format : null;
-			App.execute("echo " + message);
+			exec("echo " + message);
 		}
 	},
 	man: function() {

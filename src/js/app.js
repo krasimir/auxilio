@@ -211,7 +211,7 @@ var App = {
 	loadProfile: function() {
 		exec("storage get profiledata", function(data) {
 			if(data.profiledata && data.profiledata !== "") {
-				exec(data.profiledata);
+				exec(data.profiledata.replace(/&amp;/g, '&').replace(/\n/g, ' & '));
 			}
 		});
 	}
