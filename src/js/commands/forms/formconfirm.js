@@ -23,10 +23,12 @@ Commands.register("formconfirm", {
 		buttonYes.addEventListener("click", function() {
 			form.parentNode.style.display = "none";
 			callback(true);
+			App.commandInputFocus();
 		});
 		buttonNo.addEventListener("click", function() {
 			form.parentNode.style.display = "none";
 			callback(false);
+			App.commandInputFocus();
 		});
 
 	},

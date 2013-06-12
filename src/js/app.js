@@ -214,6 +214,9 @@ var App = {
 				exec(data.profiledata.replace(/&amp;/g, '&').replace(/\n/g, ' & '));
 			}
 		});
+	},
+	commandInputFocus: function() {
+		this.command.focus();
 	}
 }
 

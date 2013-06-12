@@ -8,6 +8,7 @@ Commands.register("formfile", {
 		var html = '\
 			<div id="' + id + '" class="form">\
 				<div class="buttons right">\
+					<a href="#" id="' + id + '_button_cancel" class="btn deny"><i class="icon-cancel"></i> CANCEL</a>\
 					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> OK</a>\
 				</div>\
 				<h1>' + title + '</h1>\
@@ -19,6 +20,7 @@ Commands.register("formfile", {
 		
 		var form = document.getElementById(id);
 		var button = document.getElementById(id + '_button');
+		var buttonCancel = document.getElementById(id + '_button_cancel');
 		var area = document.getElementById(id + '_area');
 		var fileContent = document.getElementById(id + '_filecontent');
 		var value = null;
@@ -41,9 +43,15 @@ Commands.register("formfile", {
 			if(value != null) {
 				form.parentNode.style.display = "none";
 				callback(value);
+				App.commandInputFocus();
 			} else {
 				exec("error Please choose a file.")
 			}
+		});
+		buttonCancel.addEventListener("click", function() {
+			form.parentNode.style.display = "none";
+			callback();
+			App.commandInputFocus();
 		});
 
 	},

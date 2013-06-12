@@ -9,6 +9,7 @@ Commands.register("formtextarea", {
 		var html = '\
 			<div id="' + id + '" class="form">\
 				<div class="buttons right">\
+					<a href="#" id="' + id + '_button_cancel" class="btn deny"><i class="icon-cancel"></i> CANCEL</a>\
 					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> OK</a>\
 				</div>\
 				<h1>' + title + '</h1>\
@@ -19,11 +20,18 @@ Commands.register("formtextarea", {
 		
 		var form = document.getElementById(id);
 		var button = document.getElementById(id + '_button');
+		var buttonCancel = document.getElementById(id + '_button_cancel');
 		var textarea = document.getElementById(id + '_area');
 		textarea.focus();
 		button.addEventListener("click", function() {
 			form.parentNode.style.display = "none";
 			callback(textarea.value);
+			App.commandInputFocus();
+		});
+		buttonCancel.addEventListener("click", function() {
+			form.parentNode.style.display = "none";
+			callback();
+			App.commandInputFocus();
 		});
 
 	},
