@@ -5,7 +5,6 @@ Commands.register("pagehighlight", {
 		var selector = args.join(" ");
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "highlight", selector: selector}, function(res) {
-				exec("info pagehighlight: selector <b>" + selector + "</b> (" + res.elements + " element(s) matching)");
 				callback(res);
 			});
 		}

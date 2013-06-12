@@ -5,7 +5,6 @@ Commands.register("pageclick", {
 		var selector = args.join(" ");
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "click", selector: selector}, function(res) {
-				exec("info pageclick: selector <b>" + selector + "</b> (" + res.elements + " element(s) matching)");
 				callback(res);
 			});
 		}

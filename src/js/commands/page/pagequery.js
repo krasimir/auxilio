@@ -5,7 +5,6 @@ Commands.register("pagequery", {
 		var selector = args.join(" ");
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "query", selector: selector}, function(res) {
-				exec("info pagequery: selector <b>" + selector + "</b> (" + res.elements + " element(s) matching)");
 				callback(res);
 			});
 		}

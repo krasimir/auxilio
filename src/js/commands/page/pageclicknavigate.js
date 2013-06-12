@@ -5,7 +5,6 @@ Commands.register("pageclicknavigate", {
 		var selector = args.join(" ");
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "clicknavigate", selector: selector}, function(res) {
-				exec("info pageclicknavigate: selector <b>" + selector + "</b> (" + res.elements + " element(s) matching)");
 				callback(res);
 			});
 		}
