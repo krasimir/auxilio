@@ -5,12 +5,15 @@ Commands.register("inject", {
 	files: null,
 	proccessedFiles: -1,
 	commands: [],
+	callback: null,
 	run: function(args, callback) {
+		this.callback = callback;
 		if(this.processing) {
 			App.execute("error Sorry but <b>inject</b> command is working right now. Try again later.");
-			callback();
+			this.callback();
 			return;
 		}
+		this.reset();
 		var id = _.uniqueId("files");
 		var self = this;
 		var input = '<input type="file" id="' + id + '" name="files[]" multiple />';
@@ -47,17 +50,16 @@ Commands.register("inject", {
 		}
 		this.proccessedFiles += 1;
 		if(this.proccessedFiles == this.files.length-1) {
-			this.executeCommands();
+			var commandsString = this.commands.join(" & ");
+			this.callback(commandsString);
+			this.reset();
 		}
 	},
-	executeCommands: function() {
-		var self = this;
-		exec(this.commands.join(" & "), function() {
-			self.processing = false;
-			self.files = null;
-			self.proccessedFiles = -1;
-			self.commands = [];
-		});
+	reset: function() {
+		this.processing = false;
+		this.files = null;
+		this.proccessedFiles = -1;
+		this.commands = [];
 	},
 	man: function() {
 		return 'Inject external javascript to be run in the context of Auxilio and current page.';
