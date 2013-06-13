@@ -13,8 +13,33 @@ var App = {
 		this.commandsHistoryIndex = -1;
 		this.defineUserEvents();
 		this.prepareDictionary();
-		this.command.focus();
 		this.loadProfile();
+		this.command.focus();
+	},
+	defineUserEvents:function() {
+		var self = this;
+		var onKeyUp = function(e) {
+			self.autocomplete();
+		}
+		var onKeyDown = function(e) {
+			var code = (e.keyCode ? e.keyCode : e.which);
+			if(self["key" + code]) self["key" + code](e);
+		}
+		this.command.addEventListener("focus", function() {
+			self.command.removeEventListener("keyup", onKeyUp)
+			self.command.addEventListener("keyup", onKeyUp);
+			self.command.removeEventListener("keydown", onKeyDown);
+			self.command.addEventListener("keydown", onKeyDown);
+		});
+		this.command.addEventListener("blur", function(e) {
+			self.command.removeEventListener("keyup");
+			self.command.removeEventListener("keydown");
+		});
+		this.body.addEventListener("click", function(e) {
+			if(e.target.nodeName === "BODY") {
+				self.command.focus();
+			}
+		});
 	},
 	prepareDictionary: function() {
 		// adding commands from Commands
@@ -38,29 +63,6 @@ var App = {
 				}
 			}
 		}
-	},
-	defineUserEvents:function() {
-		var self = this;
-		this.command.addEventListener("focus", function() {
-			self.command.removeEventListener("keyup")
-			self.command.addEventListener("keyup", function(e) {
-				self.autocomplete();
-			});
-			self.command.removeEventListener("keydown")
-			self.command.addEventListener("keydown", function(e) {
-				var code = (e.keyCode ? e.keyCode : e.which);
-				if(self["key" + code]) self["key" + code](e);
-			});
-		});
-		this.command.addEventListener("blur", function(e) {
-			self.command.removeEventListener("keyup");
-			self.command.removeEventListener("keydown");
-		});
-		this.body.addEventListener("click", function(e) {
-			if(e.target.nodeName === "BODY") {
-				self.command.focus();
-			}
-		});
 	},
 	// keyboard handlers
 	autocomplete: function() {
@@ -95,6 +97,7 @@ var App = {
 		this.execute(commandStr, null, true);
 		this.command.value = "";
 		this.suggest.value = "";
+		this.commandsHistoryIndex = -1;
 	},
 	key9: function(e) { // tab
 		e.preventDefault();
@@ -188,7 +191,6 @@ var App = {
 	},
 	addToHistory: function(commandStr) {
 		this.commandsHistory.push(commandStr);
-		this.commandsHistoryIndex = -1;
 	},
 	isHiddenCommand: function(command) {
 		var commandsToAvoid = [
