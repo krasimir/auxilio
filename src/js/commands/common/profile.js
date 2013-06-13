@@ -26,7 +26,7 @@ Commands.register("profile", {
 						exec("storage put profiledata " + newValue, function() {
 							exec('success Profile changed successfully.', callback);
 						});
-					}, true)
+					}, true);
 				});
 			break;
 			case "import":

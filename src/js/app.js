@@ -14,6 +14,7 @@ var App = {
 		this.defineUserEvents();
 		this.prepareDictionary();
 		this.loadProfile();
+		this.registerAliases();
 		this.command.focus();
 	},
 	defineUserEvents:function() {
@@ -214,6 +215,27 @@ var App = {
 		exec("storage get profiledata", function(data) {
 			if(data.profiledata && data.profiledata !== "") {
 				exec(data.profiledata.replace(/\n/g, ' && '));
+			}
+		});
+	},
+	registerAliases: function() {
+		exec("storage get aliases", function(data) {
+			if(data.aliases && data.aliases != "") {
+				var aliases = JSON.parse(data.aliases);
+				for(var i in aliases) {
+					(function(name, commands) {
+						Commands.register(name, {
+							requiredArguments: 0,
+							format: '[that\'s an alias]',
+							run: function(args, callback) {
+								exec(commands.replace(/\n/g, ' && '), callback);
+							},
+							man: function() {
+								return '[that\'s an alias]';
+							}	
+						})
+					})(i, aliases[i]);
+				}
 			}
 		});
 	},
