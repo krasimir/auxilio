@@ -32,7 +32,7 @@ Commands.register("alias", {
 				if(str != '') {
 					exec('echo ' + str);
 				} else {
-					exec('echo No data.');
+					exec('info No data.');
 				}
 				callback();
 			}
