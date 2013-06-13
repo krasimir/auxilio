@@ -50,7 +50,7 @@ Commands.register("inject", {
 		}
 		this.proccessedFiles += 1;
 		if(this.proccessedFiles == this.files.length-1) {
-			var commandsString = this.commands.join(" & ");
+			var commandsString = this.commands.join(" && ");
 			this.callback(commandsString);
 			this.reset();
 		}

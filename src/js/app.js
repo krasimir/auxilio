@@ -152,7 +152,7 @@ var App = {
 
 		if(!commandStr || commandStr == "" || commandStr == " ") return;
 
-		var lines = commandStr.split(" & ");
+		var lines = commandStr.split(" && ");
 		var commands = [];
 		var self = this;
 		for(var i=0; i<lines.length; i++) {
@@ -213,7 +213,7 @@ var App = {
 	loadProfile: function() {
 		exec("storage get profiledata", function(data) {
 			if(data.profiledata && data.profiledata !== "") {
-				exec(data.profiledata.replace(/&amp;/g, '&').replace(/\n/g, ' & '));
+				exec(data.profiledata.replace(/\n/g, ' && '));
 			}
 		});
 	},

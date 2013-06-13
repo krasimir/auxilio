@@ -23,7 +23,7 @@ Commands.register("profile", {
 						currentValue = data.profiledata;
 					}
 					exec('formtextarea "Manage your profile:" ' + currentValue, function(newValue) {
-						exec("storage put profiledata " + self.formatForStorage(newValue), function() {
+						exec("storage put profiledata " + newValue, function() {
 							exec('success Profile changed successfully.', callback);
 						});
 					}, true)
@@ -31,7 +31,8 @@ Commands.register("profile", {
 			break;
 			case "import":
 				exec("inject", function(data) {
-					exec("storage put profiledata " + self.formatForStorage(data), function() {
+					data = data.replace(/ && /g, '\n');
+					exec("storage put profiledata " + data, function() {
 						exec('success Profile changed successfully.', callback);
 					});
 				});
@@ -46,12 +47,6 @@ Commands.register("profile", {
 				callback();
 			break;
 		}
-	},
-	formatForStorage: function(str) {
-		return str.replace(/&/g, '&amp;');
-	},
-	formatForUsage: function(str) {
-		return str.replace(/&amp;/g, '&');
 	},
 	man: function() {
 		return 'Manages your current profile file. Valid operations:<br />show, edit, import, clear, run';
