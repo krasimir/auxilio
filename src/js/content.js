@@ -6,7 +6,7 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     			sendResponse(response);
     		})
     	break;
-    	case "click":
+    	case "pageclick":
     		var elements = document.querySelectorAll(message.selector);
     		if(elements && elements.length > 0) {
     			elements[0].click();
@@ -15,7 +15,7 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     			sendResponse({elements: 0});
     		}
     	break;
-        case "highlight":
+        case "pagehighlight":
     		var elements = document.querySelectorAll(message.selector);
             sendResponse({elements: elements && elements.length > 0 ? elements.length : 0});
         	for(var i=0; i<elements.length; i++) {
@@ -30,7 +30,7 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
             	}
             }
         break;
-        case "query":
+        case "pagequery":
             var elements = document.querySelectorAll(message.selector);
             sendResponse({elements: elements && elements.length > 0 ? elements.length : 0});
         break;

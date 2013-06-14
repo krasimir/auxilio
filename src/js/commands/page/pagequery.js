@@ -4,7 +4,7 @@ Commands.register("pagequery", {
 	run: function(args, callback) {
 		var selector = args.join(" ");
 		if(chrome && chrome.runtime) {
-			chrome.runtime.sendMessage({type: "query", selector: selector}, function(res) {
+			chrome.runtime.sendMessage({type: "pagequery", selector: selector}, function(res) {
 				callback(res);
 			});
 		}

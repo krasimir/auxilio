@@ -4,7 +4,7 @@ Commands.register("pageclicknavigate", {
 	run: function(args, callback) {
 		var selector = args.join(" ");
 		if(chrome && chrome.runtime) {
-			chrome.runtime.sendMessage({type: "clicknavigate", selector: selector}, function(res) {
+			chrome.runtime.sendMessage({type: "pageclicknavigate", selector: selector}, function(res) {
 				callback(res);
 			});
 		}

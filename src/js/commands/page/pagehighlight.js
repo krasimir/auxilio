@@ -4,7 +4,7 @@ Commands.register("pagehighlight", {
 	run: function(args, callback) {
 		var selector = args.join(" ");
 		if(chrome && chrome.runtime) {
-			chrome.runtime.sendMessage({type: "highlight", selector: selector}, function(res) {
+			chrome.runtime.sendMessage({type: "pagehighlight", selector: selector}, function(res) {
 				callback(res);
 			});
 		}

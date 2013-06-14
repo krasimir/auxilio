@@ -4,7 +4,7 @@ Commands.register("pageclick", {
 	run: function(args, callback) {
 		var selector = args.join(" ");
 		if(chrome && chrome.runtime) {
-			chrome.runtime.sendMessage({type: "click", selector: selector}, function(res) {
+			chrome.runtime.sendMessage({type: "pageclick", selector: selector}, function(res) {
 				callback(res);
 			});
 		}

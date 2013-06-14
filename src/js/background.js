@@ -41,13 +41,13 @@ var onMessageListener = function(message, sender, sendResponse) {
                 });    
               });
         break;
-        case "clicknavigate":
+        case "pageclicknavigate":
             chrome.tabs.getSelected(null, function (tab) {
                 var clickResponse = null;
                 TabCompleteNotifier.add(tab.id, function() {
                     sendResponse(clickResponse);
                 });
-                message.type = "click";
+                message.type = "pageclick";
                 chrome.tabs.sendMessage(tab.id, message, function(response) {
                     clickResponse = response;
                 });
