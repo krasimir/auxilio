@@ -2,6 +2,7 @@ var CommandBase = {
 	name: '',
 	requiredArguments: 0,
 	format: '',
+	lookForQuotes: true,
 	run: function(args, callback) {
 
 	},

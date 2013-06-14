@@ -25,7 +25,8 @@ Commands.register("formtextarea", {
 		textarea.focus();
 		button.addEventListener("click", function() {
 			form.parentNode.style.display = "none";
-			callback(textarea.value.replace(/ && /g, '\n'));
+			var value = textarea.value.replace(/ && /g, '\n');
+			callback(value);
 			App.commandInputFocus();
 		});
 		buttonCancel.addEventListener("click", function() {

@@ -23,10 +23,14 @@ Commands.register("profile", {
 						currentValue = data.profiledata;
 					}
 					exec('formtextarea "Manage your profile:" ' + currentValue, function(newValue) {
-						exec("storage put profiledata " + newValue, function() {
-							exec('success Profile changed successfully.', callback);
-						});
-					}, true);
+						if(typeof newValue !== "undefined") {
+							exec("storage put profiledata " + newValue, function() {
+								exec('success Profile changed successfully.', callback);
+							});
+						} else {
+							callback();
+						}
+					});
 				});
 			break;
 			case "import":

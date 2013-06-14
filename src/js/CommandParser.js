@@ -18,7 +18,11 @@ var CommandParser = (function() {
 		args.push(part);
 		return args;
 	}
+	var getCommandName = function(str) {
+		return str.split(" ").shift();
+	}
 	return {
-		parse: parse
+		parse: parse,
+		getCommandName: getCommandName
 	}
 })();

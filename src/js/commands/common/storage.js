@@ -1,6 +1,7 @@
 Commands.register("storage", {
 	requiredArguments: 1,
 	format: '<pre>storage [operation] [key] [value]</pre>',
+	lookForQuotes: false,
 	run: function(args, callback) {
 		var operation = args.shift();
 		var key = args.length > 0 ? args.shift() : null;

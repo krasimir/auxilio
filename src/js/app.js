@@ -154,7 +154,7 @@ var App = {
 	enableInput: function() {
 		this.command.prop('disabled', false);
 	},
-	execute: function(commandStr, callback, lookForQuotes) {
+	execute: function(commandStr, callback) {		
 
 		if(!commandStr || commandStr == "" || commandStr == " ") return;
 
@@ -166,13 +166,14 @@ var App = {
 		}
 
 		var processCommand = function(str, resultFromPreviousCommand) {
-			var args = CommandParser.parse(str, lookForQuotes);
-			var command = args.shift();
+			var command = CommandParser.getCommandName(str);
 			var c = Commands.get(command);
-			if(!self.isHiddenCommand(command)) {
-				exec("small " + str);
-			}
 			if(c) {
+				if(!self.isHiddenCommand(command)) {
+					exec("small " + str);
+				}
+				var args = CommandParser.parse(str, c.lookForQuotes);
+				args.shift(); // removing command name
 				if(resultFromPreviousCommand && args.length === 0) {
 					args = args.concat([resultFromPreviousCommand]);
 				}
@@ -256,6 +257,6 @@ window.onload = function() {
 };
 
 // shortcuts
-var exec = function(commandStr, callback, lookForQuotes) {
-	App.execute(commandStr, callback, lookForQuotes);
+var exec = function(commandStr, callback) {
+	App.execute(commandStr, callback);
 }
