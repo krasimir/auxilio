@@ -8,18 +8,19 @@ Commands.register("pagecontains", {
 			if(res.elements && res.elements > 0) {
 				var matching = 0;
 				var matchedTags = '';
+				var r = new RegExp(text, "g");
 				for(var i=0; i<res.raw.length; i++) {
 					if(res.raw[i].indexOf(text) >= 0) {
 						matching += 1;
-						matchedTags += '<pre>' + res.raw[i].replace(/</g, '&lt;') + '</pre>';
+						matchedTags += '<pre>' + res.raw[i].replace(/</g, '&lt;').replace(r, '<b class="bordered">' + text + '</b>') + '</pre>';
 					}
 				}
 				if(matching === 1) {
-					exec('success There is one element matching <b>"' + selector + '"</b> selector and containing <b>"' + text + '"</b> text.<br />' + matchedTags);
+					exec('success There is one element matching <b>"' + selector + '"</b> selector and contains <b>"' + text + '"</b> text.<br />' + matchedTags);
 				} else if(matching > 1) {
-					exec('success There are ' + matching + ' elements matching <b>"' + selector + '"</b> selector and containing <b>"' + text + '"</b> text.<br />' + matchedTags);
+					exec('success There are ' + matching + ' elements matching <b>"' + selector + '"</b> selector and contains <b>"' + text + '"</b> text.<br />' + matchedTags);
 				} else {
-					exec('error There are ' + res.elements + ' elements matching <b>"' + selector + '"</b> but non of them contain <b>"' + text + '"</b> text.');
+					exec('error There are element/s(' + res.elements + ') matching <b>"' + selector + '"</b> but non of them contain <b>"' + text + '"</b> text.');
 				}
 				callback(true);
 			} else {

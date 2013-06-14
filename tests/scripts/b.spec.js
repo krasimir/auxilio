@@ -1,2 +1,0 @@
-info b
-warning b
