@@ -1,6 +1,6 @@
 Commands.register("exec", {
 	requiredArguments: 1,
-	format: '<pre>error [command/s]</pre>',
+	format: '<pre>exec [command/s]</pre>',
 	run: function(args, callback) {
 		exec(args.join(" "), function(res) {
 			callback(res);

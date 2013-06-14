@@ -3,6 +3,19 @@
     <head>
         <title>Auxilio Test Site</title>
         <link rel="stylesheet" type="text/css" href="styles.css">
+        <script type="text/javascript">
+            window.onload = function() {
+                document.getElementById("login").addEventListener("click", function(e) {
+                    document.getElementById("login-form").style.display = "block";
+                });
+            }
+        </script>
+        <style type="text/css">
+            #login-form {
+                margin: 20px 0 0 0;
+                display: none;
+            }
+        </style>
     </head>
     <body>
         <div class="content">
@@ -16,7 +29,15 @@
                 </ul>
             </nav>
             <hr />
-            <a href="http://github.com" id="github">GitHub</a>
+            <a href="http://github.com" id="github">GitHub</a> | 
+            <a href="#" id="login">Login</a>
+            <div id="login-form">
+                <form action="login.php" method="post">
+                    <input type="text" placeholder="username" name="username"/>
+                    <input type="password" name="password"/>
+                    <input type="submit" />
+                </form>
+            </div>
         </div>
     </body>
 </html>
