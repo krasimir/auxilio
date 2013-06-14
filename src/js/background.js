@@ -34,6 +34,13 @@ var onMessageListener = function(message, sender, sendResponse) {
                 TabCompleteNotifier.add(tab.id, sendResponse);
             });
         break;
+        case "screenshot":
+            chrome.windows.getCurrent(function (win) {    
+                chrome.tabs.captureVisibleTab(win.id, {quality: 100}, function(image) {
+                    sendResponse(image);                                           
+                });    
+              });
+        break;
         case "clicknavigate":
             chrome.tabs.getSelected(null, function (tab) {
                 var clickResponse = null;

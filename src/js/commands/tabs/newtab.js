@@ -5,9 +5,10 @@ Commands.register("newtab", {
 		if(chrome && chrome.runtime) {
 			if(args[0]) {
 				var url = args[0];
-				if(url.indexOf("http") == -1) url = "http://" + url;
+				if(url.indexOf("http") == -1 && url.indexOf("data:image") == -1) {
+					url = "http://" + url;
+				}
 				chrome.runtime.sendMessage({type: "newtab", url: url}, function() {
-					exec("info " + url + " is loaded");
 					callback();
 				});
 			}else {
