@@ -140,7 +140,12 @@ var App = {
 		if(clearPreviousContent) {
 			this.output.innerHTML = '';
 		} else {
-			this.output.insertBefore(str2DOMElement(str), this.output.firstChild);
+			var newElement = str2DOMElement(str);
+			newElement.className = newElement.className + " item";
+			this.output.insertBefore(newElement, this.output.firstChild);
+			setTimeout(function() {
+				newElement.className = newElement.className + " item-shown";
+			}, 100);			
 		}
 	},
 	disableInput: function() {

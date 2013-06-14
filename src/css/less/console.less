@@ -8,6 +8,13 @@
 		box-sizing: border-box;
 		border-radius: 4px;
 		margin: 30px 0 0 0;
+		.item {
+			.transition(~"all 400ms ease-out");
+			.opacity(0);
+		}
+		.item-shown {
+			.opacity(1);
+		}
 	}
 	.inputs {
 		width: 100%;
