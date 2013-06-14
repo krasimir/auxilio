@@ -82,11 +82,15 @@ var onMessageListener = function(message, sender, sendResponse) {
             }
         break;
         default:
-            chrome.tabs.getSelected(null, function(tab){
-                chrome.tabs.sendMessage(tab.id, message, function(response) {
-                    sendResponse(response);
+            try {
+                chrome.tabs.getSelected(null, function(tab){
+                    chrome.tabs.sendMessage(tab.id, message, function(response) {
+                        sendResponse(response);
+                    });
                 });
-            });
+            } catch(e) {
+                sendResponse({error: e.message});
+            }
         break;
     }
     return true;
