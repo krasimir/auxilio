@@ -64,6 +64,18 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
                 raw: raw
             });
         break;
+        case "pagetrigger":
+            var elements = document.querySelectorAll(message.selector);
+            var raw = [];
+            for(var i=0; i<elements.length; i++) {
+                raw.push(elements[i].outerHTML);
+                elements[i][message.methodName]();
+            }
+            sendResponse({
+                elements: elements && elements.length > 0 ? elements.length : 0,
+                raw: raw
+            });
+        break;
     }
     return true;
 });
