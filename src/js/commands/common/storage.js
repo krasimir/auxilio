@@ -7,17 +7,17 @@ Commands.register("storage", {
 		var key = args.length > 0 ? args.shift() : null;
 		var value = args.length > 0 ? args.join(" ") : null;
 		if(operation !== "put" && operation != "get" && operation != "remove") {
-			exec("error Operation parameter could be 'put', 'get' or 'remove' (not '" + operation + "').");
+			exec("error profile: Operation parameter could be 'put', 'get' or 'remove' (not '" + operation + "').");
 			callback();
 			return;
 		}
 		if((operation === "put" || operation === "remove") && !key) {
-			exec("'key' is missing.");
+			exec("error profile: 'key' is missing.");
 			callback();
 			return;
 		}
 		if(operation === "put" && !value) {
-			exec("error 'put' operation used, but 'value' is missing.");
+			exec("error profile: 'put' operation used, but 'value' is missing.");
 			callback();
 			return;
 		}
