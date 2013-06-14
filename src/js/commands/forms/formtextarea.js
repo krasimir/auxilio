@@ -14,6 +14,7 @@ Commands.register("formtextarea", {
 				</div>\
 				<h1>' + title + '</h1>\
 				<textarea id="' + id + '_area" class="clear">' + text + '</textarea>\
+				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
 			</div>\
 		';
 		exec("echo " + html);
@@ -22,11 +23,20 @@ Commands.register("formtextarea", {
 		var button = document.getElementById(id + '_button');
 		var buttonCancel = document.getElementById(id + '_button_cancel');
 		var textarea = document.getElementById(id + '_area');
+		var onKeyDown = function(e) {
+			if(e.ctrlKey && e.keyCode === 13) {
+				button.click();
+			} else if(e.keyCode == 27) {
+				buttonCancel.click();
+			}
+		}
+
 		textarea.focus();
 		button.addEventListener("click", function() {
 			form.parentNode.style.display = "none";
 			var value = textarea.value.replace(/ && /g, '\n');
 			callback(value);
+			textarea.removeEventListener("keydown", onKeyDown);
 			App.commandInputFocus();
 		});
 		buttonCancel.addEventListener("click", function() {
@@ -34,6 +44,7 @@ Commands.register("formtextarea", {
 			callback();
 			App.commandInputFocus();
 		});
+		textarea.addEventListener("keydown", onKeyDown);
 
 	},
 	man: function() {
