@@ -65,16 +65,11 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
             });
         break;
         case "pagetrigger":
-            var elements = document.querySelectorAll(message.selector);
-            var raw = [];
-            for(var i=0; i<elements.length; i++) {
-                raw.push(elements[i].outerHTML);
-                elements[i][message.methodName]();
-            }
-            sendResponse({
-                elements: elements && elements.length > 0 ? elements.length : 0,
-                raw: raw
-            });
+            var script = document.createElement('script');
+            var code = document.createTextNode('(function() {' + message.jscode + '})();');
+            script.appendChild(code);
+            (document.body || document.head).appendChild(script);
+            sendResponse();
         break;
     }
     return true;
@@ -94,26 +89,15 @@ var request = function(url, callback) {
 	xhr.send(null);
 }
 
-// ------------------------------------------------------------------- Injecting script into the current page
-// function applyAuxilioConsole() {
-// 	window.auxilio = function() {
-// 		console.log("What's up!");
-// 	}
-// }
-
-// var script = document.createElement('script');
-// var code = document.createTextNode('(' + applyAuxilioConsole + ')();');
-// script.appendChild(code);
-// (document.body || document.head).appendChild(script);
 
 // ----------------------------------------------------------------------------------- Boot code
-var onWindowLoad = function() {
+// var onWindowLoad = function() {
 	
-}
-if(window) {
-	if(document && document.readyState == "complete") {
-		onWindowLoad();
-	} else {
-		window.addEventListener("load", onWindowLoad, true);
-	}
-}
+// }
+// if(window) {
+// 	if(document && document.readyState == "complete") {
+// 		onWindowLoad();
+// 	} else {
+// 		window.addEventListener("load", onWindowLoad, true);
+// 	}
+// }

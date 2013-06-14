@@ -1,17 +1,16 @@
 Commands.register("pagetrigger", {
-	requiredArguments: 2,
-	format: '<pre>pagetrigger [selector or object] [method name]</pre>',
+	requiredArguments: 1,
+	format: '<pre>pagetrigger [js code]</pre>',
 	run: function(args, callback) {
-		var selector = args.shift();
-		var methodName = args.shift();
+		var jscode = args.shift();
 		if(chrome && chrome.runtime) {
-			chrome.runtime.sendMessage({type: "pagetrigger", selector: selector, methodName: methodName}, function(res) {
+			chrome.runtime.sendMessage({type: "pagetrigger", jscode: jscode}, function(res) {
 				callback(res);
 			});
 		}
 	},
 	man: function() {
-		return 'Trigger a method of element or an object registered in window.<br />\
+		return 'Executes javascript code in the context of the current page<br />\
 		Example:<br />\
 		pagetrigger "input[name=\'name\']" focus';
 	}	
