@@ -6,7 +6,7 @@ Commands.register("load", {
 		if(url.indexOf("http") == -1) url = "http://" + url;
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "load", url: url}, function() {
-				exec("info " + url + " is loaded");
+				exec("echo " + url + " is loaded");
 				callback();
 			});
 		}

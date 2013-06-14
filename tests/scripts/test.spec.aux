@@ -1,6 +1,9 @@
+title Spec #1
 load http://auxilio-test-site.dev/
 pageexpect "li .form-page"
 date && echo
 formtextarea "Please type your favorite color." red && info
 pagecontains "body a" GitHub
-pagehighlight h1 && screenshot
+pagehighlight h1 && screenshot && hr
+
+title Spec #2

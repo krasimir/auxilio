@@ -5,7 +5,9 @@ Commands.register("screenshot", {
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "screenshot"}, function(data) {
 				if(data) {
-					exec("newtab " + data, callback);
+					exec("newtab " + data, function() {
+						callback();
+					});
 				} else {
 					exec("error There was a problem creating the screenshot.", callback);
 				}

@@ -184,6 +184,8 @@ var App = {
 				} else {
 					getNextCommand();
 				}
+			} else {
+				getNextCommand();
 			}
 		}
 		var getNextCommand = function(res) {
@@ -214,7 +216,10 @@ var App = {
 			"formfile",
 			"echocommand",
 			"storage",
-			"pagequery"
+			"pagequery",
+			"title",
+			"newtab",
+			"hr"
 		];
 		return _.indexOf(commandsToAvoid, command) >= 0;
 	},
