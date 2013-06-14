@@ -44,6 +44,7 @@ var App = {
 	},
 	prepareDictionary: function() {
 		// adding commands from Commands
+		CommandsDictionary = [];
 		for(var i in Commands) {
 			var added = false;
 			for(var j=0; j<CommandsDictionary.length; j++) {
@@ -231,6 +232,7 @@ var App = {
 		});
 	},
 	registerAliases: function() {
+		var self = this;
 		exec("storage get aliases", function(data) {
 			if(data.aliases && data.aliases != "") {
 				var aliases = JSON.parse(data.aliases);
@@ -248,6 +250,7 @@ var App = {
 						})
 					})(i, aliases[i]);
 				}
+				self.prepareDictionary();
 			}
 		});
 	},
