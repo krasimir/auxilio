@@ -7,3 +7,17 @@ pagecontains "body a" GitHub
 pagehighlight h1 && screenshot && hr
 
 title Spec #2
+load http://auxilio-test-site.dev/
+pageclick #login
+pagechange "#login-form form input[name='username']" value user
+pagechange "#login-form form input[name='password']" value pass
+pageclicknavigate "#login-form form input[type='submit']"
+screenshot
+delay 2000
+pagecontains h3 Welcome
+date
+
+title Spec #3
+load github.com
+pagechange #js-command-bar-field value auxilio
+pagetrigger alert(document.querySelector("#js-command-bar-field"));

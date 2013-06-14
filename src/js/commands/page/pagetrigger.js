@@ -1,6 +1,7 @@
 Commands.register("pagetrigger", {
 	requiredArguments: 1,
 	format: '<pre>pagetrigger [js code]</pre>',
+	lookForQuotes: false,
 	run: function(args, callback) {
 		var jscode = args.shift();
 		if(chrome && chrome.runtime) {

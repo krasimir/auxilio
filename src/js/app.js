@@ -171,6 +171,7 @@ var App = {
 			var c = Commands.get(command);
 			if(c) {
 				if(!self.isHiddenCommand(command)) {
+					// exec("small <a href=\"javascript:alert('aa');App.execute(\'man " + command + "\');\" class=\"small-command\"'>" + str + "</a>");
 					exec("small " + str);
 				}
 				var args = CommandParser.parse(str, c.lookForQuotes);

@@ -4,8 +4,8 @@
 	if(
 		isset($_POST["username"]) && 
 		isset($_POST["password"]) && 
-		isset($_POST["username"]) === "user" && 
-		isset($_POST["password"]) === "pass" 
+		$_POST["username"] === "user" && 
+		$_POST["password"] === "pass" 
 	) {
 		$result = 'Welcome';
 	}
