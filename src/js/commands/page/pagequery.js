@@ -10,6 +10,7 @@ Commands.register("pagequery", {
 		}
 	},
 	man: function() {
-		return 'Returns the number of matched elements.';
+		return 'Returns the number of matched elements and the elements in raw html string format.<br />\
+		Example: {"elements": 1, "raw": ["&lt;a href=\"#\">test&lt;/a>"]}';
 	}	
 })

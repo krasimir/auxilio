@@ -212,7 +212,8 @@ var App = {
 			"forminput", 
 			"formfile",
 			"echocommand",
-			"storage"
+			"storage",
+			"pagequery"
 		];
 		return _.indexOf(commandsToAvoid, command) >= 0;
 	},

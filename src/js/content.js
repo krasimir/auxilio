@@ -32,7 +32,14 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
         break;
         case "pagequery":
             var elements = document.querySelectorAll(message.selector);
-            sendResponse({elements: elements && elements.length > 0 ? elements.length : 0});
+            var raw = [];
+            for(var i=0; i<elements.length; i++) {
+                raw.push(elements[i].outerHTML);
+            }
+            sendResponse({
+                elements: elements && elements.length > 0 ? elements.length : 0,
+                raw: raw
+            });
         break;
     }
     return true;
