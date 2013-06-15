@@ -84,7 +84,7 @@ var onMessageListener = function(message, sender, sendResponse) {
         case "pageinsertjs":
             chrome.tabs.getSelected(null, function(tab){
                 chrome.tabs.executeScript(tab.id, {code: message.jscode}, function(response) {
-                    sendResponse(response);
+                    sendResponse(response ? JSON.stringify(response) : null);
                 });
             });
         break;
@@ -92,7 +92,7 @@ var onMessageListener = function(message, sender, sendResponse) {
             chrome.tabs.getSelected(null, function (tab) {
                 var clickResponse = null;
                 TabCompleteNotifier.add(tab.id, function() {
-                    sendResponse(clickResponse);
+                    sendResponse(sendResponse(clickResponse ? JSON.stringify(clickResponse) : null));
                 });
                 chrome.tabs.executeScript(tab.id, {code: message.jscode}, function(response) {
                     clickResponse = response;

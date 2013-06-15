@@ -6,6 +6,10 @@ Commands.register("pageinsertjsw", {
 		var jscode = args.join(" ");
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "pageinsertjsw", jscode: jscode}, function(res) {
+				if(res) {
+					res = JSON.parse(res);
+					if(res.length === 1) res = res[0];
+				}
 				callback(res);
 			});
 		}
