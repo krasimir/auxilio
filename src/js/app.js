@@ -170,6 +170,8 @@ var App = {
 			var command = CommandParser.getCommandName(str);
 			var c = Commands.get(command);
 			if(c) {
+
+				// outputing the command
 				if(!self.isHiddenCommand(command)) {
 					var linkId = _.uniqueId("commandlink");
 					exec("small <a href='#' id='" + linkId + "'>" + str + "</a>");
@@ -179,11 +181,15 @@ var App = {
 						});
 					})(self.commandsHistory.length-1, str);
 				}
+
+				// adds the result from the previous command
 				var args = CommandParser.parse(str, c.lookForQuotes);
 				args.shift(); // removing command name
 				if(resultFromPreviousCommand && (args.length === 0 || c.concatArgs)) {
 					args = args.concat([resultFromPreviousCommand]);
 				}
+
+				// validate and execute
 				if(c.validate(args)) {
 					c.run(args, function(res) {
 						getNextCommand(res);
@@ -191,6 +197,7 @@ var App = {
 				} else {
 					getNextCommand();
 				}
+				
 			} else {
 				getNextCommand();
 			}
