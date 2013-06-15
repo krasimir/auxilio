@@ -2,9 +2,14 @@ Commands.register("man", {
 	requiredArguments: 0, 
 	format: "<pre>man\nman [name of command]</pre>",
 	run: function(args, callback) {
-		var commandName = args[0];
-		if(commandName) {
-			this.showCommand(commandName);
+		var commandToViewName = args[0];
+		if(commandToViewName) {
+			for(var commandName in Commands) {
+				var r = new RegExp(commandToViewName, "g");
+				if(commandName != "get" && commandName != "register" && commandName.match(r)) {
+					this.showCommand(commandName);
+				}
+			}
 		} else {
 			for(var commandName in Commands) {
 				if(commandName != "get" && commandName != "register") {

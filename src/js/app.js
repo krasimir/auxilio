@@ -171,8 +171,13 @@ var App = {
 			var c = Commands.get(command);
 			if(c) {
 				if(!self.isHiddenCommand(command)) {
-					// exec("small <a href=\"javascript:alert('aa');App.execute(\'man " + command + "\');\" class=\"small-command\"'>" + str + "</a>");
-					exec("small " + str);
+					var linkId = _.uniqueId("commandlink");
+					exec("small <a href='#' id='" + linkId + "'>" + str + "</a>");
+					(function(index, command){
+						document.querySelector("#" + linkId).addEventListener("click", function() {
+							exec(command);
+						});
+					})(self.commandsHistory.length-1, str);
 				}
 				var args = CommandParser.parse(str, c.lookForQuotes);
 				args.shift(); // removing command name
@@ -263,6 +268,11 @@ var App = {
 // Boot
 window.onload = function() {
 	App.init();
+	document.querySelector("body").addEventListener("keydown", function(e) {
+		if(e.ctrlKey && e.keyCode === 123) {
+			App.command.focus();
+		}
+	});
 };
 
 // shortcuts
