@@ -3,6 +3,7 @@ var CommandBase = {
 	requiredArguments: 0,
 	format: '',
 	lookForQuotes: true,
+	concatArgs: false,
 	run: function(args, callback) {
 
 	},

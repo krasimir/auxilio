@@ -181,7 +181,7 @@ var App = {
 				}
 				var args = CommandParser.parse(str, c.lookForQuotes);
 				args.shift(); // removing command name
-				if(resultFromPreviousCommand && args.length === 0) {
+				if(resultFromPreviousCommand && (args.length === 0 || c.concatArgs)) {
 					args = args.concat([resultFromPreviousCommand]);
 				}
 				if(c.validate(args)) {
