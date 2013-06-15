@@ -19,5 +19,6 @@ date
 
 title Spec #3
 load github.com
-pagechange #js-command-bar-field value auxilio
-pagetrigger alert(document.querySelector("#js-command-bar-field"));
+pageinsertjs document.querySelector("#js-command-bar-field").value="auxilio";
+pageinsertjsw document.querySelector("#top_search_form").submit();
+pagecontains h3 krasimir/auxilio

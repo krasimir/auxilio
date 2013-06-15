@@ -41,7 +41,7 @@ var onMessageListener = function(message, sender, sendResponse) {
                 });    
               });
         break;
-        case "pageclicknavigate":
+        case "pageclickw":
             chrome.tabs.getSelected(null, function (tab) {
                 var clickResponse = null;
                 TabCompleteNotifier.add(tab.id, function() {
@@ -85,6 +85,17 @@ var onMessageListener = function(message, sender, sendResponse) {
             chrome.tabs.getSelected(null, function(tab){
                 chrome.tabs.executeScript(tab.id, {code: message.jscode}, function(response) {
                     sendResponse(response);
+                });
+            });
+        break;
+        case "pageinsertjsw":
+            chrome.tabs.getSelected(null, function (tab) {
+                var clickResponse = null;
+                TabCompleteNotifier.add(tab.id, function() {
+                    sendResponse(clickResponse);
+                });
+                chrome.tabs.executeScript(tab.id, {code: message.jscode}, function(response) {
+                    clickResponse = response;
                 });
             });
         break;

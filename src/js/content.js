@@ -41,29 +41,6 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
                 raw: raw
             });
         break;
-        case "pagechange":
-            var elements = document.querySelectorAll(message.selector);
-            var raw = [];
-            for(var i=0; i<elements.length; i++) {
-                var props = message.attribute.split(".");
-                switch(props.length) {
-                    case 1:
-                        elements[i][props.shift()] = message.value;
-                    break;
-                    case 2:
-                        elements[i][props.shift()][props.shift()] = message.value;
-                    break;
-                    case 3:
-                        elements[i][props.shift()][props.shift()][props.shift()] = message.value;
-                    break;
-                }
-                raw.push(elements[i].outerHTML);
-            }
-            sendResponse({
-                elements: elements && elements.length > 0 ? elements.length : 0,
-                raw: raw
-            });
-        break;
     }
     return true;
 });

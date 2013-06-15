@@ -1,10 +1,10 @@
-Commands.register("pageclicknavigate", {
+Commands.register("pageclickw", {
 	requiredArguments: 1,
-	format: '<pre>pageclicknavigate [selector]</pre>',
+	format: '<pre>pageclickw [selector]</pre>',
 	run: function(args, callback) {
 		var selector = args.join(" ");
 		if(chrome && chrome.runtime) {
-			chrome.runtime.sendMessage({type: "pageclicknavigate", selector: selector}, function(res) {
+			chrome.runtime.sendMessage({type: "pageclickw", selector: selector}, function(res) {
 				callback(res);
 			});
 		}
