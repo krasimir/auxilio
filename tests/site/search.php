@@ -1,13 +1,11 @@
 <?php
 
-	$result = 'Wrong credentials!';
+	$result = 'There is no search keyword typed.';
 	if(
-		isset($_POST["username"]) && 
-		isset($_POST["password"]) && 
-		$_POST["username"] === "user" && 
-		$_POST["password"] === "pass" 
+		isset($_POST["s"]) && 
+		$_POST["s"] !== ""
 	) {
-		$result = 'Welcome';
+		$result = 'Search: '.$_POST["s"];
 	}
 
 ?>
@@ -20,7 +18,8 @@
     <body>
         <div class="content">
         	<h1>Login</h1>
-            <h3><?php echo $result; ?></h3><hr />
+            <h3><?php echo $result; ?></h3>
+            <hr />
             <h3>Back to <a href="index.html">home page</a></h3>
         </div>
     </body>

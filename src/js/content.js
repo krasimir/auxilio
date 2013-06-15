@@ -64,13 +64,6 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
                 raw: raw
             });
         break;
-        case "pagetrigger":
-            var script = document.createElement('script');
-            var code = document.createTextNode('(function() { ' + message.jscode + ' })();');
-            script.appendChild(code);
-            (document.body || document.head).appendChild(script);
-            sendResponse();
-        break;
     }
     return true;
 });

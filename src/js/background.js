@@ -81,6 +81,20 @@ var onMessageListener = function(message, sender, sendResponse) {
                 sendResponse({error: "Wrong operation (" + message.operation + ")."});
             }
         break;
+        case "pageinsertjs":
+            chrome.tabs.getSelected(null, function(tab){
+                chrome.tabs.executeScript(tab.id, {code: message.jscode}, function(response) {
+                    sendResponse(response);
+                });
+            });
+        break;
+        case "pageinsertcss":
+            chrome.tabs.getSelected(null, function(tab) {
+                chrome.tabs.insertCSS(tab.id, {code: message.csscode}, function(response) {
+                    sendResponse(response);
+                });
+            });
+        break;
         default:
             try {
                 chrome.tabs.getSelected(null, function(tab){

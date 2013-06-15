@@ -1,11 +1,11 @@
-Commands.register("pagetrigger", {
+Commands.register("pageinsertjs", {
 	requiredArguments: 1,
-	format: '<pre>pagetrigger [js code]</pre>',
+	format: '<pre>pageinsertjs [js code]</pre>',
 	lookForQuotes: false,
 	run: function(args, callback) {
-		var jscode = args.shift();
+		var jscode = args.join(" ");
 		if(chrome && chrome.runtime) {
-			chrome.runtime.sendMessage({type: "pagetrigger", jscode: jscode}, function(res) {
+			chrome.runtime.sendMessage({type: "pageinsertjs", jscode: jscode}, function(res) {
 				callback(res);
 			});
 		}
@@ -13,6 +13,6 @@ Commands.register("pagetrigger", {
 	man: function() {
 		return 'Executes javascript code in the context of the current page<br />\
 		Example:<br />\
-		pagetrigger "input[name=\'name\']" focus';
+		pageinsertjs "document.querySelector(\'body\').click();"';
 	}	
 })
