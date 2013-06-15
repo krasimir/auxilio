@@ -8,11 +8,11 @@ Commands.register("pagecontains", {
 			if(res.elements && res.elements > 0) {
 				var matching = 0;
 				var matchedTags = '';
-				var r = new RegExp(text, "g");
+				var r = new RegExp("(" + text + ")", "gi");
 				for(var i=0; i<res.raw.length; i++) {
-					if(res.raw[i].indexOf(text) >= 0) {
+					if(res.raw[i].match(r)) {
 						matching += 1;
-						matchedTags += '<pre>' + res.raw[i].replace(/</g, '&lt;').replace(r, '<b class="bordered">' + text + '</b>') + '</pre>';
+						matchedTags += '<pre>' + res.raw[i].replace(/</g, '&lt;').replace(r, '<b class="bordered">$1</b>') + '</pre>';
 					}
 				}
 				if(matching === 1) {
