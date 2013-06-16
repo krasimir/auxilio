@@ -6,7 +6,7 @@ var filterDOMElements = function(elements, filter) {
     var filteredElements = [];
     var r = new RegExp(filter, "gi");
     for(var i=0; i<elements.length; i++) {
-        if(elements[i].innerHTML.toString().match(r)) {
+        if(elements[i].outerHTML.toString().match(r)) {
             filteredElements.push(elements[i]);
         }
     }
