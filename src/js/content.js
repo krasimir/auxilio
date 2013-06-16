@@ -1,3 +1,25 @@
+// helper methods
+var filterDOMElements = function(elements, filter) {
+    if(filter === null || filter === false || typeof filter === "undefined") {
+        return elements;
+    }
+    var filteredElements = [];
+    var r = new RegExp(filter, "gi");
+    for(var i=0; i<elements.length; i++) {
+        if(elements[i].innerHTML.toString().match(r)) {
+            filteredElements.push(elements[i]);
+        }
+    }
+    return filteredElements;
+}
+var getRawOfDOMElements = function(elements) {
+    var raw = [];
+    for(var i=0; i<elements.length; i++) {
+        raw.push(elements[i].outerHTML);
+    }
+    return raw;
+}
+
 // communication
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     switch(message.type) {
@@ -7,16 +29,16 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     		})
     	break;
     	case "pageclick":
-    		var elements = document.querySelectorAll(message.selector);
+    		var elements = filterDOMElements(document.querySelectorAll(message.selector), message.filter);
     		if(elements && elements.length > 0) {
     			elements[0].click();
-    			sendResponse({elements: elements.length});
+    			sendResponse({elements: elements.length, raw: getRawOfDOMElements(elements)});
     		} else {
     			sendResponse({elements: 0});
     		}
     	break;
         case "pagehighlight":
-    		var elements = document.querySelectorAll(message.selector);
+    		var elements = filterDOMElements(document.querySelectorAll(message.selector), message.filter);
             sendResponse({elements: elements && elements.length > 0 ? elements.length : 0});
         	for(var i=0; i<elements.length; i++) {
         		if(message.selector != "img") {
@@ -31,14 +53,10 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
             }
         break;
         case "pagequery":
-            var elements = document.querySelectorAll(message.selector);
-            var raw = [];
-            for(var i=0; i<elements.length; i++) {
-                raw.push(elements[i].outerHTML);
-            }
+            var elements = filterDOMElements(document.querySelectorAll(message.selector), message.filter);
             sendResponse({
                 elements: elements && elements.length > 0 ? elements.length : 0,
-                raw: raw
+                raw: getRawOfDOMElements(elements)
             });
         break;
     }
