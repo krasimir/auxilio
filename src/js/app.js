@@ -177,11 +177,11 @@ var App = {
 				if(!self.isHiddenCommand(command)) {
 					var linkId = _.uniqueId("commandlink");
 					exec("small <a href='#' id='" + linkId + "'>" + str + "</a>");
-					(function(index, command){
+					(function(command, linkId){
 						document.querySelector("#" + linkId).addEventListener("click", function() {
 							exec(command);
 						});
-					})(self.commandsHistory.length-1, str);
+					})(str, linkId);
 				}
 
 				// adds the result from the previous command
