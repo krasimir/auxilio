@@ -30,7 +30,7 @@ var onMessageListener = function(message, sender, sendResponse) {
             });
         break;
         case "newtab":
-            chrome.tabs.create({ active: message.active, url: message.url }, function(tab) {
+            chrome.tabs.create({ active: message.active.toString() === "true", url: message.url }, function(tab) {
                 TabCompleteNotifier.add(tab.id, sendResponse);
             });
         break;
