@@ -1,23 +1,4 @@
-title Spec #1
-load http://auxilio-test-site.dev/
-pageexpect "li .form-page"
-date && echo
-formtextarea "Please type your favorite color." red && info
-pagecontains "body a" GitHub
-pagehighlight h1 && screenshot && hr
-
-title Spec #2
-load http://auxilio-test-site.dev/
-pageclick #login
-pagechange "#login-form form input[name='username']" value user
-pagechange "#login-form form input[name='password']" value pass
-pageclicknavigate "#login-form form input[type='submit']"
-screenshot
-delay 2000
-pagecontains h3 Welcome
-date
-
-title Spec #3
+title Search feature of GitHub.com
 load github.com
 pageinsertjs document.querySelector("#js-command-bar-field").value="auxilio";
 pageinsertjsw document.querySelector("#top_search_form").submit();
