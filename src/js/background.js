@@ -106,6 +106,16 @@ var onMessageListener = function(message, sender, sendResponse) {
                 });
             });
         break;
+        case "marker":
+            chrome.tabs.getSelected(null, function(tab) {
+                chrome.tabs.insertCSS(tab.id, {file: "css/marker.css"}, function(response) {
+                    sendResponse(response);
+                });
+                chrome.tabs.executeScript(tab.id, {file: "js/scripts/marker.js"}, function(response) {
+                    sendResponse(response ? JSON.stringify(response) : null);
+                });
+            });
+        break;
         default:
             try {
                 chrome.tabs.getSelected(null, function(tab){

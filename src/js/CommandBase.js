@@ -5,7 +5,7 @@ var CommandBase = {
 	lookForQuotes: true,
 	concatArgs: false,
 	run: function(args, callback) {
-
+		callback();
 	},
 	man: function() {
 		return '<u>' + this.name + '</u> has no manual page.';
