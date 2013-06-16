@@ -3,6 +3,7 @@ var CommandsDictionary = [];
 
 // The main application logic
 var App = {
+	commandsStoreInHistory: 50,
 	init: function() {
 		this.suggest = document.getElementById("js-suggest");
 		this.command = document.getElementById("js-command");
@@ -15,6 +16,7 @@ var App = {
 		this.prepareDictionary();
 		this.loadProfile();
 		this.registerAliases();
+		this.getCommandsHistory();
 		this.command.focus();
 	},
 	defineUserEvents:function() {
@@ -213,7 +215,11 @@ var App = {
 
 	},
 	addToHistory: function(commandStr) {
+		if(this.commandsHistory.length > this.commandsStoreInHistory) {
+			this.commandsHistory.shift();
+		}
 		this.commandsHistory.push(commandStr);
+		exec("storage put auxiliohistory " + JSON.stringify(this.commandsHistory).replace(/ && /g, '\n'));
 	},
 	isHiddenCommand: function(command) {
 		var commandsToAvoid = [
@@ -264,6 +270,21 @@ var App = {
 					})(i, aliases[i]);
 				}
 				self.prepareDictionary();
+			}
+		});
+	},
+	getCommandsHistory: function() {
+		var self = this;
+		exec("storage get auxiliohistory", function(data) {
+			if(data && data !== '' && data !== null) {
+				try {
+					data = JSON.parse(data.auxiliohistory.replace(/\n/g, ' && '));
+					if(data && data.length) {
+						self.commandsHistory = data;
+					}					
+				} catch(e) {
+
+				}
 			}
 		});
 	},
