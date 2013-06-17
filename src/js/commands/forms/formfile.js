@@ -1,10 +1,10 @@
 Commands.register("formfile", {
-	requiredArguments: 1,
+	requiredArguments: 0,
 	format: '<pre>formfile [title]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("formfile");
-		var title = args.join(' ');
+		var title = args.length > 0 ? args.join(' ') : "Please choose file/s:";
 		var html = '\
 			<div id="' + id + '" class="form">\
 				<div class="buttons right">\

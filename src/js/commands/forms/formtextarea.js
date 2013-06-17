@@ -1,10 +1,10 @@
 Commands.register("formtextarea", {
-	requiredArguments: 1,
+	requiredArguments: 0,
 	format: '<pre>formtextarea [title]\nformtextarea [title] [text]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("formtextarea");
-		var title = args.shift();
+		var title = args.length > 0 ? args.shift() : "Type something:";
 		var text = args.length > 0 ? args.join(" ") : '';
 		var html = '\
 			<div id="' + id + '" class="form">\
