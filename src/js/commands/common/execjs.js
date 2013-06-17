@@ -6,13 +6,23 @@ Commands.register("execjs", {
 	run: function(args, callback) {
 		var js = args.shift();
 		var parameter = args.shift();
+		var self = this;
+		if(js.indexOf("function ") === 0) {
+			this.evalJSCode(js, parameter, callback);
+		} else {
+			exec(js, function(res) {
+				self.evalJSCode(res.replace(/ && /g, '\n'), parameter, callback);
+			});
+		}
+	},
+	evalJSCode: function(js, parameter, callback) {
 		try {
 			eval("var auxilioFunction=" + js);
 			if(typeof auxilioFunction !== "undefined") {
 				auxilioFunction(parameter);
 			}
 		} catch(e) {
-			exec("error Error executing<pre>" + js + "</pre>" + e.message);
+			exec("error Error executing<pre>" + js + "</pre>" + e.message + "<pre>" + e.stack + "</pre>");
 		}
 		callback();
 	},
