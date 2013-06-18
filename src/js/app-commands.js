@@ -1,1 +1,1462 @@
-Commands.register("clear",{run:function(e,t){App.clear(),t()},man:function(){return"Clearing the current console's output."}}),Commands.register("compare",{requiredArguments:4,format:"<pre>compare [title] [value1] [expression] [value2]</pre>",lookForQuotes:!0,concatArgs:!0,run:function(e,t){var n=e.shift(),r=this.prepareValue(e.shift().toString()),i=e.shift(),s=this.prepareValue(e.shift().toString()),o=!1;if(i==="=="||i==="===")o=r===s;else if(i===">")o=r>s;else if(i==="<")o=r<s;else if(i===">=")o=r>=s;else if(i==="<=")o=r<=s;else{if(i!=="!="&&i!=="!=="){exec("error compare: Unrecognized expression. ("+i+")"),t(o);return}o=r!==s}o?exec("success "+n+"<br />"+r+" "+i+" "+s):exec("error "+n+"<br />"+r+" "+i+" "+s),t(o)},prepareValue:function(e){return isNaN(e)===!0?e.toString():parseInt(e)},man:function(){return"Compares values. (Have in mind that it works with strings and numbers.)"}}),Commands.register("date",{requiredArguments:0,format:"<pre>date [as object (true | false)]</pre>",run:function(e,t){var n=e.length>0?e.shift()==="true":!1,r=new Date,i=["January","February","March","April","May","June","July","August","September","October","November","December"];if(n)t({year:r.getFullYear(),month:r.getMonth(),monthName:i[r.getMonth()],day:r.getDate(),hour:r.getHours(),minutes:r.getMinutes()});else{var s="";s+=r.getDate()+" "+i[r.getMonth()]+" "+r.getFullYear(),s+=" ",s+=this.formatDigit(r.getHours())+":"+this.formatDigit(r.getMinutes()),t(s)}},formatDigit:function(e){return e<10?"0"+e:e},man:function(){return"Gets the current date."}}),Commands.register("delay",{requiredArguments:1,format:"<pre>delay [miliseconds]</pre>",run:function(e,t){var n=parseInt(e.shift());setTimeout(function(){t()},n)},man:function(){return"Delay the next command. For example<br />		echo A &amp;&amp; delay 2000 &amp;&amp; echo B		"}}),Commands.register("diff",{requiredArguments:0,format:"<pre>diff</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){},compareJSON:function(e,t,n){var r=objectDiff.diffOwnProperties(e,t),i="<pre>"+objectDiff.convertToXMLString(r)+"</pre>";exec("echo "+i),n(r)},compareText:function(e,t,n){var r=new diff_match_patch,i=r.diff_main(e,t),s="";s+="Difference:<pre>"+r.diff_prettyHtml(i)+"</pre>",s+="Text #1:<pre>"+e+"</pre>",s+="Text #2:<pre>"+t+"</pre>",exec("echo "+s),n(i)},man:function(){return"Comparison of files."}}),Commands.register("exec",{requiredArguments:1,format:"<pre>exec [command/s]</pre>",run:function(e,t){exec(e.join(" "),function(e){t(e)})},man:function(){return"Executes a given command."}}),Commands.register("execjs",{requiredArguments:2,format:"<pre>execjs [js function] [parameter]</pre>",lookForQuotes:!0,concatArgs:!0,run:function(e,t){var n=e.shift(),r=e.shift(),i=this;n.toString().indexOf("function")===0?this.evalJSCode(n,r,t):exec(n,function(e){i.evalJSCode(e.replace(/ && /g,"\n"),r,t)})},evalJSCode:function(js,parameter,callback){try{eval("var auxilioFunction="+js),typeof auxilioFunction!="undefined"&&auxilioFunction(parameter)}catch(e){exec("error Error executing<pre>"+js+"</pre>"+e.message+"<pre>"+e.stack+"</pre>")}callback()},man:function(){return"Evals a javascript function. It is very useful to use the command together with others. Like for example:<br />		date &amp;&amp; execjs \"function fName(date) { exec('echo ' + date); }\"		"}}),Commands.register("execl",{requiredArguments:0,format:"<pre>execl</pre>",run:function(e,t){exec("formtextarea Command:",function(e){e=e.replace(/\n/g," && "),exec(e,function(e){t(e)})})},man:function(){return"Executes a given command, but provides a textarea for writing it."}}),Commands.register("history",{requiredArguments:0,format:"<pre>history</pre>",run:function(e,t){var n='History:<pre class="history-panel">';for(var r=App.commandsHistory.length-2;r>=0;r--){var i=App.commandsHistory[r];if(i!=""&&i!=" "){var s=_.uniqueId("historylink");n+="<a href='#' id='"+s+"'>"+i.toString().replace(/&/g,"&amp;")+"</a>\n",function(e,t){setTimeout(function(){document.querySelector("#"+t).addEventListener("click",function(){exec(e)})},200)}(i,s)}}n+="</pre>",exec("info "+n,t,!0)},man:function(){return"Outputs the current console's history."}}),Commands.register("inject",{requiredArguments:0,format:"<pre>inject [type]</pre>",processing:!1,files:null,filesRaw:null,proccessedFiles:-1,commands:[],callback:null,type:"auxilio",run:function(e,t){this.type=e.length>0?e.shift():"auxilio",this.callback=t;if(this.processing){exec("error Sorry but <b>inject</b> command is working right now. Try again later."),this.callback();return}this.reset();var n=_.uniqueId("files"),r=this,i='Choose a file(s): <input type="file" id="'+n+'" name="files[]" multiple />';exec("echo "+i),this.inputElement=document.getElementById(n),this.inputElement.addEventListener("change",function(e){r.processing=!0,r.handleFileSelected(e)},!1),this.inputElement.focus(),this.inputElement.click()},handleFileSelected:function(e){this.files=e.target.files;var t="<b>Selected file(s):</b><br />",n=this;for(var r=0,i;i=this.files[r];r++){t+=i.name+"<br />";var s=new FileReader;(function(e,t){e.onload=function(e){if(e.target.result)switch(n.type){case"raw":n.handleFileReadRaw(t,e.target.result);break;default:n.handleFileRead(t,e.target.result)}},e.readAsText(t)})(s,i)}App.execute("echo "+t)},handleFileRead:function(e,t){var n=t.split("\n");for(var r=0,i;i=n[r];r++)this.commands.push(i.replace(/\n/g,"").replace(/\r/g,""));this.proccessedFiles+=1;if(this.proccessedFiles==this.files.length-1){var s=this.commands.join(" && ");this.inputElement.style.display="none",App.setFocus(),this.callback(s),this.reset()}},handleFileReadRaw:function(e,t){this.filesRaw||(this.filesRaw=[]),this.filesRaw.push({file:e,content:t}),this.proccessedFiles+=1,this.proccessedFiles==this.files.length-1&&(this.inputElement.style.display="none",App.setFocus(),this.callback(this.filesRaw),this.reset())},reset:function(){this.processing=!1,this.files=null,this.proccessedFiles=-1,this.commands=[],this.filesRaw=null},man:function(){return"Inject external javascript to be run in the context of Auxilio and current page. By default the command works with <i>type=auxilio</i>.		It could be also <i>type=raw</i>. Then instead of string the callback is called with an object containing the files."}}),Commands.register("l",{run:function(e,t){App.clear(),t()},man:function(){return"Clearing the current console's output."}}),Commands.register("man",{requiredArguments:0,format:"<pre>man\nman [name of command]</pre>",run:function(e,t){var n=e[0];if(n)for(var r in Commands){var i=new RegExp(n,"g");r!="get"&&r!="register"&&r.match(i)&&this.showCommand(r)}else for(var r in Commands)r!="get"&&r!="register"&&this.showCommand(r);t()},showCommand:function(e){var t=Commands.get(e);if(t){var n="(<b>"+e+"</b>) "+(t.man?t.man():"");t.format&&t.format!=""?n+="<br />"+t.format:null,exec("echo "+n)}},man:function(){return"Shows information about available commands."}}),Commands.register("marker",{requiredArguments:0,format:"<pre>marker</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){chrome&&chrome.runtime&&chrome.runtime.sendMessage({type:"marker"},t)},man:function(){return"Gives you ability to place markers on the current page. <i>screenshot</i> command could be used after that."}}),Commands.register("request",{requiredArguments:1,format:"<pre>request [url]<br />request [url] [raw]</pre>",run:function(e,t){var n=this,r=e.shift(),i=e.length>0&&e[0]==="true";r.indexOf("http")==-1&&(r="http://"+r);var s=function(e){if(e.error)exec("error request: "+e.error,t);else{var n=e.responseText;i||(n=n.replace(/</g,"&lt;"),n=n.replace(/>/g,"&gt;"),n="<pre>"+n+"</pre>"),t(n)}};chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"request",url:r},s):request(r,s)},man:function(){return"Sends ajax request and shows the result in the console.<br />		Use <b>raw</b> parameter to leave the data as it is received from the url. 		For example:<br />		request github.com true"}});var request=function(e,t){var n=new XMLHttpRequest;n.open("GET",e,!0),n.onreadystatechange=function(){n.readyState==4&&n.status==200?t({responseText:n.responseText}):n.readyState==4&&t({error:"Error requesting '"+e+"'. (xhr.status="+n.status+")"})},n.send()};Commands.register("alias",{requiredArguments:0,lookForQuotes:!1,concatArgs:!0,format:"<pre>alias [name] [value]</pre>",aliases:{},run:function(e,t){var n=e.length>0?e.shift():null,r=e.length>0?e.join(" ").replace(/\\n/g,"\n"):null,i=this;aliases={};if(n==="clearallplease"){this.storeAliases(t);return}exec("storage get aliases",function(e){e.aliases&&e.aliases!=""&&(i.aliases=JSON.parse(e.aliases));if(n){var s=i.aliases[n]||"";r?(i.aliases[n]=r,i.storeAliases(t)):exec('formtextarea "alias:'+n+'" '+s,function(e){if(e==null){t();return}e===""?delete i.aliases[n]:i.aliases[n]=e,i.storeAliases(t)},!0)}else{var o="";for(var u in i.aliases)o+="<h2>"+u+"</h2><pre>"+i.aliases[u]+"</pre>";o!=""?exec("echo "+o):exec("info No data."),t()}})},storeAliases:function(e){exec("storage put aliases "+JSON.stringify(this.aliases),function(){exec("success Aliases saved succesfully.",function(){App.registerAliases(),e()})})},man:function(){return"Managing aliases.<br />		alias - brings all the aliases<br />		alias [name] - openes an editor for adding or editing. If you leave the textarea empty and click 'OK', the alias will be deleted.<br />		alias [name] [value] - directly pass the content of the alias<br />		alias clearallplease - clears all the added aliases		"}}),Commands.register("profile",{requiredArguments:0,format:"<pre>echo [operation]</pre>",run:function(e,t){var n=e[0]||"show",r=this;switch(n){case"show":exec("storage get profiledata",function(e){if(e.profiledata&&e.profiledata!==""){var n="Your profile:<br />";n+="<pre>"+e.profiledata+"</pre>",exec("info "+n,t)}else exec("info There is no profile data.",t)});break;case"edit":exec("storage get profiledata",function(e){var n="";e.profiledata&&e.profiledata!==""&&(n=e.profiledata),exec('formtextarea "Manage your profile:" '+n,function(e){typeof e!="undefined"?exec("storage put profiledata "+e,function(){exec("success Profile changed successfully.",t)}):t()})});break;case"import":exec("inject",function(e){e=e.replace(/ && /g,"\n"),exec("storage put profiledata "+e,function(){exec("success Profile changed successfully.",t)})});break;case"clear":exec("storage remove profiledata",function(){exec("success Profile cleared successfully.",t)});break;case"run":App.loadProfile(),t()}},man:function(){return"Manages your current profile file. Valid operations:<br />show, edit, import, clear, run"}}),Commands.register("storage",{requiredArguments:1,format:"<pre>storage [operation] [key] [value]</pre>",lookForQuotes:!1,run:function(e,t){var n=e.shift(),r=e.length>0?e.shift():null,i=e.length>0?e.join(" "):null;if(n!=="put"&&n!="get"&&n!="remove"){exec("error profile: Operation parameter could be 'put', 'get' or 'remove' (not '"+n+"')."),t();return}if((n==="put"||n==="remove")&&!r){exec("error profile: 'key' is missing."),t();return}if(n==="put"&&!i){exec("error profile: 'put' operation used, but 'value' is missing."),t();return}chrome&&chrome.runtime&&chrome.runtime.sendMessage({type:"storage",operation:n,key:r,value:i},function(e){e.error?exec("error "+error.error):n==="get"?t(e.value):t()})},man:function(){return"			Store key-value pairs by using chrome.storage.sync API.<br />			Examples:<br />			storage put username Auxilio // stores username=Auxilio<br />			storage get username // returns Auxilio<br />			storage remove username // returns Auxilio<br />			storage get // returns all stored values<br />		"}}),Commands.register("formconfirm",{requiredArguments:1,format:"<pre>formconfirm [question]</pre>",run:function(e,t){var n=_.uniqueId("formconfirm"),r=e.join(" "),i='			<div id="'+n+'" class="form">				<div class="buttons right">					<a href="#" id="'+n+'_buttonno" class="btn deny"><i class="icon-ok"></i> NO</a>					<a href="#" id="'+n+'_buttonyes" class="btn confirm"><i class="icon-ok"></i> YES</a>				</div>				<h1>'+r+'</h1>				<span class="clear" />			</div>		';exec("echo "+i);var s=document.getElementById(n),o=document.getElementById(n+"_buttonyes"),u=document.getElementById(n+"_buttonno");o.addEventListener("click",function(){s.parentNode.style.display="none",t(!0),App.commandInputFocus()}),u.addEventListener("click",function(){s.parentNode.style.display="none",t(!1),App.commandInputFocus()})},man:function(){return"Shows a text (question) with two options - YES and NO. The callback accepts only one boolean parameter."}}),Commands.register("formfile",{requiredArguments:0,format:"<pre>formfile [title]</pre>",run:function(e,t){var n=_.uniqueId("formfile"),r=e.length>0?e.join(" "):"Please choose file/s:",i='			<div id="'+n+'" class="form">				<div class="buttons right">					<a href="#" id="'+n+'_button_cancel" class="btn deny"><i class="icon-cancel"></i> CANCEL</a>					<a href="#" id="'+n+'_button" class="btn confirm"><i class="icon-ok"></i> OK</a>				</div>				<h1>'+r+'</h1>				<input type="file" id="'+n+'_area" class="clear" />				<div class="file-content" id="'+n+'_filecontent"></div>			</div>		';exec("echo "+i);var s=document.getElementById(n),o=document.getElementById(n+"_button"),u=document.getElementById(n+"_button_cancel"),a=document.getElementById(n+"_area"),f=document.getElementById(n+"_filecontent"),l=null;a.addEventListener("change",function(e){var t=e.target.files,n=null;if(n=t[0]){var r=new FileReader;r.onload=function(e){e.target.result&&(l=e.target.result,f.style.display="block",f.innerText=l)},r.readAsText(n)}}),o.addEventListener("click",function(){l!=null?(s.parentNode.style.display="none",t(l),App.commandInputFocus()):exec("error Please choose a file.")}),u.addEventListener("click",function(){s.parentNode.style.display="none",t(),App.commandInputFocus()})},man:function(){return'Shows a simple form with input[type="file"] and button. Use the callback of the command to get the content of the file.'}}),Commands.register("forminput",{requiredArguments:0,format:"<pre>forminput [title]\forminput [title] [text]</pre>",run:function(e,t){var n=_.uniqueId("forminput"),r=e.length>0?e.shift():"Type something:",i=e.length>0?e.join(" "):"",s='			<div id="'+n+'" class="form">				<div class="buttons right">					<a href="#" id="'+n+'_button_cancel" class="btn deny"><i class="icon-cancel"></i> CANCEL</a>					<a href="#" id="'+n+'_button" class="btn confirm"><i class="icon-ok"></i> OK</a>				</div>				<h1>'+r+'</h1>				<input type="text" id="'+n+'_area" class="clear" value="'+i+'"/>				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>			</div>		';exec("echo "+s);var o=document.getElementById(n),u=document.getElementById(n+"_button"),a=document.getElementById(n+"_button_cancel"),f=document.getElementById(n+"_area"),l=function(e){e.ctrlKey&&e.keyCode===13?u.click():e.keyCode==27&&a.click()};f.focus(),u.addEventListener("click",function(){o.parentNode.style.display="none";var e=f.value.replace(/ && /g,"\n");t(e),f.removeEventListener("keydown",l),App.commandInputFocus()}),a.addEventListener("click",function(){o.parentNode.style.display="none",t(),App.commandInputFocus()}),f.addEventListener("keydown",l)},man:function(){return"Shows a simple form with input and button. Use the callback of the command to get the text submitted by the form."}}),Commands.register("formtextarea",{requiredArguments:0,format:"<pre>formtextarea [title]\nformtextarea [title] [text]</pre>",run:function(e,t){var n=_.uniqueId("formtextarea"),r=e.length>0?e.shift():"Type something:",i=e.length>0?e.join(" "):"",s='			<div id="'+n+'" class="form">				<div class="buttons right">					<a href="#" id="'+n+'_button_cancel" class="btn deny"><i class="icon-cancel"></i> CANCEL</a>					<a href="#" id="'+n+'_button" class="btn confirm"><i class="icon-ok"></i> OK</a>				</div>				<h1>'+r+'</h1>				<textarea id="'+n+'_area" class="clear">'+i+'</textarea>				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>			</div>		';exec("echo "+s);var o=document.getElementById(n),u=document.getElementById(n+"_button"),a=document.getElementById(n+"_button_cancel"),f=document.getElementById(n+"_area"),l=function(e){e.ctrlKey&&e.keyCode===13?u.click():e.keyCode==27&&a.click()};f.focus(),u.addEventListener("click",function(){o.parentNode.style.display="none";var e=f.value.replace(/ && /g,"\n");t(e),f.removeEventListener("keydown",l),App.commandInputFocus()}),a.addEventListener("click",function(){o.parentNode.style.display="none",t(),App.commandInputFocus()}),f.addEventListener("keydown",l)},man:function(){return"Shows a simple form with textarea and button. Use the callback of the command to get the text submitted by the form."}}),Commands.register("tetris",{requiredArguments:0,format:"<pre>tetris [level to start from]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){App.removeFocus();var n=this,r=e.length>0?parseInt(e.shift()):1;if(!!App.global.TetrisStarted){exec("warning Only one tetris game could be started at a time. Use the <i>clear</i> command to remove the previous one."),t();return}App.global.TetrisStarted=!0,App.global.TetrisInitialized?this.initTetris(t,r):(App.global.TetrisInitialized=!0,this.injectFiles(["css/Tetris.css","js/vendor/Tetris.js"],function(){n.initTetris(t,r)}))},injectFiles:function(e,t){var n=0,r=document.querySelector("body")||document.querySelector("head"),i=function(){++n==e.length&&t()};for(var s=0;s<e.length;s++){var o=e[s],u=o.split("."),a=u[u.length-1].toLowerCase();switch(a){case"js":var f=document.createElement("script");f.setAttribute("type","text/javascript"),f.onload=function(){i()},r.appendChild(f),f.setAttribute("src",o);break;case"css":var l=document.createElement("link");l.setAttribute("rel","stylesheet"),l.setAttribute("type","text/css"),l.onload=function(){i()},r.appendChild(l),l.setAttribute("href",o)}}},initTetris:function(e,t){App.setOutputPanelContent('			<div class="regular tetris-holder">			<div id="tetris">			    <div class="left">			        <h1><a href="http://gosu.pl/dhtml/JsTetris.html">JsTetris 1.0.0</a></h1>			        <div class="menu">			            <div><input type="button" value="New Game" id="tetris-menu-start" /></div>			            <div><input type="button" value="Reset" id="tetris-menu-reset" style="display: none"/></div>			            <div><input type="button" value="Help" id="tetris-menu-help" /></div>			            <!--<div><input type="button" value="Highscores" id="tetris-menu-highscores" /></div>-->			        </div>			        <div class="keyboard">			            <div class="up"><input type="button" value="^" id="tetris-keyboard-up" /></div>			            <div class="down"><input type="button" value="v" id="tetris-keyboard-down" /></div>			            <div class="left"><input type="button" value="&lt;" id="tetris-keyboard-left" /></div>			            <div class="right"><input type="button" value="&gt;" id="tetris-keyboard-right" /></div>			        </div>			        <div id="tetris-nextpuzzle"></div>			        <div id="tetris-gameover">Game Over</div>			        <div class="stats">		                Level:						<span id="tetris-stats-level">1</span><br />						Score:						<span id="tetris-stats-score">0</span><br />						Lines:						<span id="tetris-stats-lines">0</span><br />						APM:						<span id="tetris-stats-apm">0</span><br />						Time:						<span id="tetris-stats-time">0</span>			        </div>			    </div>			    <div id="tetris-area"></div>			    <div id="tetris-help" class="window">			        <div class="top">			            Help <span id="tetris-help-close" class="close">x</span>			        </div>			        <div class="content">			            <b>Controllers:</b> <br />			            up - rotate <br />			            down - move down <br />			            left - move left <br />			            right - move right <br />			            space - fall to the bottom <br />			            n - new game <br />			            <!--r - reset <br />-->			            <br />			            <b>Rules:</b> <br />			            1) Puzzle speed = 80+700/level miliseconds, the smaller value the faster puzzle falls <br />			            2) If puzzles created in current level >= 10+level*2 then increase level <br />			            3) After puzzle falling score is increased by 1000*level*linesRemoved <br />			            4) Each "down" action increases score by 5+level (pressing space counts as multiple down actions)			        </div>			    </div>			    <br class="clear" />			</div>			</div>		');var n=new Tetris(t);n.unit=14,n.areaX=12,n.areaY=22,n.start();var r=document.querySelector(".tetris-holder");r.addEventListener("DOMNodeRemoved",function(e){e.target===r&&(App.global.TetrisStarted=!1,n.stop())}),e()},man:function(){return"Tetris game."}}),Commands.register("alert",{requiredArguments:1,format:"<pre>alert [text]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){for(var n=0;n<e.length;n++)typeof e[n]=="object"&&(e[n]=JSON.stringify(e[n]));alert(e.join(" ")),t()},man:function(){return"Alerts message."}}),Commands.register("echo",{requiredArguments:1,format:"<pre>echo [text]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){for(var n=0;n<e.length;n++)typeof e[n]=="object"&&(e[n]=JSON.stringify(e[n]));App.setOutputPanelContent('<div class="regular">'+e.join(" ")+"</div>"),t()},man:function(){return"Outputs message."}}),Commands.register("echoraw",{requiredArguments:1,format:"<pre>echoraw [string]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){for(var n=0;n<e.length;n++)typeof e[n]=="object"&&(e[n]=JSON.stringify(e[n]));var r=e.join(" ").replace(/</g,"&lt;").replace(/>/g,"&gt;");App.setOutputPanelContent('<div class="regular">'+r+"</div>"),t()},man:function(){return"Outputs message in raw format. Even the html is shown as string."}}),Commands.register("error",{requiredArguments:1,format:"<pre>error [text]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){for(var n=0;n<e.length;n++)typeof e[n]=="object"&&(e[n]=JSON.stringify(e[n]));App.setOutputPanelContent('<div class="error"><i class="icon-attention"></i> '+e.join(" ")+"</div>"),t()},man:function(){return"Outputs error message."}}),Commands.register("hidden",{requiredArguments:1,format:"<pre>hidden [text]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){for(var n=0;n<e.length;n++)typeof e[n]=="object"&&(e[n]=JSON.stringify(e[n]));App.setOutputPanelContent('<div class="hidden">'+e.join(" ")+"</div>"),t()},man:function(){return"Outputs invisible content. I.e. useful when you have to add hidden html markup."}}),Commands.register("hr",{requiredArguments:0,format:"<pre>hr</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){App.setOutputPanelContent("<div><hr /></div>"),t()},man:function(){return"Adds &lt;hr /> tag to the console's output panel"}}),Commands.register("info",{requiredArguments:1,format:"<pre>info [text]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){for(var n=0;n<e.length;n++)typeof e[n]=="object"&&(e[n]=JSON.stringify(e[n]));App.setOutputPanelContent('<div class="info"><i class="icon-info-circled"></i> '+e.join(" ")+"</div>"),t()},man:function(){return"Outputs info message."}}),Commands.register("small",{requiredArguments:1,format:"<pre>small [text]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){for(var n=0;n<e.length;n++)typeof e[n]=="object"&&(e[n]=JSON.stringify(e[n]));App.setOutputPanelContent('<div class="small"><i class="icon-right-hand"></i> '+e.join(" ")+"</div>"),t()},man:function(){return"Outputs small message."}}),Commands.register("success",{requiredArguments:1,format:"<pre>success [text]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){for(var n=0;n<e.length;n++)typeof e[n]=="object"&&(e[n]=JSON.stringify(e[n]));App.setOutputPanelContent('<div class="success"><i class="icon-ok"></i> '+e.join(" ")+"</div>"),t()},man:function(){return"Outputs success message."}}),Commands.register("title",{requiredArguments:1,format:"<pre>title [text]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){for(var n=0;n<e.length;n++)typeof e[n]=="object"&&(e[n]=JSON.stringify(e[n]));App.setOutputPanelContent("<div><h1>"+e.join(" ")+"</h1></div>"),t()},man:function(){return"Outputs a title."}}),Commands.register("warning",{requiredArguments:1,format:"<pre>warning [text]</pre>",lookForQuotes:!1,concatArgs:!0,run:function(e,t){for(var n=0;n<e.length;n++)typeof e[n]=="object"&&(e[n]=JSON.stringify(e[n]));App.setOutputPanelContent('<div class="warning"><i class="icon-attention"></i> '+e.join(" ")+"</div>"),t()},man:function(){return"Outputs warning message."}}),Commands.register("pageclick",{requiredArguments:1,format:"<pre>pageclick [selector] [filter]</pre>",run:function(e,t){var n=e.shift(),r=e.length>0?e.join(" "):null;chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"pageclick",selector:n,filter:r},function(e){t(e)}):t()},man:function(){return"Clicks an element on the page and returns the result immediately.<br />		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element."}}),Commands.register("pageclickw",{requiredArguments:1,format:"<pre>pageclickw [selector] [filter]</pre>",run:function(e,t){var n=e.shift(),r=e.length>0?e.join(" "):null;chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"pageclickw",selector:n,filter:r},function(e){t(e)}):t()},man:function(){return"Clicks an element on the page and waits till the page is updated (i.e. a new url is fully loaded).<br />		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element."}}),Commands.register("pagecontains",{requiredArguments:2,format:"<pre>pagecontains [selector] [text]</pre>",run:function(e,t){var n=e.shift(),r=e.join(" ");exec("pagequery "+n,function(e){if(e.elements&&e.elements>0){var i=0,s="",o=new RegExp("("+r+")","gi");for(var u=0;u<e.raw.length;u++)e.raw[u].match(o)&&(i+=1,s+="<pre>"+e.raw[u].replace(/</g,"&lt;").replace(o,'<b class="bordered">$1</b>')+"</pre>");i===1?exec('success There is one element matching <b>"'+n+'"</b> selector and contains <b>"'+r+'"</b> text.<br />'+s):i>1?exec("success There are "+i+' elements matching <b>"'+n+'"</b> selector and contains <b>"'+r+'"</b> text.<br />'+s):exec("error There are element/s("+e.elements+') matching <b>"'+n+'"</b> but non of them contain <b>"'+r+'"</b> text.'),t(!0)}else exec('error There are no elements matching <b>"'+n+'"</b> selector.'),t(!1)})},man:function(){return'Checks if there is an element matching the provided selector and containing the provided text.<br />		Example:<br />		pagecontains "body > a" "my link"'}}),Commands.register("pageexpect",{requiredArguments:1,format:"<pre>pageexpect [selector] [filter]</pre>",run:function(e,t){var n=e.shift(),r=e.length>0?e.join(" "):null,i=r?'pagequery "'+n+'" '+r:'pagequery "'+n+'"';exec(i,function(e){e.elements&&e.elements>0?(e.elements===1?exec('success There is one element matching <b>"'+n+'"</b> selector. '+(r?"(filter: <b>"+r+"</b>)":"")):exec("success There are "+e.elements+' elements matching <b>"'+n+'"</b> selector. '+(r?"(filter: <b>"+r+"</b>)":"")),t(e)):(exec('error There are no elements matching <b>"'+n+'"</b> selector. '+(r?"(filter: <b>"+r+"</b>)":"")),t(e))})},man:function(){return"Checks if there is an element matching the provided selector.<br />		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element"}}),Commands.register("pagehighlight",{requiredArguments:1,format:"<pre>pagehighlight [selector] [filter]</pre>",run:function(e,t){var n=e.shift(),r=e.length>0?e.join(" "):null;chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"pagehighlight",selector:n,filter:r},function(e){t(e)}):t()},man:function(){return"Highlights element/elements on the page.<br />		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element."}}),Commands.register("pageinsertcss",{requiredArguments:1,format:"<pre>pageinsertcss [css code]</pre>",lookForQuotes:!1,run:function(e,t){var n=e.join(" ");chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"pageinsertcss",csscode:n},function(e){t(e)}):t()},man:function(){return"Inserts css code in the context of the current page<br />		Example:<br />		pageinsertcss body { background: #F00; }"}}),Commands.register("pageinsertjs",{requiredArguments:1,format:"<pre>pageinsertjs [js code]</pre>",lookForQuotes:!1,run:function(e,t){var n=e.join(" ");chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"pageinsertjs",jscode:n},function(e){e&&(e=JSON.parse(e),e.length===1&&(e=e[0])),t(e)}):t()},man:function(){return"Executes javascript code in the context of the current page<br />		Example:<br />		pageinsertjs \"document.querySelector('body').click();\""}}),Commands.register("pageinsertjsw",{requiredArguments:1,format:"<pre>pageinsertjsw [js code]</pre>",lookForQuotes:!1,run:function(e,t){var n=e.join(" ");chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"pageinsertjsw",jscode:n},function(e){e&&(e=JSON.parse(e),e.length===1&&(e=e[0])),t(e)}):t()},man:function(){return"Executes javascript code in the context of the current page and waits till the current page is updated<br />		Example:<br />		pageinsertjsw \"document.querySelector('form').submit();\""}}),Commands.register("pagequery",{requiredArguments:1,format:"<pre>pagequery [selector] [filter]</pre>",run:function(e,t){var n=e.shift(),r=e.length>0?e.join(" "):null;chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"pagequery",selector:n,filter:r},function(e){t(e)}):t()},man:function(){return'Returns the number of matched elements and the elements in raw html string format.<br />		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.		Example: {"elements": 1, "raw": ["&lt;a href="#">test&lt;/a>"]}'}}),Commands.register("load",{requiredArguments:1,format:"<pre>load [url]</pre>",run:function(e,t){var n=e[0];n.indexOf("http")==-1&&(n="http://"+n),chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"load",url:n},function(){exec("echo "+n+" is loaded"),t()}):t()},man:function(){return"Loads another page in the current tab."}}),Commands.register("newtab",{requiredArguments:0,format:"<pre>newtab\nnewtab [url] [active (true | false)]</pre>",run:function(e,t){if(chrome&&chrome.runtime)if(e[0]){var n=e.shift(),r=e.length>0?e.shift():"true";n.indexOf("http")==-1&&n.indexOf("data:image")==-1&&(n="http://"+n),chrome.runtime.sendMessage({type:"newtab",url:n,active:r},function(){t()})}else chrome.runtime.sendMessage({type:"newtab"},t);else t()},man:function(){return"Creates a new tab."}}),Commands.register("refresh",{requiredArguments:0,format:"<pre>refresh</pre>",run:function(e,t){chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"refresh"},function(){exec("echo current tab is refreshed"),t()}):t()},man:function(){return"Refreshes the current tab's page"}}),Commands.register("screenshot",{requiredArguments:0,format:"<pre>screenshot</pre>",run:function(e,t){chrome&&chrome.runtime?chrome.runtime.sendMessage({type:"screenshot"},function(e){e?exec("newtab "+e+" false",function(){t()}):exec("error There was a problem creating the screenshot.",t)}):t()},man:function(){return"Makes a screenshot of the current tab and loads it in a new tab."}})
+Commands.register("clear", {
+	run: function(args, callback) {
+		App.clear();
+		callback();
+	},
+	man: function() {
+		return 'Clearing the current console\'s output.';
+	}	
+})
+Commands.register("compare", {
+	requiredArguments: 4,
+	format: '<pre>compare [title] [value1] [expression] [value2]</pre>',
+	lookForQuotes: true,
+	concatArgs: true,
+	run: function(args, callback) {
+		var title = args.shift();
+		var value1 = this.prepareValue(args.shift().toString());
+		var expression = args.shift();
+		var value2 = this.prepareValue(args.shift().toString());
+		var success = false;
+		if(expression === "==" || expression === "===") {
+			success = value1 === value2;
+		} else if(expression === ">") {
+			success = value1 > value2;
+		} else if(expression === "<") {
+			success = value1 < value2;
+		} else if(expression === ">=") {
+			success = value1 >= value2;
+		} else if(expression === "<=") {
+			success = value1 <= value2;
+		} else if(expression === "!=" || expression === "!==") {
+			success = value1 !== value2;
+		} else {
+			exec("error compare: Unrecognized expression. (" + expression + ")");
+			callback(success);
+			return;
+		}
+		if(success) {
+			exec("success " + title + "<br />" + value1 + " " + expression + " " + value2);
+		} else {
+			exec("error " + title + "<br />" + value1 + " " + expression + " " + value2);
+		}
+		callback(success);
+	},
+	prepareValue: function(v) {
+		if(isNaN(v) === true) {
+			return v.toString();
+		} else {
+			return parseInt(v);
+		}
+	},
+	man: function() {
+		return 'Compares values. (Have in mind that it works with strings and numbers.)';
+	}	
+})
+Commands.register("date", {
+	requiredArguments: 0,
+	format: '<pre>date [as object (true | false)]</pre>',
+	run: function(args, callback) {
+		var asObject = args.length > 0 ? args.shift() === "true" : false;
+		var currentDate = new Date();
+		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+		if(asObject) { 
+			callback({
+				year: currentDate.getFullYear(),
+				month: currentDate.getMonth(),
+				monthName: months[currentDate.getMonth()],
+				day: currentDate.getDate(),
+				hour: currentDate.getHours(),
+				minutes: currentDate.getMinutes()
+			});
+		} else {
+			var str = '';
+			str += currentDate.getDate() + " " + months[currentDate.getMonth()] + " " + currentDate.getFullYear();
+			str += ' ';
+			str += this.formatDigit(currentDate.getHours()) + ":" + this.formatDigit(currentDate.getMinutes());
+			callback(str);
+		}
+	},
+	formatDigit: function(d) {
+		if(d < 10) {
+			return "0" + d;
+		} else {
+			return d;
+		}
+	},
+	man: function() {
+		return 'Gets the current date.';
+	}	
+})
+Commands.register("delay", {
+	requiredArguments: 1,
+	format: '<pre>delay [miliseconds]</pre>',
+	run: function(args, callback) {
+		var interval = parseInt(args.shift());
+		setTimeout(function() {
+			callback();
+		}, interval)
+	},
+	man: function() {
+		return 'Delay the next command. For example<br />\
+		echo A &amp;&amp; delay 2000 &amp;&amp; echo B\
+		';
+	}	
+})
+Commands.register("diff", {
+	requiredArguments: 0,
+	format: '<pre>diff\ndiff [string1] [string2]</pre>',
+	lookForQuotes: true,
+	concatArgs: true,
+	run: function(args, callback) {
+		if(args.length === 0) {
+			var self = this;
+			exec("inject raw", function(res) {
+				if(!res) {
+					callback();
+					return;
+				}
+				if(res.length === 2) {
+					var file1Ext = self.getExt(res[0].file.name);
+					var file2Ext = self.getExt(res[1].file.name);
+					if(file1Ext === file2Ext && file1Ext === "json") {
+						var file1JSON, file2JSON;
+						try {
+							file1JSON = JSON.parse(res[0].content);
+						} catch(e) {
+							exec("error File " + res[0].file.name + " contains invalid json.");
+							callback();
+							return;
+						}
+						try {
+							file2JSON = JSON.parse(res[1].content);
+						} catch(e) {
+							exec("error File " + res[1].file.name + " contains invalid json.");
+							callback();
+							return;
+						}
+						console.log(file1JSON, file2JSON);
+						self.compareJSON(file1JSON, file2JSON, callback);
+					} else {
+						self.compareText(res[0].content, res[1].content, callback);
+					}
+				} else {
+					exec("error <i>diff</i> works with two files.");
+				}
+			});
+		} else if(args.length === 2) {
+			this.compareText(args.shift(), args.shift(), callback);
+		} else if(args.length > 0) {
+			exec("error Sorry, but <i>diff</i> requires two or no arguments.")
+		}
+		// this.compareText("Krasimir Tsonev is web developer", "Krasimir tyonev is developer", callback);
+		// this.compareJSON({a: 20}, {a: 20, b: { c: 20 }}, callback);
+	},
+	compareJSON: function(ob1, ob2, callback) {
+		var diff = objectDiff.diffOwnProperties(ob1, ob2);		
+		var markup = '<pre>' + objectDiff.convertToXMLString(diff) + '</pre>';
+		exec("echo " + markup);
+		callback(diff);
+	},
+	compareText: function(t1, t2, callback) {
+		var dmp = new diff_match_patch();
+		var d = dmp.diff_main(t1, t2);
+		// dmp.diff_cleanupSemantic(d);
+		// dmp.diff_cleanupEfficiency(d);
+		var result = '';
+		result += 'Difference:<pre>' + dmp.diff_prettyHtml(d) + '</pre>';
+		result += 'Text #1:<pre>' + t1 + '</pre>';
+		result += 'Text #2:<pre>' + t2 + '</pre>';
+		exec("echo " + result);
+		callback(d);
+	},
+	getExt: function(filename) {
+		var parts = filename.split(".");
+		return parts[parts.length-1].toLowerCase();
+	},
+	man: function() {
+		return 'Comparison of files.';
+	}	
+})
+Commands.register("exec", {
+	requiredArguments: 1,
+	format: '<pre>exec [command/s]</pre>',
+	run: function(args, callback) {
+		exec(args.join(" "), function(res) {
+			callback(res);
+		});
+	},
+	man: function() {
+		return 'Executes a given command.';
+	}	
+})
+Commands.register("execjs", {
+	requiredArguments: 2,
+	format: '<pre>execjs [js function] [parameter]</pre>',
+	lookForQuotes: true,
+	concatArgs: true,
+	run: function(args, callback) {
+		var js = args.shift();
+		var parameter = args.shift();
+		var self = this;
+		if(js.toString().indexOf("function") === 0) {
+			this.evalJSCode(js, parameter, callback);
+		} else {
+			exec(js, function(res) {
+				self.evalJSCode(res.replace(/ && /g, '\n'), parameter, callback);
+			});
+		}
+	},
+	evalJSCode: function(js, parameter, callback) {
+		try {
+			eval("var auxilioFunction=" + js);
+			if(typeof auxilioFunction !== "undefined") {
+				auxilioFunction(parameter);
+			}
+		} catch(e) {
+			exec("error Error executing<pre>" + js + "</pre>" + e.message + "<pre>" + e.stack + "</pre>");
+		}
+		callback();
+	},
+	man: function() {
+		return 'Evals a javascript function. It is very useful to use the command together with others. Like for example:<br />\
+		date &amp;&amp; execjs "function fName(date) { exec(\'echo \' + date); }"\
+		';
+	}	
+})
+Commands.register("execl", {
+	requiredArguments: 0,
+	format: '<pre>execl</pre>',
+	run: function(args, callback) {
+		exec("formtextarea Command:", function(command) {
+			command = command.replace(/\n/g, ' && ');
+			exec(command, function(res) {
+				callback(res);
+			});
+		});		
+	},
+	man: function() {
+		return 'Executes a given command, but provides a textarea for writing it.';
+	}	
+})
+Commands.register("history", {
+	requiredArguments: 0,
+	format: '<pre>history</pre>',
+	run: function(args, callback) {
+		var message = 'History:<pre class="history-panel">';
+		for(var i=App.commandsHistory.length-2; i>=0; i--) {
+			var str = App.commandsHistory[i];
+			if(str != '' && str != ' ') {
+				var linkId = _.uniqueId("historylink");
+				message += "<a href='#' id='" + linkId + "'>" + str.toString().replace(/&/g, '&amp;') + "</a>\n";
+				(function(command, linkId){
+					setTimeout(function() {
+						document.querySelector("#" + linkId).addEventListener("click", function() {
+							exec(command);
+						});
+					}, 200);
+				})(str, linkId);
+			}
+		}
+		message += '</pre>';
+		exec('info ' + message, callback, true);
+	},
+	man: function() {
+		return 'Outputs the current console\'s history.';
+	}	
+})
+Commands.register("inject", {
+	requiredArguments: 0,
+	format: '<pre>inject [type]</pre>',
+	processing: false,
+	files: null,
+	filesRaw: null,
+	proccessedFiles: -1,
+	commands: [],
+	callback: null,
+	type: 'auxilio',
+	run: function(args, callback) {
+		this.type = args.length > 0 ? args.shift() : 'auxilio';
+		this.callback = callback;
+		if(this.processing) {
+			exec("error Sorry but <b>inject</b> command is working right now. Try again later.");
+			this.callback();
+			return;
+		}
+		this.reset();
+		var id = _.uniqueId("files");
+		var self = this;
+		var input = 'Choose a file(s): <input type="file" id="' + id + '" name="files[]" multiple />';
+		exec('echo ' + input);
+		this.inputElement = document.getElementById(id);
+		this.inputElement.addEventListener('change', function(e) {
+			self.processing = true;
+			self.handleFileSelected(e);
+		}, false);
+		this.inputElement.focus();
+		this.inputElement.click();
+	},
+	handleFileSelected: function(e) {
+		this.files = e.target.files;
+		var message = '<b>Selected file(s):</b><br />';
+		var self = this;
+		for(var i=0, f; f=this.files[i]; i++) {
+			message += f.name + "<br />";
+			var reader = new FileReader();
+			(function(reader, f) {
+				reader.onload = function(e) {
+					if(e.target.result) {
+						switch(self.type) {
+							case 'raw': self.handleFileReadRaw(f, e.target.result); break;
+							default: self.handleFileRead(f, e.target.result); break;
+						}						
+					}
+				};
+				reader.readAsText(f);
+			})(reader, f);
+		}
+		App.execute('echo ' + message);
+	},
+	handleFileRead: function(file, content) {
+		var fileCommands = content.split("\n");
+		for(var i=0, c; c = fileCommands[i]; i++) {
+			this.commands.push(c.replace(/\n/g, '').replace(/\r/g, ''));
+		}
+		this.proccessedFiles += 1;
+		if(this.proccessedFiles == this.files.length-1) {
+			var commandsString = this.commands.join(" && ");
+			this.inputElement.style.display = "none";
+			App.setFocus();
+			this.callback(commandsString);
+			this.reset();
+		}
+	},
+	handleFileReadRaw: function(file, content) {
+		if(!this.filesRaw) this.filesRaw = [];
+		this.filesRaw.push({file: file, content: content});
+		this.proccessedFiles += 1;
+		if(this.proccessedFiles == this.files.length-1) {			
+			this.inputElement.style.display = "none";
+			App.setFocus();
+			this.callback(this.filesRaw);
+			this.reset();
+		}
+	},
+	reset: function() {
+		this.processing = false;
+		this.files = null;
+		this.proccessedFiles = -1;
+		this.commands = [];
+		this.filesRaw = null;
+	},
+	man: function() {
+		return 'Inject external javascript to be run in the context of Auxilio and current page. By default the command works with <i>type=auxilio</i>.\
+		It could be also <i>type=raw</i>. Then instead of string the callback is called with an object containing the files.';
+	}	
+})
+Commands.register("l", {
+	run: function(args, callback) {
+		App.clear();
+		callback();
+	},
+	man: function() {
+		return 'Clearing the current console\'s output.';
+	}	
+})
+Commands.register("man", {
+	requiredArguments: 0, 
+	format: "<pre>man\nman [name of command]</pre>",
+	run: function(args, callback) {
+		var commandToViewName = args[0];
+		if(commandToViewName) {
+			for(var commandName in Commands) {
+				var r = new RegExp(commandToViewName, "g");
+				if(commandName != "get" && commandName != "register" && commandName.match(r)) {
+					this.showCommand(commandName);
+				}
+			}
+		} else {
+			for(var commandName in Commands) {
+				if(commandName != "get" && commandName != "register") {
+					this.showCommand(commandName);
+				}
+			}
+		}
+		callback();
+	},
+	showCommand:function(commandName) {
+		var c = Commands.get(commandName);
+		if(c) {
+			var message = '(<b>' + commandName + '</b>) ' + (c.man ? c.man() : '');
+			c.format && c.format != '' ? message += '<br />' + c.format : null;
+			exec("echo " + message);
+		}
+	},
+	man: function() {
+		return 'Shows information about available commands.';
+	}
+})
+Commands.register("marker", {
+	requiredArguments: 0,
+	format: '<pre>marker</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "marker"}, callback);
+		}
+	},
+	man: function() {
+		return 'Gives you ability to place markers on the current page. <i>screenshot</i> command could be used after that.';
+	}	
+})
+Commands.register("request", {
+	requiredArguments: 1,
+	format: '<pre>request [url]<br />request [url] [raw]</pre>',
+	run: function(args, finished) {
+		var self = this;
+		var url = args.shift();
+		var showRawOutput = args.length > 0 && args[0] === "true";
+		if(url.indexOf("http") == -1) url = "http://" + url;
+		var callback = function(response) {
+			if(response.error) {
+				exec('error request: ' + response.error, finished);
+			} else {
+				var responseText = response.responseText;
+				if(!showRawOutput) {
+					responseText = responseText.replace(/</g, '&lt;');
+					responseText = responseText.replace(/>/g, '&gt;');
+					responseText = '<pre>' + responseText + '</pre>';
+				}
+				finished(responseText);
+			}
+		}
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "request", url: url}, callback);
+		} else {
+			request(url, callback);
+		}
+	},
+	man: function() {
+		return 'Sends ajax request and shows the result in the console.<br />\
+		Use <b>raw</b> parameter to leave the data as it is received from the url. \
+		For example:<br />\
+		request github.com true';
+	}
+})
+
+// Used in development mode
+var request = function(url, callback) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", url, true);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			callback({responseText: xhr.responseText});
+		} else if(xhr.readyState == 4) {
+			callback({error: "Error requesting '" + url + "'. (xhr.status=" + xhr.status + ")"});
+		}
+	}
+	xhr.send();
+}
+Commands.register("alias", {
+	requiredArguments: 0,
+	lookForQuotes: false,
+	concatArgs: true,
+	format: '<pre>alias [name] [value]</pre>',
+	aliases: {},
+	run: function(args, callback) {
+		var name = args.length > 0 ? args.shift() : null;
+		var aliasValue = args.length > 0 ? args.join(" ").replace(/\\n/g, '\n') : null;
+		var self = this;
+		aliases = {};
+		if(name === "clearallplease") {
+			this.storeAliases(callback)
+			return;
+		}
+		exec("storage get aliases", function(data) {
+			if(data.aliases && data.aliases != "") {
+				self.aliases = JSON.parse(data.aliases);
+			}
+			if(name) {
+				var currentValue = self.aliases[name] || '';
+				if(aliasValue) {
+					self.aliases[name] = aliasValue;
+					self.storeAliases(callback);
+				} else {
+					exec('formtextarea "alias:' + name + '" ' + currentValue, function(newValue) {
+						if(newValue == null) { callback(); return; }
+						if(newValue === '') { delete self.aliases[name]; }
+						else { self.aliases[name] = newValue; }
+						self.storeAliases(callback);
+					}, true);
+				}
+			} else {
+				var str = '';
+				for(var i in self.aliases) {
+					str += '<h2>' + i + '</h2><pre>' + self.aliases[i] + '</pre>';
+				}
+				if(str != '') {
+					exec('echo ' + str);
+				} else {
+					exec('info No data.');
+				}
+				callback();
+			}
+		});
+	},
+	storeAliases: function(callback) {
+		exec("storage put aliases " + JSON.stringify(this.aliases), function() {
+			exec('success Aliases saved succesfully.', function() {
+				App.registerAliases();
+				callback();
+			});
+		});
+	},
+	man: function() {
+		return 'Managing aliases.<br />\
+		alias - brings all the aliases<br />\
+		alias [name] - openes an editor for adding or editing. If you leave the textarea empty and click \'OK\', the alias will be deleted.<br />\
+		alias [name] [value] - directly pass the content of the alias<br />\
+		alias clearallplease - clears all the added aliases\
+		';
+	}	
+})
+Commands.register("profile", {
+	requiredArguments: 0,
+	format: '<pre>echo [operation]</pre>',
+	run: function(args, callback) {
+		var operation = args[0] || "show";
+		var self = this;
+		switch(operation) {
+			case "show":
+				exec("storage get profiledata", function(data) {
+					if(data.profiledata && data.profiledata !== "") {
+						var str = 'Your profile:<br />';
+						str += '<pre>' + data.profiledata + '</pre>';
+						exec('info ' + str, callback);
+					} else {
+						exec('info There is no profile data.', callback);
+					}
+				});
+			break;
+			case "edit":
+				exec("storage get profiledata", function(data) {
+					var currentValue = '';
+					if(data.profiledata && data.profiledata !== "") {
+						currentValue = data.profiledata;
+					}
+					exec('formtextarea "Manage your profile:" ' + currentValue, function(newValue) {
+						if(typeof newValue !== "undefined") {
+							exec("storage put profiledata " + newValue, function() {
+								exec('success Profile changed successfully.', callback);
+							});
+						} else {
+							callback();
+						}
+					});
+				});
+			break;
+			case "import":
+				exec("inject", function(data) {
+					data = data.replace(/ && /g, '\n');
+					exec("storage put profiledata " + data, function() {
+						exec('success Profile changed successfully.', callback);
+					});
+				});
+			break;
+			case "clear":
+				exec("storage remove profiledata", function() {
+					exec('success Profile cleared successfully.', callback);
+				});
+			break;
+			case "run":
+				App.loadProfile();
+				callback();
+			break;
+		}
+	},
+	man: function() {
+		return 'Manages your current profile file. Valid operations:<br />show, edit, import, clear, run';
+	}	
+})
+Commands.register("storage", {
+	requiredArguments: 1,
+	format: '<pre>storage [operation] [key] [value]</pre>',
+	lookForQuotes: false,
+	run: function(args, callback) {
+		var operation = args.shift();
+		var key = args.length > 0 ? args.shift() : null;
+		var value = args.length > 0 ? args.join(" ") : null;
+		if(operation !== "put" && operation != "get" && operation != "remove") {
+			exec("error profile: Operation parameter could be 'put', 'get' or 'remove' (not '" + operation + "').");
+			callback();
+			return;
+		}
+		if((operation === "put" || operation === "remove") && !key) {
+			exec("error profile: 'key' is missing.");
+			callback();
+			return;
+		}
+		if(operation === "put" && !value) {
+			exec("error profile: 'put' operation used, but 'value' is missing.");
+			callback();
+			return;
+		}
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "storage", operation: operation, key: key, value: value}, function(res) {
+				if(res.error) {
+					exec("error " + error.error);
+				} else {
+					if(operation === "get") {
+						// exec("info " + JSON.stringify(res.value))
+						callback(res.value);
+					} else {
+						callback();
+					}
+				}
+			});
+		}
+	},
+	man: function() {
+		return '\
+			Store key-value pairs by using chrome.storage.sync API.<br />\
+			Examples:<br />\
+			storage put username Auxilio // stores username=Auxilio<br />\
+			storage get username // returns Auxilio<br />\
+			storage remove username // returns Auxilio<br />\
+			storage get // returns all stored values<br />\
+		';
+	}	
+})
+Commands.register("formconfirm", {
+	requiredArguments: 1,
+	format: '<pre>formconfirm [question]</pre>',
+	run: function(args, callback) {
+		
+		var id = _.uniqueId("formconfirm");
+		var question = args.join(" ");
+		var html = '\
+			<div id="' + id + '" class="form">\
+				<div class="buttons right">\
+					<a href="#" id="' + id + '_buttonno" class="btn deny"><i class="icon-ok"></i> NO</a>\
+					<a href="#" id="' + id + '_buttonyes" class="btn confirm"><i class="icon-ok"></i> YES</a>\
+				</div>\
+				<h1>' + question + '</h1>\
+				<span class="clear" />\
+			</div>\
+		';
+		exec("echo " + html);
+		
+		var form = document.getElementById(id);
+		var buttonYes = document.getElementById(id + '_buttonyes');
+		var buttonNo = document.getElementById(id + '_buttonno');
+		buttonYes.addEventListener("click", function() {
+			form.parentNode.style.display = "none";
+			callback(true);
+			App.commandInputFocus();
+		});
+		buttonNo.addEventListener("click", function() {
+			form.parentNode.style.display = "none";
+			callback(false);
+			App.commandInputFocus();
+		});
+
+	},
+	man: function() {
+		return 'Shows a text (question) with two options - YES and NO. The callback accepts only one boolean parameter.';
+	}	
+})
+Commands.register("formfile", {
+	requiredArguments: 0,
+	format: '<pre>formfile [title]</pre>',
+	run: function(args, callback) {
+		
+		var id = _.uniqueId("formfile");
+		var title = args.length > 0 ? args.join(' ') : "Please choose file/s:";
+		var html = '\
+			<div id="' + id + '" class="form">\
+				<div class="buttons right">\
+					<a href="#" id="' + id + '_button_cancel" class="btn deny"><i class="icon-cancel"></i> CANCEL</a>\
+					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> OK</a>\
+				</div>\
+				<h1>' + title + '</h1>\
+				<input type="file" id="' + id + '_area" class="clear" />\
+				<div class="file-content" id="' + id + '_filecontent"></div>\
+			</div>\
+		';
+		exec("echo " + html);
+		
+		var form = document.getElementById(id);
+		var button = document.getElementById(id + '_button');
+		var buttonCancel = document.getElementById(id + '_button_cancel');
+		var area = document.getElementById(id + '_area');
+		var fileContent = document.getElementById(id + '_filecontent');
+		var value = null;
+		area.addEventListener("change", function(e) {
+			var files = e.target.files;
+			var file = null;
+			if(file = files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					if(e.target.result) {
+						value = e.target.result;
+						fileContent.style.display = "block";
+						fileContent.innerText = value;
+					}
+				};
+				reader.readAsText(file);
+			}
+		})
+		button.addEventListener("click", function() {
+			if(value != null) {
+				form.parentNode.style.display = "none";
+				callback(value);
+				App.commandInputFocus();
+			} else {
+				exec("error Please choose a file.")
+			}
+		});
+		buttonCancel.addEventListener("click", function() {
+			form.parentNode.style.display = "none";
+			callback();
+			App.commandInputFocus();
+		});
+
+	},
+	man: function() {
+		return 'Shows a simple form with input[type="file"] and button. Use the callback of the command to get the content of the file.';
+	}	
+})
+Commands.register("forminput", {
+	requiredArguments: 0,
+	format: '<pre>forminput [title]\forminput [title] [text]</pre>',
+	run: function(args, callback) {
+		
+		var id = _.uniqueId("forminput");
+		var title = args.length > 0 ? args.shift() : "Type something:";
+		var text = args.length > 0 ? args.join(" ") : '';
+		var html = '\
+			<div id="' + id + '" class="form">\
+				<div class="buttons right">\
+					<a href="#" id="' + id + '_button_cancel" class="btn deny"><i class="icon-cancel"></i> CANCEL</a>\
+					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> OK</a>\
+				</div>\
+				<h1>' + title + '</h1>\
+				<input type="text" id="' + id + '_area" class="clear" value="' + text + '"/>\
+				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
+			</div>\
+		';
+		exec("echo " + html);
+		
+		var form = document.getElementById(id);
+		var button = document.getElementById(id + '_button');
+		var buttonCancel = document.getElementById(id + '_button_cancel');
+		var textarea = document.getElementById(id + '_area');
+		var onKeyDown = function(e) {
+			if(e.ctrlKey && e.keyCode === 13) {
+				button.click();
+			} else if(e.keyCode == 27) {
+				buttonCancel.click();
+			}
+		}
+
+		textarea.focus();
+		button.addEventListener("click", function() {
+			form.parentNode.style.display = "none";
+			var value = textarea.value.replace(/ && /g, '\n');
+			callback(value);
+			textarea.removeEventListener("keydown", onKeyDown);
+			App.commandInputFocus();
+		});
+		buttonCancel.addEventListener("click", function() {
+			form.parentNode.style.display = "none";
+			callback();
+			App.commandInputFocus();
+		});
+		textarea.addEventListener("keydown", onKeyDown);
+
+	},
+	man: function() {
+		return 'Shows a simple form with input and button. Use the callback of the command to get the text submitted by the form.';
+	}	
+})
+Commands.register("formtextarea", {
+	requiredArguments: 0,
+	format: '<pre>formtextarea [title]\nformtextarea [title] [text]</pre>',
+	run: function(args, callback) {
+		
+		var id = _.uniqueId("formtextarea");
+		var title = args.length > 0 ? args.shift() : "Type something:";
+		var text = args.length > 0 ? args.join(" ") : '';
+		var html = '\
+			<div id="' + id + '" class="form">\
+				<div class="buttons right">\
+					<a href="#" id="' + id + '_button_cancel" class="btn deny"><i class="icon-cancel"></i> CANCEL</a>\
+					<a href="#" id="' + id + '_button" class="btn confirm"><i class="icon-ok"></i> OK</a>\
+				</div>\
+				<h1>' + title + '</h1>\
+				<textarea id="' + id + '_area" class="clear">' + text + '</textarea>\
+				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
+			</div>\
+		';
+		exec("echo " + html);
+		
+		var form = document.getElementById(id);
+		var button = document.getElementById(id + '_button');
+		var buttonCancel = document.getElementById(id + '_button_cancel');
+		var textarea = document.getElementById(id + '_area');
+		var onKeyDown = function(e) {
+			if(e.ctrlKey && e.keyCode === 13) {
+				button.click();
+			} else if(e.keyCode == 27) {
+				buttonCancel.click();
+			}
+		}
+
+		textarea.focus();
+		button.addEventListener("click", function() {
+			form.parentNode.style.display = "none";
+			var value = textarea.value.replace(/ && /g, '\n');
+			callback(value);
+			textarea.removeEventListener("keydown", onKeyDown);
+			App.commandInputFocus();
+		});
+		buttonCancel.addEventListener("click", function() {
+			form.parentNode.style.display = "none";
+			callback();
+			App.commandInputFocus();
+		});
+		textarea.addEventListener("keydown", onKeyDown);
+
+	},
+	man: function() {
+		return 'Shows a simple form with textarea and button. Use the callback of the command to get the text submitted by the form.';
+	}	
+})
+Commands.register("tetris", {
+	requiredArguments: 0,
+	format: '<pre>tetris [level to start from]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		App.removeFocus();
+		var self = this;
+		var defaultLevel = args.length > 0 ? parseInt(args.shift()) : 1;
+		if(!App.global.TetrisStarted) {
+			App.global.TetrisStarted = true;
+		} else {
+			exec("warning Only one tetris game could be started at a time. Use the <i>clear</i> command to remove the previous one.");
+			callback();
+			return;
+		}
+		if(!App.global.TetrisInitialized) {
+			App.global.TetrisInitialized = true;
+			this.injectFiles(["css/Tetris.css", "js/vendor/Tetris.js"], function() {
+				self.initTetris(callback, defaultLevel);
+			});
+		} else {
+			this.initTetris(callback, defaultLevel);
+		}
+	},
+	injectFiles: function(files, callback) {
+		var filesLoaded = 0;
+		var parent = document.querySelector("body") || document.querySelector("head");
+		var onFileLoaded = function() {
+			if(++filesLoaded == files.length) {
+				callback();
+			}
+		}
+		for(var i=0; i<files.length; i++) {
+			var file = files[i];
+			var parts = file.split(".");
+			var ext = parts[parts.length-1].toLowerCase();
+			switch(ext) {
+				case "js":
+					var script = document.createElement('script');
+					script.setAttribute("type", "text/javascript");
+					script.onload = function() {
+						onFileLoaded();
+					}
+					parent.appendChild(script);
+					script.setAttribute("src", file);
+				break;
+				case "css":
+					var css = document.createElement('link');
+					css.setAttribute("rel", "stylesheet");
+					css.setAttribute("type", "text/css");
+					css.onload = function() {
+						onFileLoaded();
+					}
+					parent.appendChild(css);
+					css.setAttribute("href", file);
+				break;
+			}
+		}
+	},
+	initTetris: function(callback, defaultLevel) {
+		App.setOutputPanelContent('\
+			<div class="regular tetris-holder">\
+			<div id="tetris">\
+			    <div class="left">\
+			        <h1><a href="http://gosu.pl/dhtml/JsTetris.html">JsTetris 1.0.0</a></h1>\
+			        <div class="menu">\
+			            <div><input type="button" value="New Game" id="tetris-menu-start" /></div>\
+			            <div><input type="button" value="Reset" id="tetris-menu-reset" style="display: none"/></div>\
+			            <div><input type="button" value="Help" id="tetris-menu-help" /></div>\
+			            <!--<div><input type="button" value="Highscores" id="tetris-menu-highscores" /></div>-->\
+			        </div>\
+			        <div class="keyboard">\
+			            <div class="up"><input type="button" value="^" id="tetris-keyboard-up" /></div>\
+			            <div class="down"><input type="button" value="v" id="tetris-keyboard-down" /></div>\
+			            <div class="left"><input type="button" value="&lt;" id="tetris-keyboard-left" /></div>\
+			            <div class="right"><input type="button" value="&gt;" id="tetris-keyboard-right" /></div>\
+			        </div>\
+			        <div id="tetris-nextpuzzle"></div>\
+			        <div id="tetris-gameover">Game Over</div>\
+			        <div class="stats">\
+		                Level:\
+						<span id="tetris-stats-level">1</span><br />\
+						Score:\
+						<span id="tetris-stats-score">0</span><br />\
+						Lines:\
+						<span id="tetris-stats-lines">0</span><br />\
+						APM:\
+						<span id="tetris-stats-apm">0</span><br />\
+						Time:\
+						<span id="tetris-stats-time">0</span>\
+			        </div>\
+			    </div>\
+			    <div id="tetris-area"></div>\
+			    <div id="tetris-help" class="window">\
+			        <div class="top">\
+			            Help <span id="tetris-help-close" class="close">x</span>\
+			        </div>\
+			        <div class="content">\
+			            <b>Controllers:</b> <br />\
+			            up - rotate <br />\
+			            down - move down <br />\
+			            left - move left <br />\
+			            right - move right <br />\
+			            space - fall to the bottom <br />\
+			            n - new game <br />\
+			            <!--r - reset <br />-->\
+			            <br />\
+			            <b>Rules:</b> <br />\
+			            1) Puzzle speed = 80+700/level miliseconds, the smaller value the faster puzzle falls <br />\
+			            2) If puzzles created in current level >= 10+level*2 then increase level <br />\
+			            3) After puzzle falling score is increased by 1000*level*linesRemoved <br />\
+			            4) Each "down" action increases score by 5+level (pressing space counts as multiple down actions)\
+			        </div>\
+			    </div>\
+			    <br class="clear" />\
+			</div>\
+			</div>\
+		');
+		var tetris = new Tetris(defaultLevel);
+	    tetris.unit = 14;
+	    tetris.areaX = 12;
+	    tetris.areaY = 22;
+	    tetris.start();
+
+	    var tetrisHolderDOMElement = document.querySelector(".tetris-holder");
+	    tetrisHolderDOMElement.addEventListener("DOMNodeRemoved", function(e) {
+	    	if(e.target === tetrisHolderDOMElement) {
+	    		App.global.TetrisStarted = false;
+	    		tetris.stop();
+	    	}
+	    });
+
+		callback();
+	},
+	man: function() {
+		return 'Tetris game.';
+	}	
+});
+Commands.register("alert", {
+	requiredArguments: 1,
+	format: '<pre>alert [text]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] === 'object') {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		alert(args.join(" "));
+		callback();
+	},
+	man: function() {
+		return 'Alerts message.';
+	}	
+})
+Commands.register("echo", {
+	requiredArguments: 1,
+	format: '<pre>echo [text]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] === 'object') {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		App.setOutputPanelContent('<div class="regular">' + args.join(" ") + '</div>');
+		callback();
+	},
+	man: function() {
+		return 'Outputs message.';
+	}	
+})
+Commands.register("echoraw", {
+	requiredArguments: 1,
+	format: '<pre>echoraw [string]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] === 'object') {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		var output = args
+		.join(" ")
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;');
+		App.setOutputPanelContent('<div class="regular">' + output + '</div>');
+		callback();
+	},
+	man: function() {
+		return 'Outputs message in raw format. Even the html is shown as string.';
+	}	
+})
+Commands.register("error", {
+	requiredArguments: 1,
+	format: '<pre>error [text]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] === 'object') {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		App.setOutputPanelContent('<div class="error"><i class="icon-attention"></i> ' + args.join(" ") + '</div>');
+		callback();
+	},
+	man: function() {
+		return 'Outputs error message.';
+	}	
+})
+Commands.register("hidden", {
+	requiredArguments: 1,
+	format: '<pre>hidden [text]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] === 'object') {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		App.setOutputPanelContent('<div class="hidden">' + args.join(" ") + '</div>');
+		callback();
+	},
+	man: function() {
+		return 'Outputs invisible content. I.e. useful when you have to add hidden html markup.';
+	}	
+})
+Commands.register("hr", {
+	requiredArguments: 0,
+	format: '<pre>hr</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		App.setOutputPanelContent('<div><hr /></div>');
+		callback();
+	},
+	man: function() {
+		return 'Adds &lt;hr /> tag to the console\'s output panel';
+	}	
+})
+Commands.register("info", {
+	requiredArguments: 1,
+	format: '<pre>info [text]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] === 'object') {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		App.setOutputPanelContent('<div class="info"><i class="icon-info-circled"></i> ' + args.join(" ") + '</div>');
+		callback();
+	},
+	man: function() {
+		return 'Outputs info message.';
+	}	
+})
+Commands.register("small", {
+	requiredArguments: 1,
+	format: '<pre>small [text]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] === 'object') {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		App.setOutputPanelContent('<div class="small"><i class="icon-right-hand"></i> ' + args.join(" ") + '</div>');
+		callback();
+	},
+	man: function() {
+		return 'Outputs small message.';
+	}	
+})
+Commands.register("success", {
+	requiredArguments: 1,
+	format: '<pre>success [text]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] === 'object') {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		App.setOutputPanelContent('<div class="success"><i class="icon-ok"></i> ' + args.join(" ") + '</div>');
+		callback();
+	},
+	man: function() {
+		return 'Outputs success message.';
+	}	
+})
+Commands.register("title", {
+	requiredArguments: 1,
+	format: '<pre>title [text]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] === 'object') {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		App.setOutputPanelContent('<div><h1>' + args.join(" ") + '</h1></div>');
+		callback();
+	},
+	man: function() {
+		return 'Outputs a title.';
+	}	
+})
+Commands.register("warning", {
+	requiredArguments: 1,
+	format: '<pre>warning [text]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] === 'object') {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		App.setOutputPanelContent('<div class="warning"><i class="icon-attention"></i> ' + args.join(" ") + '</div>');
+		callback();
+	},
+	man: function() {
+		return 'Outputs warning message.';
+	}	
+})
+Commands.register("pageclick", {
+	requiredArguments: 1,
+	format: '<pre>pageclick [selector] [filter]</pre>',
+	run: function(args, callback) {
+		var selector = args.shift();
+		var filter = args.length > 0 ? args.join(" ") : null;
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "pageclick", selector: selector, filter: filter}, function(res) {
+				callback(res);
+			});
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Clicks an element on the page and returns the result immediately.<br />\
+		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.';
+	}
+})
+Commands.register("pageclickw", {
+	requiredArguments: 1,
+	format: '<pre>pageclickw [selector] [filter]</pre>',
+	run: function(args, callback) {
+		var selector = args.shift();
+		var filter = args.length > 0 ? args.join(" ") : null;
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "pageclickw", selector: selector, filter: filter}, function(res) {
+				callback(res);
+			});
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Clicks an element on the page and waits till the page is updated (i.e. a new url is fully loaded).<br />\
+		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.';
+	}	
+})
+Commands.register("pagecontains", {
+	requiredArguments: 2,
+	format: '<pre>pagecontains [selector] [text]</pre>',
+	run: function(args, callback) {
+		var selector = args.shift();
+		var text = args.join(" ");
+		exec("pagequery " + selector, function(res) {
+			if(res.elements && res.elements > 0) {
+				var matching = 0;
+				var matchedTags = '';
+				var r = new RegExp("(" + text + ")", "gi");
+				for(var i=0; i<res.raw.length; i++) {
+					if(res.raw[i].match(r)) {
+						matching += 1;
+						matchedTags += '<pre>' + res.raw[i].replace(/</g, '&lt;').replace(r, '<b class="bordered">$1</b>') + '</pre>';
+					}
+				}
+				if(matching === 1) {
+					exec('success There is one element matching <b>"' + selector + '"</b> selector and contains <b>"' + text + '"</b> text.<br />' + matchedTags);
+				} else if(matching > 1) {
+					exec('success There are ' + matching + ' elements matching <b>"' + selector + '"</b> selector and contains <b>"' + text + '"</b> text.<br />' + matchedTags);
+				} else {
+					exec('error There are element/s(' + res.elements + ') matching <b>"' + selector + '"</b> but non of them contain <b>"' + text + '"</b> text.');
+				}
+				callback(true);
+			} else {
+				exec('error There are no elements matching <b>"' + selector + '"</b> selector.')
+				callback(false);
+			}			
+		});
+	},
+	man: function() {
+		return 'Checks if there is an element matching the provided selector and containing the provided text.<br />\
+		Example:<br />\
+		pagecontains "body > a" "my link"';
+	}	
+})
+Commands.register("pageexpect", {
+	requiredArguments: 1,
+	format: '<pre>pageexpect [selector] [filter]</pre>',
+	run: function(args, callback) {
+		var selector = args.shift();
+		var filter = args.length > 0 ? args.join(" ") : null;
+		var command = filter ? "pagequery \"" + selector + "\" " + filter : "pagequery \"" + selector + "\"";
+		exec(command, function(res) {
+			if(res.elements && res.elements > 0) {
+				if(res.elements === 1) {
+					exec('success There is one element matching <b>"' + selector + '"</b> selector. ' + (filter ? '(filter: <b>' + filter + '</b>)' : ''));
+				} else {
+					exec('success There are ' + res.elements + ' elements matching <b>"' + selector + '"</b> selector. ' + (filter ? '(filter: <b>' + filter + '</b>)' : ''));
+				}
+				callback(res);
+			} else {
+				exec('error There are no elements matching <b>"' + selector + '"</b> selector. ' + (filter ? '(filter: <b>' + filter + '</b>)' : ''))
+				callback(res);
+			}			
+		});
+	},
+	man: function() {
+		return 'Checks if there is an element matching the provided selector.<br />\
+		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element';
+	}	
+})
+Commands.register("pagehighlight", {
+	requiredArguments: 1,
+	format: '<pre>pagehighlight [selector] [filter]</pre>',
+	run: function(args, callback) {
+		var selector = args.shift();
+		var filter = args.length > 0 ? args.join(" ") : null;
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "pagehighlight", selector: selector, filter: filter}, function(res) {
+				callback(res);
+			});
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Highlights element/elements on the page.<br />\
+		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.';
+	}	
+})
+Commands.register("pageinsertcss", {
+	requiredArguments: 1,
+	format: '<pre>pageinsertcss [css code]</pre>',
+	lookForQuotes: false,
+	run: function(args, callback) {
+		var csscode = args.join(" ");
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "pageinsertcss", csscode: csscode}, function(res) {
+				callback(res);
+			});
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Inserts css code in the context of the current page<br />\
+		Example:<br />\
+		pageinsertcss body { background: #F00; }';
+	}	
+})
+Commands.register("pageinsertjs", {
+	requiredArguments: 1,
+	format: '<pre>pageinsertjs [js code]</pre>',
+	lookForQuotes: false,
+	run: function(args, callback) {
+		var jscode = args.join(" ");
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "pageinsertjs", jscode: jscode}, function(res) {
+				if(res) {
+					res = JSON.parse(res);
+					if(res.length === 1) res = res[0];
+				}
+				callback(res);
+			});
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Executes javascript code in the context of the current page<br />\
+		Example:<br />\
+		pageinsertjs "document.querySelector(\'body\').click();"';
+	}	
+})
+Commands.register("pageinsertjsw", {
+	requiredArguments: 1,
+	format: '<pre>pageinsertjsw [js code]</pre>',
+	lookForQuotes: false,
+	run: function(args, callback) {
+		var jscode = args.join(" ");
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "pageinsertjsw", jscode: jscode}, function(res) {
+				if(res) {
+					res = JSON.parse(res);
+					if(res.length === 1) res = res[0];
+				}
+				callback(res);
+			});
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Executes javascript code in the context of the current page and waits till the current page is updated<br />\
+		Example:<br />\
+		pageinsertjsw "document.querySelector(\'form\').submit();"';
+	}	
+})
+Commands.register("pagequery", {
+	requiredArguments: 1,
+	format: '<pre>pagequery [selector] [filter]</pre>',
+	run: function(args, callback) {
+		var selector = args.shift();
+		var filter = args.length > 0 ? args.join(" ") : null;		
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "pagequery", selector: selector, filter: filter}, function(res) {
+				callback(res);
+			});
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Returns the number of matched elements and the elements in raw html string format.<br />\
+		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.\
+		Example: {"elements": 1, "raw": ["&lt;a href=\"#\">test&lt;/a>"]}';
+	}	
+})
+Commands.register("load", {
+	requiredArguments: 1,
+	format: '<pre>load [url]</pre>',
+	run: function(args, callback) {
+		var url = args[0];
+		if(url.indexOf("http") == -1) url = "http://" + url;
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "load", url: url}, function() {
+				exec("echo " + url + " is loaded");
+				callback();
+			});
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Loads another page in the current tab.';
+	}	
+})
+Commands.register("newtab", {
+	requiredArguments: 0,
+	format: '<pre>newtab\nnewtab [url] [active (true | false)]</pre>',
+	run: function(args, callback) {
+		if(chrome && chrome.runtime) {
+			if(args[0]) {
+				var url = args.shift();
+				var active = args.length > 0 ? args.shift() : "true";
+				if(url.indexOf("http") == -1 && url.indexOf("data:image") == -1) {
+					url = "http://" + url;
+				}
+				chrome.runtime.sendMessage({type: "newtab", url: url, active: active}, function() {
+					callback();
+				});
+			}else {
+				chrome.runtime.sendMessage({type: "newtab"}, callback);
+			}
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Creates a new tab.';
+	}	
+})
+Commands.register("refresh", {
+	requiredArguments: 0,
+	format: '<pre>refresh</pre>',
+	run: function(args, callback) {
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "refresh"}, function() {
+				exec("echo current tab is refreshed");
+				callback();
+			});
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Refreshes the current tab\'s page';
+	}	
+})
+Commands.register("screenshot", {
+	requiredArguments: 0,
+	format: '<pre>screenshot</pre>',
+	run: function(args, callback) {
+		if(chrome && chrome.runtime) {
+			chrome.runtime.sendMessage({type: "screenshot"}, function(data) {
+				if(data) {
+					exec("newtab " + data + " false", function() {
+						callback();
+					});
+				} else {
+					exec("error There was a problem creating the screenshot.", callback);
+				}
+			});
+		} else {
+			callback();
+		}
+	},
+	man: function() {
+		return 'Makes a screenshot of the current tab and loads it in a new tab.';
+	}	
+})

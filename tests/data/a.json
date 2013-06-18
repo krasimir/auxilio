@@ -1,0 +1,13 @@
+{
+	"members": [
+		{
+			"name": "John Black",
+			"job": "developer"
+		},
+		{
+			"name": "Martin Silver",
+			"job": "designer"
+		}
+	],
+	"type": "name-and-job"
+}

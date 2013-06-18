@@ -11,6 +11,6 @@
 	    "watch": "src/js/commands",
 	    "pack": ["src/js/commands"],
 	    "output": "src/js/app-commands.js",
-	    "minify": true
+	    "minify": false
 	}
 ]
