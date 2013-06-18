@@ -4,7 +4,48 @@ Commands.register("tetris", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		
+		var self = this;
+		var defaultLevel = args.length > 0 ? parseInt(args.shift()) : 1;
+		this.injectFiles(["css/Tetris.css", "js/vendor/Tetris.js"], function() {
+			self.initTetris(callback);
+		});
+	},
+	injectFiles: function(files, callback) {
+		var filesLoaded = 0;
+		var parent = document.querySelector("body") || document.querySelector("head");
+		var onFileLoaded = function() {
+			if(++filesLoaded == files.length) {
+				callback();
+			}
+		}
+		for(var i=0; i<files.length; i++) {
+			var file = files[i];
+			var parts = file.split(".");
+			var ext = parts[parts.length-1].toLowerCase();
+			switch(ext) {
+				case "js":
+					var script = document.createElement('script');
+					script.setAttribute("type", "text/javascript");
+					script.onload = function() {
+						onFileLoaded();
+					}
+					parent.appendChild(script);
+					script.setAttribute("src", file);
+				break;
+				case "css":
+					var css = document.createElement('link');
+					css.setAttribute("rel", "stylesheet");
+					css.setAttribute("type", "text/css");
+					css.onload = function() {
+						onFileLoaded();
+					}
+					parent.appendChild(css);
+					css.setAttribute("href", file);
+				break;
+			}
+		}
+	},
+	initTetris: function(callback, defaultLevel) {
 		App.setOutputPanelContent('\
 			<div class="regular">\
 			<div id="tetris">\
@@ -63,10 +104,12 @@ Commands.register("tetris", {
 			</div>\
 			</div>\
 		');
-		var tetris = new Tetris();
-		    tetris.unit = 14;
-		    tetris.areaX = 12;
-		    tetris.areaY = 22;
+		var tetris = new Tetris(defaultLevel);
+	    tetris.unit = 14;
+	    tetris.areaX = 12;
+	    tetris.areaY = 22;
+	    tetris.start();
+
 		callback();
 	},
 	man: function() {

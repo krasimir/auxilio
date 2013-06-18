@@ -103,7 +103,9 @@
  * document.getElementById("tetris-nextpuzzle") cache ?
  *
  */
-function Tetris() {
+function Tetris(defaultLevel) {
+
+    defaultLevel = defaultLevel || 1;
 
     var self = this;
     
@@ -121,7 +123,7 @@ function Tetris() {
      */
     this.start = function() {
         self.reset();
-        self.stats.start();
+        self.stats.start(defaultLevel);
         document.getElementById("tetris-nextpuzzle").style.display = "block";
         self.area = new Area(self.unit, self.areaX, self.areaY, "tetris-area");
         self.puzzle = new Puzzle(self, self.area);
@@ -147,7 +149,7 @@ function Tetris() {
         }
         document.getElementById("tetris-gameover").style.display = "none";
         document.getElementById("tetris-nextpuzzle").style.display = "none";
-        self.stats.reset();
+        self.stats.reset(defaultLevel);
     }
 
     /**
@@ -361,8 +363,8 @@ function Tetris() {
          * @return void
          * @access public
          */
-        this.start = function() {
-            this.reset();
+        this.start = function(defaultLevel) {
+            this.reset(defaultLevel);
             this.timerId = setInterval(this.incTime, 1000);
         }
 
@@ -382,9 +384,9 @@ function Tetris() {
          * @return void
          * @access public
          */
-        this.reset = function() {
+        this.reset = function(defaultLevel) {
             this.stop();
-            this.level = 1;
+            this.level = defaultLevel;
             this.time  = 0;
             this.apm   = 0;
             this.lines = 0;
@@ -725,7 +727,9 @@ function Tetris() {
             this.board = [];
             this.elements = [];
             for (var i = 0; i < this.nextElements.length; i++) {
-                document.getElementById("tetris-nextpuzzle").removeChild(this.nextElements[i]);
+                if(document.getElementById("tetris-nextpuzzle")) {
+                    document.getElementById("tetris-nextpuzzle").removeChild(this.nextElements[i]);
+                }
             }
             this.nextElements = [];
             this.x = null;
