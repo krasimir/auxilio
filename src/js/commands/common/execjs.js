@@ -7,10 +7,10 @@ Commands.register("execjs", {
 		var js = args.shift();
 		var parameter = args.shift();
 		var self = this;
-		if(js.indexOf("function ") === 0) {
+		if(js.toString().indexOf("function ") === 0) {
 			this.evalJSCode(js, parameter, callback);
 		} else {
-			exec(js, function(res) {
+			exec(js.toString(), function(res) {
 				self.evalJSCode(res.replace(/ && /g, '\n'), parameter, callback);
 			});
 		}

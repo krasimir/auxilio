@@ -1,0 +1,3 @@
+function(elements) {
+	alert(elements);
+}

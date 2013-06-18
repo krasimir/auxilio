@@ -1,12 +1,15 @@
 Commands.register("inject", {
 	requiredArguments: 0,
-	format: '<pre>inject</pre>',
+	format: '<pre>inject [type]</pre>',
 	processing: false,
 	files: null,
+	filesRaw: null,
 	proccessedFiles: -1,
 	commands: [],
 	callback: null,
+	type: 'auxilio',
 	run: function(args, callback) {
+		this.type = args.length > 0 ? args.shift() : 'auxilio';
 		this.callback = callback;
 		if(this.processing) {
 			App.execute("error Sorry but <b>inject</b> command is working right now. Try again later.");
@@ -35,7 +38,10 @@ Commands.register("inject", {
 			(function(reader, f) {
 				reader.onload = function(e) {
 					if(e.target.result) {
-						self.handleFileRead(f, e.target.result);
+						switch(self.type) {
+							case 'raw': self.handleFileReadRaw(f, e.target.result); break;
+							default: self.handleFileRead(f, e.target.result); break;
+						}						
 					}
 				};
 				reader.readAsText(f);
@@ -55,11 +61,21 @@ Commands.register("inject", {
 			this.reset();
 		}
 	},
+	handleFileReadRaw: function(file, content) {
+		if(!this.filesRaw) this.filesRaw = [];
+		this.filesRaw.push({file: file, content: content});
+		this.proccessedFiles += 1;
+		if(this.proccessedFiles == this.files.length-1) {			
+			this.callback(this.filesRaw);
+			this.reset();
+		}
+	},
 	reset: function() {
 		this.processing = false;
 		this.files = null;
 		this.proccessedFiles = -1;
 		this.commands = [];
+		this.filesRaw = null;
 	},
 	man: function() {
 		return 'Inject external javascript to be run in the context of Auxilio and current page.';
