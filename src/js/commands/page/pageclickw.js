@@ -8,6 +8,8 @@ Commands.register("pageclickw", {
 			chrome.runtime.sendMessage({type: "pageclickw", selector: selector, filter: filter}, function(res) {
 				callback(res);
 			});
+		} else {
+			callback();
 		}
 	},
 	man: function() {

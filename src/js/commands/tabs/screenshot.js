@@ -12,6 +12,8 @@ Commands.register("screenshot", {
 					exec("error There was a problem creating the screenshot.", callback);
 				}
 			});
+		} else {
+			callback();
 		}
 	},
 	man: function() {

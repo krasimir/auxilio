@@ -8,6 +8,8 @@ Commands.register("pageinsertcss", {
 			chrome.runtime.sendMessage({type: "pageinsertcss", csscode: csscode}, function(res) {
 				callback(res);
 			});
+		} else {
+			callback();
 		}
 	},
 	man: function() {

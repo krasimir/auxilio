@@ -15,6 +15,8 @@ Commands.register("newtab", {
 			}else {
 				chrome.runtime.sendMessage({type: "newtab"}, callback);
 			}
+		} else {
+			callback();
 		}
 	},
 	man: function() {

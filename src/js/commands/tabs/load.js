@@ -9,6 +9,8 @@ Commands.register("load", {
 				exec("echo " + url + " is loaded");
 				callback();
 			});
+		} else {
+			callback();
 		}
 	},
 	man: function() {

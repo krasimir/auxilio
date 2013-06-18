@@ -161,6 +161,9 @@ var App = {
 	removeFocus: function() {
 		this.command.blur();
 	},
+	setFocus: function() {
+		this.command.focus();
+	},
 	execute: function(commandStr, callback) {		
 
 		if(!commandStr || commandStr == "" || commandStr == " ") return;
@@ -173,7 +176,6 @@ var App = {
 		}
 
 		var processCommand = function(str, resultFromPreviousCommand) {
-			
 			var command = CommandParser.getCommandName(str);
 			var c = Commands.get(command);
 			if(c) {
@@ -312,4 +314,10 @@ window.onload = function() {
 // shortcuts
 var exec = function(commandStr, callback) {
 	App.execute(commandStr, callback);
+}
+// console.log in the background page
+var bglog = function(obj) {
+	if(chrome && chrome.runtime) {
+		chrome.runtime.sendMessage({type: "bglog", obj: obj});
+	}
 }

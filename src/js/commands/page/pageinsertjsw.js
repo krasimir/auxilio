@@ -12,6 +12,8 @@ Commands.register("pageinsertjsw", {
 				}
 				callback(res);
 			});
+		} else {
+			callback();
 		}
 	},
 	man: function() {

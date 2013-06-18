@@ -12,21 +12,22 @@ Commands.register("inject", {
 		this.type = args.length > 0 ? args.shift() : 'auxilio';
 		this.callback = callback;
 		if(this.processing) {
-			App.execute("error Sorry but <b>inject</b> command is working right now. Try again later.");
+			exec("error Sorry but <b>inject</b> command is working right now. Try again later.");
 			this.callback();
 			return;
 		}
 		this.reset();
 		var id = _.uniqueId("files");
 		var self = this;
-		var input = '<input type="file" id="' + id + '" name="files[]" multiple />';
-		App.execute('hidden ' + input);
-		var inputElement = document.getElementById(id);
-		inputElement.addEventListener('change', function(e) {
+		var input = 'Choose a file(s): <input type="file" id="' + id + '" name="files[]" multiple />';
+		exec('echo ' + input);
+		this.inputElement = document.getElementById(id);
+		this.inputElement.addEventListener('change', function(e) {
 			self.processing = true;
 			self.handleFileSelected(e);
 		}, false);
-		inputElement.click();
+		this.inputElement.focus();
+		this.inputElement.click();
 	},
 	handleFileSelected: function(e) {
 		this.files = e.target.files;
@@ -57,6 +58,8 @@ Commands.register("inject", {
 		this.proccessedFiles += 1;
 		if(this.proccessedFiles == this.files.length-1) {
 			var commandsString = this.commands.join(" && ");
+			this.inputElement.style.display = "none";
+			App.setFocus();
 			this.callback(commandsString);
 			this.reset();
 		}
@@ -66,6 +69,8 @@ Commands.register("inject", {
 		this.filesRaw.push({file: file, content: content});
 		this.proccessedFiles += 1;
 		if(this.proccessedFiles == this.files.length-1) {			
+			this.inputElement.style.display = "none";
+			App.setFocus();
 			this.callback(this.filesRaw);
 			this.reset();
 		}
@@ -78,6 +83,7 @@ Commands.register("inject", {
 		this.filesRaw = null;
 	},
 	man: function() {
-		return 'Inject external javascript to be run in the context of Auxilio and current page.';
+		return 'Inject external javascript to be run in the context of Auxilio and current page. By default the command works with <i>type=auxilio</i>.\
+		It could be also <i>type=raw</i>. Then instead of string the callback is called with an object containing the files.';
 	}	
 })

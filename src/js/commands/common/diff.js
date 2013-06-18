@@ -4,7 +4,6 @@ Commands.register("diff", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		exec("inject")
 		// this.compareText("Krasimir Tsonev is web developer", "Krasimir tyonev is developer", callback);
 		// this.compareJSON({a: 20}, {a: 20, b: { c: 20 }}, callback);
 	},

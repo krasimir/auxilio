@@ -3,11 +3,13 @@ Commands.register("pagequery", {
 	format: '<pre>pagequery [selector] [filter]</pre>',
 	run: function(args, callback) {
 		var selector = args.shift();
-		var filter = args.length > 0 ? args.join(" ") : null;
+		var filter = args.length > 0 ? args.join(" ") : null;		
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "pagequery", selector: selector, filter: filter}, function(res) {
 				callback(res);
 			});
+		} else {
+			callback();
 		}
 	},
 	man: function() {

@@ -116,6 +116,9 @@ var onMessageListener = function(message, sender, sendResponse) {
                 });
             });
         break;
+        case "bglog":
+            console.log(message.obj);
+        break;
         default:
             try {
                 chrome.tabs.getSelected(null, function(tab){

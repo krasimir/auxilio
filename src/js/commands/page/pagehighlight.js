@@ -8,6 +8,8 @@ Commands.register("pagehighlight", {
 			chrome.runtime.sendMessage({type: "pagehighlight", selector: selector, filter: filter}, function(res) {
 				callback(res);
 			});
+		} else {
+			callback();
 		}
 	},
 	man: function() {
