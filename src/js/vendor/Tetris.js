@@ -152,6 +152,17 @@ function Tetris(defaultLevel) {
         self.stats.reset(defaultLevel);
     }
 
+    this.stop = function() {
+        if(self.stats) {
+            self.stats.stop();
+        }
+        if(self.puzzle) {
+            self.puzzle.stop();
+        }
+        document.getElementById("tetris-nextpuzzle").style.display = "none";
+        document.getElementById("tetris-gameover").style.display = "block";
+    }
+
     /**
      * End game.
      * Stop stats, ...
@@ -296,7 +307,7 @@ function Tetris(defaultLevel) {
         this.left = 37;
         this.right = 39;
         this.n = 78;
-        this.r = 82;
+        // this.r = 82;
         this.space = 32;
         this.f12 = 123;
         this.escape = 27;
@@ -862,7 +873,9 @@ function Tetris(defaultLevel) {
                         el.className = "block" + this.nextType;
                         el.style.left = (x * this.area.unit) + "px";
                         el.style.top = (y * this.area.unit) + "px";
-                        document.getElementById("tetris-nextpuzzle").appendChild(el);
+                        if(document.getElementById("tetris-nextpuzzle")) {
+                            document.getElementById("tetris-nextpuzzle").appendChild(el);
+                        }
                         this.nextElements.push(el);
                     }
                 }

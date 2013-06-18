@@ -4,6 +4,7 @@ var CommandsDictionary = [];
 // The main application logic
 var App = {
 	commandsStoreInHistory: 50,
+	global: {}, // storage for global variables
 	init: function() {
 		this.suggest = document.getElementById("js-suggest");
 		this.command = document.getElementById("js-command");
@@ -156,6 +157,9 @@ var App = {
 	},
 	enableInput: function() {
 		this.command.prop('disabled', false);
+	},
+	removeFocus: function() {
+		this.command.blur();
 	},
 	execute: function(commandStr, callback) {		
 

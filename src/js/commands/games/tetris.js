@@ -1,14 +1,27 @@
 Commands.register("tetris", {
 	requiredArguments: 0,
-	format: '<pre>tetris</pre>',
+	format: '<pre>tetris [level to start from]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
+		App.removeFocus();
 		var self = this;
 		var defaultLevel = args.length > 0 ? parseInt(args.shift()) : 1;
-		this.injectFiles(["css/Tetris.css", "js/vendor/Tetris.js"], function() {
-			self.initTetris(callback);
-		});
+		if(!App.global.TetrisStarted) {
+			App.global.TetrisStarted = true;
+		} else {
+			exec("warning Only one tetris game could be started at a time. Use the <i>clear</i> command to remove the previous one.");
+			callback();
+			return;
+		}
+		if(!App.global.TetrisInitialized) {
+			App.global.TetrisInitialized = true;
+			this.injectFiles(["css/Tetris.css", "js/vendor/Tetris.js"], function() {
+				self.initTetris(callback, defaultLevel);
+			});
+		} else {
+			this.initTetris(callback, defaultLevel);
+		}
 	},
 	injectFiles: function(files, callback) {
 		var filesLoaded = 0;
@@ -47,13 +60,13 @@ Commands.register("tetris", {
 	},
 	initTetris: function(callback, defaultLevel) {
 		App.setOutputPanelContent('\
-			<div class="regular">\
+			<div class="regular tetris-holder">\
 			<div id="tetris">\
 			    <div class="left">\
 			        <h1><a href="http://gosu.pl/dhtml/JsTetris.html">JsTetris 1.0.0</a></h1>\
 			        <div class="menu">\
 			            <div><input type="button" value="New Game" id="tetris-menu-start" /></div>\
-			            <div><input type="button" value="Reset" id="tetris-menu-reset" /></div>\
+			            <div><input type="button" value="Reset" id="tetris-menu-reset" style="display: none"/></div>\
 			            <div><input type="button" value="Help" id="tetris-menu-help" /></div>\
 			            <!--<div><input type="button" value="Highscores" id="tetris-menu-highscores" /></div>-->\
 			        </div>\
@@ -91,7 +104,7 @@ Commands.register("tetris", {
 			            right - move right <br />\
 			            space - fall to the bottom <br />\
 			            n - new game <br />\
-			            r - reset <br />\
+			            <!--r - reset <br />-->\
 			            <br />\
 			            <b>Rules:</b> <br />\
 			            1) Puzzle speed = 80+700/level miliseconds, the smaller value the faster puzzle falls <br />\
@@ -109,6 +122,14 @@ Commands.register("tetris", {
 	    tetris.areaX = 12;
 	    tetris.areaY = 22;
 	    tetris.start();
+
+	    var tetrisHolderDOMElement = document.querySelector(".tetris-holder");
+	    tetrisHolderDOMElement.addEventListener("DOMNodeRemoved", function(e) {
+	    	if(e.target === tetrisHolderDOMElement) {
+	    		App.global.TetrisStarted = false;
+	    		tetris.stop();
+	    	}
+	    });
 
 		callback();
 	},
