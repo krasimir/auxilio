@@ -3,13 +3,8 @@ Commands.register("alert", {
 	format: '<pre>alert [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
-	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		alert(args.join(" "));
+	run: function(args, callback) {	
+		alert(this.formatter(args, false, true));
 		callback();
 	},
 	man: function() {

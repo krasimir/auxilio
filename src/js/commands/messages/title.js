@@ -4,12 +4,7 @@ Commands.register("title", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		App.setOutputPanelContent('<div><h1>' + args.join(" ") + '</h1></div>');
+		App.setOutputPanelContent('<div><h1>' + this.formatter(args) + '</h1></div>');
 		callback();
 	},
 	man: function() {

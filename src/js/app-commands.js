@@ -977,13 +977,8 @@ Commands.register("alert", {
 	format: '<pre>alert [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
-	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		alert(args.join(" "));
+	run: function(args, callback) {	
+		alert(this.formatter(args, false, true));
 		callback();
 	},
 	man: function() {
@@ -996,12 +991,7 @@ Commands.register("echo", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		App.setOutputPanelContent('<div class="regular">' + args.join(" ") + '</div>');
+		App.setOutputPanelContent('<div class="regular">' + this.formatter(args) + '</div>');
 		callback();
 	},
 	man: function() {
@@ -1014,16 +1004,7 @@ Commands.register("echoraw", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		var output = args
-		.join(" ")
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;');
-		App.setOutputPanelContent('<div class="regular">' + output + '</div>');
+		App.setOutputPanelContent('<div class="regular">' + this.formatter(args, true, true, true) + '</div>');
 		callback();
 	},
 	man: function() {
@@ -1036,12 +1017,7 @@ Commands.register("error", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		App.setOutputPanelContent('<div class="error"><i class="icon-attention"></i> ' + args.join(" ") + '</div>');
+		App.setOutputPanelContent('<div class="error"><i class="icon-attention"></i> ' + this.formatter(args) + '</div>');
 		callback();
 	},
 	man: function() {
@@ -1054,11 +1030,6 @@ Commands.register("hidden", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
 		App.setOutputPanelContent('<div class="hidden">' + args.join(" ") + '</div>');
 		callback();
 	},
@@ -1085,12 +1056,7 @@ Commands.register("info", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		App.setOutputPanelContent('<div class="info"><i class="icon-info-circled"></i> ' + args.join(" ") + '</div>');
+		App.setOutputPanelContent('<div class="info"><i class="icon-info-circled"></i> ' + this.formatter(args) + '</div>');
 		callback();
 	},
 	man: function() {
@@ -1103,12 +1069,7 @@ Commands.register("small", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		App.setOutputPanelContent('<div class="small"><i class="icon-right-hand"></i> ' + args.join(" ") + '</div>');
+		App.setOutputPanelContent('<div class="small"><i class="icon-right-hand"></i> ' + this.formatter(args) + '</div>');
 		callback();
 	},
 	man: function() {
@@ -1121,12 +1082,7 @@ Commands.register("success", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		App.setOutputPanelContent('<div class="success"><i class="icon-ok"></i> ' + args.join(" ") + '</div>');
+		App.setOutputPanelContent('<div class="success"><i class="icon-ok"></i> ' + this.formatter(args) + '</div>');
 		callback();
 	},
 	man: function() {
@@ -1139,12 +1095,7 @@ Commands.register("title", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		App.setOutputPanelContent('<div><h1>' + args.join(" ") + '</h1></div>');
+		App.setOutputPanelContent('<div><h1>' + this.formatter(args) + '</h1></div>');
 		callback();
 	},
 	man: function() {
@@ -1157,12 +1108,7 @@ Commands.register("warning", {
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
-		for(var i=0; i<args.length; i++) {
-			if(typeof args[i] === 'object') {
-				args[i] = JSON.stringify(args[i]);
-			}
-		}
-		App.setOutputPanelContent('<div class="warning"><i class="icon-attention"></i> ' + args.join(" ") + '</div>');
+		App.setOutputPanelContent('<div class="warning"><i class="icon-attention"></i> ' + this.formatter(args) + '</div>');
 		callback();
 	},
 	man: function() {
