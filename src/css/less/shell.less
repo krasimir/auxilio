@@ -1,0 +1,16 @@
+.shell-indicator-off {
+	.transition(~"all 300ms ease-out");
+	position: absolute;
+	width: 12px;
+	height: 12px;
+	border-radius: 6px;
+	background: lighten(@color-a, 25%);
+	top: 0;
+	right: 0;
+	margin: 8px 8px 0 0;
+	border: solid 1px lighten(@color-a, 15%);
+}
+.shell-indicator-on {
+	.shell-indicator-off();
+	background: darken(@color-success, 20%);
+}

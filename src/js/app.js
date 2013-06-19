@@ -153,10 +153,10 @@ var App = {
 		}
 	},
 	disableInput: function() {
-		this.command.prop('disabled', true);
+		this.command.setAttribute('disabled', true);
 	},
 	enableInput: function() {
-		this.command.prop('disabled', false);
+		this.command.setAttribute('disabled', false);
 	},
 	removeFocus: function() {
 		this.command.blur();
@@ -208,7 +208,16 @@ var App = {
 				}
 				
 			} else {
-				getNextCommand();
+
+				// checking for active socket.io app
+				if(Shell.connected()) {
+					Shell.send(str, function(res) {
+						getNextCommand(res);
+					});
+				} else {
+					exec("error Missing command <b>" + command + "</b>.");
+					getNextCommand();
+				}
 			}
 		}
 		var getNextCommand = function(res) {
@@ -298,26 +307,5 @@ var App = {
 	},
 	commandInputFocus: function() {
 		this.command.focus();
-	}
-}
-
-// Boot
-window.onload = function() {
-	App.init();
-	document.querySelector("body").addEventListener("keydown", function(e) {
-		if(e.ctrlKey && e.keyCode === 123) {
-			App.command.focus();
-		}
-	});
-};
-
-// shortcuts
-var exec = function(commandStr, callback) {
-	App.execute(commandStr, callback);
-}
-// console.log in the background page
-var bglog = function(obj) {
-	if(chrome && chrome.runtime) {
-		chrome.runtime.sendMessage({type: "bglog", obj: obj});
 	}
 }

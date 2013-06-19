@@ -26,7 +26,7 @@ var onMessageListener = function(message, sender, sendResponse) {
         case "refresh":
             chrome.tabs.getSelected(null, function (tab) {
                 TabCompleteNotifier.add(tab.id, sendResponse);
-                chrome.tabs.update(tab.id, {url: tab.url});
+                chrome.tabs.reload(tab.id);
             });
         break;
         case "newtab":

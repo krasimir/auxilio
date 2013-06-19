@@ -3,13 +3,10 @@ var Commands = {
 		this[name] = logic;
 	},
 	get: function(name) {
-		if(name && name != "" && name != " ") {
-			if(this[name]) {
-				return _.extend({}, CommandBase, {name: name}, this[name]);
-			} else {
-				exec("error Missing command <b>" + name + "</b>.");
-			}			
+		if(name && name != "" && name != " " && this[name]) {
+			return _.extend({}, CommandBase, {name: name}, this[name]);
+		} else {
+			return false;
 		}
-		return false;
 	}
 };
