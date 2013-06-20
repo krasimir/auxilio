@@ -5,20 +5,39 @@ var Autocomplete = (function() {
 
 	var _el,
 		_matches = [],
-		_listeners = {};
+		_listeners = {},
+		_commandPart = [];
 
 	var init = function() {
 		_el = document.getElementById("js-suggest");
 		prepareDictionary();
 	}
 	var run = function(commandStr) {
+
 		clear();
 		_matches = [];
-		if(commandStr == "") return;
+		if(typeof commandStr === "undefined" || commandStr == "") return;
+
+		var parts = commandStr.split(" ");
+		performMatching(parts.pop());
+		_commandPart = parts;
+
+		if(_matches.length > 0) {
+			var suggestionStr = '';
+			for(var i=0; i<_matches.length; i++) {
+				suggestionStr += _matches[i];
+				suggestionStr += i < _matches.length-1 ? ", " : "";
+			}
+			_el.value = _commandPart.length > 0 ? _commandPart.join(" ") + " " + suggestionStr : suggestionStr;
+		}
+
+	}
+	var performMatching = function(word) {
+		if(!word || word == '') return;
 		for(var i=0; i<CommandsDictionary.length; i++) {
 			var suggestion = CommandsDictionary[i];
 			try {
-				var re = new RegExp("^" + commandStr.toLowerCase() + "(.*)?");
+				var re = new RegExp("^" + word.toLowerCase() + "(.*)?");
 				if(suggestion.toLowerCase().match(re)) {
 					_matches.push(suggestion);
 				}
@@ -26,21 +45,15 @@ var Autocomplete = (function() {
 
 			}
 		}
-		if(_matches.length > 0) {
-			var suggestionStr = '';
-			for(var i=0; i<_matches.length; i++) {
-				suggestionStr += _matches[i];
-				suggestionStr += i < _matches.length-1 ? ", " : "";
-			}
-			_el.value = suggestionStr;
-		}
 	}
 	var clear = function() {
 		_el.value = "";
 	}
 	var tab = function() {
 		if(_matches.length > 0) {
-			dispatch("match", {value: _matches[0]});
+			dispatch("match", {
+				value: _commandPart.length > 0 ? _commandPart.join(" ") + " " + _matches[0] : _matches[0]
+			});
 			run();
 		}
 	}

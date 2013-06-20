@@ -41,7 +41,6 @@ var App = {
 			}
 		});
 	},
-	
 	key13: function(e) { // enter
 		e.preventDefault();
 		var commandStr = this.command.value;
