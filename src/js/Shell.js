@@ -28,6 +28,7 @@ var Shell = (function() {
 		});
 		_socket.on('welcome', function(data) {
 			_context = data.context;
+			FilesDictionary = data.files;
 			setContext();
 		});
 		_socket.on('disconnect', function() {
@@ -36,10 +37,11 @@ var Shell = (function() {
 		});
 		_socket.on("result", function(res) {
 			_context = res.context;
+			FilesDictionary = res.files;
 			setContext();
 			if(res.command && _cache[res.command]) {
 				if(res.stderr !== "") {
-					exec("error " + res.stderr);
+					exec("error " + res.stderr + "<pre>" + res.command + "</pre>");
 				} else if(res.stdout !== '') {
 					exec("echo " + res.stdout);
 				}

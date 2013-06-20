@@ -1,12 +1,14 @@
 // Available commands
 var CommandsDictionary = [];
+var FilesDictionary = [];
 
 var Autocomplete = (function() {
 
 	var _el,
 		_matches = [],
 		_listeners = {},
-		_commandPart = [];
+		_commandPart = [],
+		_delimeter = ' ';
 
 	var init = function() {
 		_el = document.getElementById("js-suggest");
@@ -18,9 +20,9 @@ var Autocomplete = (function() {
 		_matches = [];
 		if(typeof commandStr === "undefined" || commandStr == "") return;
 
-		var parts = commandStr.split(" ");
-		performMatching(parts.pop());
-		_commandPart = parts;
+		if(!splitCommandStr(commandStr, " ")) {
+			splitCommandStr(commandStr, "/")
+		}
 
 		if(_matches.length > 0) {
 			var suggestionStr = '';
@@ -28,16 +30,24 @@ var Autocomplete = (function() {
 				suggestionStr += _matches[i];
 				suggestionStr += i < _matches.length-1 ? ", " : "";
 			}
-			_el.value = _commandPart.length > 0 ? _commandPart.join(" ") + " " + suggestionStr : suggestionStr;
+			_el.value = _commandPart.length > 0 ? _commandPart.join(_delimeter) + _delimeter + suggestionStr : suggestionStr;
 		}
 
 	}
+	var splitCommandStr = function(commandStr, delimeter) {
+		_delimeter = delimeter;
+		var parts = commandStr.split(delimeter);
+		var areThereAnyMatches = performMatching(parts.pop());
+		_commandPart = parts;
+		return areThereAnyMatches;
+	}
 	var performMatching = function(word) {
 		if(!word || word == '') return;
-		for(var i=0; i<CommandsDictionary.length; i++) {
-			var suggestion = CommandsDictionary[i];
+		var arr = FilesDictionary && FilesDictionary.length > 0 ? CommandsDictionary.concat(FilesDictionary) : CommandsDictionary;
+		for(var i=0; i<arr.length; i++) {
+			var suggestion = arr[i];
 			try {
-				var re = new RegExp("^" + word.toLowerCase() + "(.*)?");
+				var re = new RegExp("^" + word.toLowerCase().replace(/\./, '\\.') + "(.*)?");
 				if(suggestion.toLowerCase().match(re)) {
 					_matches.push(suggestion);
 				}
@@ -45,6 +55,7 @@ var Autocomplete = (function() {
 
 			}
 		}
+		return _matches.length > 0;
 	}
 	var clear = function() {
 		_el.value = "";
@@ -52,7 +63,7 @@ var Autocomplete = (function() {
 	var tab = function() {
 		if(_matches.length > 0) {
 			dispatch("match", {
-				value: _commandPart.length > 0 ? _commandPart.join(" ") + " " + _matches[0] : _matches[0]
+				value: _commandPart.length > 0 ? _commandPart.join(_delimeter) + _delimeter + _matches[0] : _matches[0]
 			});
 			run();
 		}

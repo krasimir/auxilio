@@ -16,7 +16,7 @@ Commands.register("formfile", {
 				<div class="file-content" id="' + id + '_filecontent"></div>\
 			</div>\
 		';
-		exec("echo " + html);
+		App.setOutputPanelContent('<div class="regular">' + html + '</div>');
 		
 		var form = document.getElementById(id);
 		var button = document.getElementById(id + '_button');

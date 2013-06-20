@@ -218,8 +218,17 @@ var App = {
 						Commands.register(name, {
 							requiredArguments: 0,
 							format: '[that\'s an alias]',
+							lookForQuotes: true,
+							concatArgs: true,
 							run: function(args, callback) {
-								exec(commands.replace(/\n/g, ' && '), callback);
+								var commandToCall = commands.replace(/\n/g, ' && ');
+								if(args.length > 0) {
+									for(var j=0; j<args.length; j++) {
+										var r = new RegExp("\\$" + (j + 1), "g");
+										commandToCall = commandToCall.replace(r, args[j]);
+									}
+								}
+								exec(commandToCall, callback);
 							},
 							man: function() {
 								return '[that\'s an alias]';

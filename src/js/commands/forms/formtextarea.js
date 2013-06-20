@@ -17,7 +17,7 @@ Commands.register("formtextarea", {
 				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
 			</div>\
 		';
-		exec("echo " + html);
+		App.setOutputPanelContent('<div class="regular">' + html + '</div>');
 		
 		var form = document.getElementById(id);
 		var button = document.getElementById(id + '_button');

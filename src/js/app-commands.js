@@ -665,7 +665,7 @@ Commands.register("formconfirm", {
 				<span class="clear" />\
 			</div>\
 		';
-		exec("echo " + html);
+		App.setOutputPanelContent('<div class="regular">' + html + '</div>');
 		
 		var form = document.getElementById(id);
 		var buttonYes = document.getElementById(id + '_buttonyes');
@@ -704,7 +704,7 @@ Commands.register("formfile", {
 				<div class="file-content" id="' + id + '_filecontent"></div>\
 			</div>\
 		';
-		exec("echo " + html);
+		App.setOutputPanelContent('<div class="regular">' + html + '</div>');
 		
 		var form = document.getElementById(id);
 		var button = document.getElementById(id + '_button');
@@ -766,7 +766,7 @@ Commands.register("forminput", {
 				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
 			</div>\
 		';
-		exec("echo " + html);
+		App.setOutputPanelContent('<div class="regular">' + html + '</div>');
 		
 		var form = document.getElementById(id);
 		var button = document.getElementById(id + '_button');
@@ -819,7 +819,7 @@ Commands.register("formtextarea", {
 				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
 			</div>\
 		';
-		exec("echo " + html);
+		App.setOutputPanelContent('<div class="regular">' + html + '</div>');
 		
 		var form = document.getElementById(id);
 		var button = document.getElementById(id + '_button');

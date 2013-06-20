@@ -15,7 +15,7 @@ Commands.register("formconfirm", {
 				<span class="clear" />\
 			</div>\
 		';
-		exec("echo " + html);
+		App.setOutputPanelContent('<div class="regular">' + html + '</div>');
 		
 		var form = document.getElementById(id);
 		var buttonYes = document.getElementById(id + '_buttonyes');
