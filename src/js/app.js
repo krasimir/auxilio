@@ -110,6 +110,9 @@ var App = {
 	setCommandValue: function(v) {
 		this.command.value = v;
 	},
+	getCommandValue: function() {
+		return this.command.value;
+	},
 	execute: function(commandStr, callback) {		
 
 		if(!commandStr || commandStr == "" || commandStr == " ") return;

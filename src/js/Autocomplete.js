@@ -8,15 +8,18 @@ var Autocomplete = (function() {
 		_matches = [],
 		_listeners = {},
 		_commandPart = [],
-		_delimeter = ' ';
+		_delimeter = ' ',
+		_hint;
 
 	var init = function() {
 		_el = document.getElementById("js-suggest");
+		_hint = document.getElementById("js-hint");
 		prepareDictionary();
 	}
 	var run = function(commandStr) {
 
 		clear();	
+		hideHint();
 		_matches = [];
 		if(typeof commandStr === "undefined" || commandStr == "") return;
 
@@ -24,10 +27,16 @@ var Autocomplete = (function() {
 			splitCommandStr(commandStr, "/")
 		}
 
+		// requesting path
+		if(commandStr.charAt(commandStr.length-1) === "/") {
+			var parts = commandStr.split(" ");
+			Shell.readdir(parts.pop());
+		}
+
 		if(_matches.length > 0) {
 			var suggestionStr = '';
 			for(var i=0; i<_matches.length; i++) {
-				suggestionStr += _matches[i].toLowerCase();
+				suggestionStr += _matches[i];
 				suggestionStr += i < _matches.length-1 ? ", " : "";
 			}
 			_el.value = _commandPart.length > 0 ? _commandPart.join(_delimeter) + _delimeter + suggestionStr : suggestionStr;
@@ -102,6 +111,13 @@ var Autocomplete = (function() {
 			}
 		}
 	}
+	var showHint = function(str) {
+		_hint.innerHTML = str == '' ? "." : str;
+		_hint.style.left = "10px";
+	}
+	var hideHint = function() {
+		_hint.style.left = "-400px";
+	}
 
 	return {
 		init: init,
@@ -109,7 +125,9 @@ var Autocomplete = (function() {
 		clear: clear,
 		tab: tab,
 		on: on,
-		prepareDictionary: prepareDictionary
+		prepareDictionary: prepareDictionary,
+		showHint: showHint,
+		hideHint: hideHint
 	}
 
 })();

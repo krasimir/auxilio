@@ -53,6 +53,11 @@ var Shell = (function() {
 				_cache[res.id](res);
 			}
 		});
+		_socket.on("showhint", function(res) {
+			if(res && res.files) {
+				Autocomplete.showHint(res.files.join("<br />"));
+			}
+		});
 	}
 	var init = function() {
 		_body = document.querySelector("body");
@@ -90,12 +95,18 @@ var Shell = (function() {
 	var formatOutput = function(str) {
 		return str.replace(/\n/g, '<br />').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 	}
+	var readdir = function(path) {
+		_socket.emit("readdir", {
+			path: path
+		});
+	}
 
 	return {
 		init: init,
 		send: send,
 		connected: connected,
-		connect: connect
+		connect: connect,
+		readdir: readdir
 	}
 
 })();
