@@ -3,6 +3,7 @@
 	box-sizing: border-box;
 	padding: 10px;
 	.console-output-content {
+		.transition(~"all 400ms ease-out");
 		width: 100%;
 		overflow: hidden;
 		box-sizing: border-box;
@@ -17,6 +18,7 @@
 		}
 	}
 	.inputs {
+		.transition(~"all 400ms ease-out");
 		width: 100%;
 		position: fixed;
 		top: -2px;
@@ -62,5 +64,15 @@
 				color: darken(@color-a, 100%);
 			}
 		}
+	}
+}
+
+
+.shell-on {
+	.inputs {
+		top: 30px;
+	}
+	.console-output-content {
+		margin: 60px 0 0 0;
 	}
 }

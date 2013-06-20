@@ -1,19 +1,20 @@
 var Shell = (function() {
 
-	var _el,
+	var _body,
+		_contextEl,
 		_host = "localhost",
 		_port = 3443,
-		_retryInterval = 30000,
+		_retryInterval = 10000,
 		_socket,
 		_connected = false,
 		_context,
 		_cache = {};
 
 	var on = function() {
-		_el.className = "shell-indicator-on";
+		_body.className = "shell-on";
 	}
 	var off = function() {
-		_el.className = "shell-indicator-off";
+		_body.className = "shell-off";
 	}
 	var connect = function() {
 		_socket = io.connect('http://' + _host + ":" + _port, {
@@ -23,22 +24,30 @@ var Shell = (function() {
 			_connected = true;
 			on();
 		});
+		_socket.on('welcome', function(data) {
+			_context = data.context;
+			setContext();
+		});
 		_socket.on('disconnect', function() {
 			_connected = false;
 			off();
 		});
 		_socket.on("result", function(res) {
-			try {
-				if(res.command && _cache[res.command]) {
-					_cache[res.command](res.stdout === "" ? res.stderr : res.stdout);
+			_context = res.context;
+			setContext();
+			if(res.command && _cache[res.command]) {
+				if(res.stderr !== "") {
+					exec("error " + res.stderr);
+				} else if(res.stdout !== '') {
+					exec("echo " + res.stdout);
 				}
-			} catch(e) {
-				// console.log(e);
+				_cache[res.command](res);
 			}
 		});
 	}
 	var init = function() {
-		_el = document.getElementById("js-shell-indicator");
+		_body = document.querySelector("body");
+		_contextEl = document.getElementById("js-shell-cwd");
 		connect();
 		setTimeout(function() {
 			retry();
@@ -54,6 +63,9 @@ var Shell = (function() {
 	}
 	var connected = function() {
 		return _connected;
+	}
+	var setContext = function() {
+		_contextEl.innerHTML = _context;
 	}
 	var send = function(command, callback) {
 		_cache[command] = callback;
