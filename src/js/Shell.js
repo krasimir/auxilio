@@ -43,8 +43,10 @@ var Shell = (function() {
 				var output = document.getElementById(res.id);
 				if(output) {
 					if(res.stderr !== "") {
+						output.style.display = "block";
 						output.innerHTML += '<div class="regular-shell">' + formatOutput(res.stderr) + '</div>';
 					} else if(res.stdout !== '') {
+						output.style.display = "block";
 						output.innerHTML += '<div class="regular-shell">' + formatOutput(res.stdout) + '</div>';
 					}
 				}
@@ -78,7 +80,7 @@ var Shell = (function() {
 	}
 	var send = function(command, callback) {
 		var id = _.uniqueId("shellcommand");
-		App.setOutputPanelContent('<div id="' + id + '"></div>');
+		App.setOutputPanelContent('<div id="' + id + '" class="shell-wrapper"></div>');
 		_cache[id] = callback;
 		_socket.emit("command", {
 			command: command,
