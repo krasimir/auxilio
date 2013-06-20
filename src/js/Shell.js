@@ -4,7 +4,9 @@ var Shell = (function() {
 		_contextEl,
 		_host = "localhost",
 		_port = 3443,
-		_retryInterval = 10000,
+		_retryInterval = 30000,
+		_retryTries = 0,
+		_retryTriesMax = 20,
 		_socket,
 		_connected = false,
 		_context,
@@ -57,7 +59,9 @@ var Shell = (function() {
 		if(!_connected) {
 			connect();
 			setTimeout(function() {
-				retry();
+				if(++_retryTries < _retryTriesMax) {
+					retry();
+				}
 			}, _retryInterval);
 		}
 	}

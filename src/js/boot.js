@@ -1,5 +1,9 @@
 // Boot
 window.onload = function() {
+	Autocomplete.init();
+	Autocomplete.on("match", function(res) {
+		App.setCommandValue(res.value);
+	});
 	App.init();
 	Shell.init();
 	document.querySelector("body").addEventListener("keydown", function(e) {

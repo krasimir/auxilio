@@ -1,20 +1,16 @@
-// Available commands
-var CommandsDictionary = [];
+
 
 // The main application logic
 var App = {
 	commandsStoreInHistory: 50,
 	global: {}, // storage for global variables
 	init: function() {
-		this.suggest = document.getElementById("js-suggest");
 		this.command = document.getElementById("js-command");
 		this.output = document.getElementById("js-console-output-content");
 		this.body = document.querySelector("body");
-		this.matches = [];
 		this.commandsHistory = [];
 		this.commandsHistoryIndex = -1;
 		this.defineUserEvents();
-		this.prepareDictionary();
 		this.loadProfile();
 		this.registerAliases();
 		this.getCommandsHistory();
@@ -23,7 +19,7 @@ var App = {
 	defineUserEvents:function() {
 		var self = this;
 		var onKeyUp = function(e) {
-			self.autocomplete();
+			Autocomplete.run(self.command.value);
 		}
 		var onKeyDown = function(e) {
 			var code = (e.keyCode ? e.keyCode : e.which);
@@ -45,71 +41,19 @@ var App = {
 			}
 		});
 	},
-	prepareDictionary: function() {
-		// adding commands from Commands
-		CommandsDictionary = [];
-		for(var i in Commands) {
-			var added = false;
-			for(var j=0; j<CommandsDictionary.length; j++) {
-				if(CommandsDictionary[j] == i) {
-					added = true;
-					j = CommandsDictionary.length;
-				}
-			}
-			if(!added) CommandsDictionary.push(i);
-		}
-		// sort the array by command length
-		for(var i=0; i<CommandsDictionary.length; i++) {
-			for(var j=0; j<CommandsDictionary.length; j++) {
-				if(CommandsDictionary[i].length < CommandsDictionary[j].length) {
-					var temp = CommandsDictionary[i];
-					CommandsDictionary[i] = CommandsDictionary[j];
-					CommandsDictionary[j] = temp;
-				}
-			}
-		}
-	},
-	// keyboard handlers
-	autocomplete: function() {
-		this.suggest.value = "";
-		this.matches = [];
-		var commandStr = this.command.value;
-		if(commandStr == "") return;
-		for(var i=0; i<CommandsDictionary.length; i++) {
-			var suggestion = CommandsDictionary[i];
-			try {
-				var re = new RegExp("^" + commandStr.toLowerCase() + "(.*)?");
-				if(suggestion.toLowerCase().match(re)) {
-					this.matches.push(suggestion);
-				}
-			} catch(e) {
-
-			}
-		}
-		if(this.matches.length > 0) {
-			var suggestionStr = '';
-			for(var i=0; i<this.matches.length; i++) {
-				suggestionStr += this.matches[i];
-				suggestionStr += i < this.matches.length-1 ? ", " : "";
-			}
-			this.suggest.value = suggestionStr;
-		}
-	},
+	
 	key13: function(e) { // enter
 		e.preventDefault();
 		var commandStr = this.command.value;
 		this.addToHistory(commandStr);
 		this.execute(commandStr, null, true);
 		this.command.value = "";
-		this.suggest.value = "";
+		Autocomplete.clear();
 		this.commandsHistoryIndex = -1;
 	},
 	key9: function(e) { // tab
 		e.preventDefault();
-		if(this.matches.length > 0) {
-			this.command.value = this.matches[0];
-			this.autocomplete();
-		}
+		Autocomplete.tab();
 	},
 	key38: function(e) { // up
 		e.preventDefault();
@@ -163,6 +107,9 @@ var App = {
 	},
 	setFocus: function() {
 		this.command.focus();
+	},
+	setCommandValue: function(v) {
+		this.command.value = v;
 	},
 	execute: function(commandStr, callback) {		
 
@@ -281,7 +228,7 @@ var App = {
 						})
 					})(i, aliases[i]);
 				}
-				self.prepareDictionary();
+				Autocomplete.prepareDictionary();
 			}
 		});
 	},
