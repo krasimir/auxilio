@@ -1,5 +1,5 @@
 Commands.register("shell", {
-	requiredArguments: 1,
+	requiredArguments: 0,
 	format: '<pre>shell [command]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
@@ -10,8 +10,12 @@ Commands.register("shell", {
 				callback(res);
 			});
 		} else {
-			exec("error Sorry, the corresponding nodejs module is not running or you misspell the command.");
-			callback();
+			if(args.length === 0) {
+				Shell.connect();
+			} else {
+				exec("error Sorry, the corresponding nodejs module is not running or you misspell the command.");
+				callback();
+			}
 		}
 	},
 	man: function() {

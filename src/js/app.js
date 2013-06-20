@@ -181,7 +181,9 @@ var App = {
 	},
 	isHiddenCommand: function(command) {
 		var commandsToAvoid = [
-			"echo", 
+			"echo",
+			"echoraw",
+			"echoshell", 
 			"info", 
 			"error", 
 			"success", 

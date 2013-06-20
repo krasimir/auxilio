@@ -459,7 +459,7 @@ var request = function(url, callback) {
 	xhr.send();
 }
 Commands.register("shell", {
-	requiredArguments: 1,
+	requiredArguments: 0,
 	format: '<pre>shell [command]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
@@ -470,8 +470,12 @@ Commands.register("shell", {
 				callback(res);
 			});
 		} else {
-			exec("error Sorry, the corresponding nodejs module is not running or you misspell the command.");
-			callback();
+			if(args.length === 0) {
+				Shell.connect();
+			} else {
+				exec("error Sorry, the corresponding nodejs module is not running or you misspell the command.");
+				callback();
+			}
 		}
 	},
 	man: function() {
@@ -1047,6 +1051,19 @@ Commands.register("echoraw", {
 	},
 	man: function() {
 		return 'Outputs message in raw format. Even the html is shown as string.';
+	}	
+})
+Commands.register("echoshell", {
+	requiredArguments: 1,
+	format: '<pre>echoshell [text]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		App.setOutputPanelContent('<div class="regular-shell">' + this.formatter(args) + '</div>');
+		callback(this.formatter(args));
+	},
+	man: function() {
+		return 'Outputs message.';
 	}	
 })
 Commands.register("error", {

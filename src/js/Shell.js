@@ -39,14 +39,16 @@ var Shell = (function() {
 			_context = res.context;
 			FilesDictionary = res.files;
 			setContext();
-			if(res.command && _cache[res.command]) {
-				if(res.stderr !== "") {
-					// exec("small " + res.stderr + "<pre>" + res.command + "</pre>");
-					exec("small " + res.stderr);
-				} else if(res.stdout !== '') {
-					exec("echo " + res.stdout);
+			if(res.command && _cache[res.id]) {
+				var output = document.getElementById(res.id);
+				if(output) {
+					if(res.stderr !== "") {
+						output.innerHTML += '<div class="regular-shell">' + formatOutput(res.stderr) + '</div>';
+					} else if(res.stdout !== '') {
+						output.innerHTML += '<div class="regular-shell">' + formatOutput(res.stdout) + '</div>';
+					}
 				}
-				_cache[res.command](res);
+				_cache[res.id](res);
 			}
 		});
 	}
@@ -75,17 +77,23 @@ var Shell = (function() {
 		_contextEl.innerHTML = _context;
 	}
 	var send = function(command, callback) {
-		_cache[command] = callback;
+		var id = _.uniqueId("shellcommand");
+		App.setOutputPanelContent('<div id="' + id + '"></div>');
+		_cache[id] = callback;
 		_socket.emit("command", {
 			command: command,
-			context: _context
+			id: id
 		});
+	}
+	var formatOutput = function(str) {
+		return str.replace(/\n/g, '<br />').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 	}
 
 	return {
 		init: init,
 		send: send,
-		connected: connected
+		connected: connected,
+		connect: connect
 	}
 
 })();

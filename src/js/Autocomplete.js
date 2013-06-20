@@ -16,7 +16,7 @@ var Autocomplete = (function() {
 	}
 	var run = function(commandStr) {
 
-		clear();
+		clear();	
 		_matches = [];
 		if(typeof commandStr === "undefined" || commandStr == "") return;
 
@@ -27,7 +27,7 @@ var Autocomplete = (function() {
 		if(_matches.length > 0) {
 			var suggestionStr = '';
 			for(var i=0; i<_matches.length; i++) {
-				suggestionStr += _matches[i];
+				suggestionStr += _matches[i].toLowerCase();
 				suggestionStr += i < _matches.length-1 ? ", " : "";
 			}
 			_el.value = _commandPart.length > 0 ? _commandPart.join(_delimeter) + _delimeter + suggestionStr : suggestionStr;
