@@ -470,7 +470,8 @@ Commands.register("shell", {
 				callback(res);
 			});
 		} else {
-			exec("error Sorry, the corresponding nodejs module is not running.");
+			exec("error Sorry, the corresponding nodejs module is not running or you misspell the command.");
+			callback();
 		}
 	},
 	man: function() {

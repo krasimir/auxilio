@@ -209,15 +209,10 @@ var App = {
 				
 			} else {
 
-				// checking for active socket.io app
-				if(Shell.connected()) {
-					Shell.send(str, function(res) {
-						getNextCommand(res);
-					});
-				} else {
-					exec("error Missing command <b>" + command + "</b>.");
-					getNextCommand();
-				}
+				// sending the command to the shell
+				exec("shell " + str, function(res) {
+					getNextCommand(res);
+				})
 			}
 		}
 		var getNextCommand = function(res) {
