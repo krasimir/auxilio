@@ -5,7 +5,7 @@ Commands.register("echo", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="regular">' + this.formatter(args) + '</div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs message.';

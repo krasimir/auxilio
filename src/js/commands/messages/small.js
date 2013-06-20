@@ -5,7 +5,7 @@ Commands.register("small", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="small"><i class="icon-right-hand"></i> ' + this.formatter(args) + '</div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs small message.';

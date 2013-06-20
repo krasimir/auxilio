@@ -5,7 +5,7 @@ Commands.register("title", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div><h1>' + this.formatter(args) + '</h1></div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs a title.';

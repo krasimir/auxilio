@@ -5,7 +5,7 @@ Commands.register("success", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="success"><i class="icon-ok"></i> ' + this.formatter(args) + '</div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs success message.';

@@ -478,6 +478,23 @@ Commands.register("shell", {
 		return 'Executes shell command.';
 	}	
 })
+Commands.register("stringify", {
+	requiredArguments: 1,
+	format: '<pre>stringify [text or object]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		for(var i=0; i<args.length; i++) {
+			if(typeof args[i] !== "string" && typeof args[i] !== "number") {
+				args[i] = JSON.stringify(args[i]);
+			}
+		}
+		callback(args.join(" "));
+	},
+	man: function() {
+		return 'Just bypasses the given arguments as string';
+	}	
+})
 Commands.register("alias", {
 	requiredArguments: 0,
 	lookForQuotes: false,
@@ -802,6 +819,7 @@ Commands.register("forminput", {
 })
 Commands.register("formtextarea", {
 	requiredArguments: 0,
+	concatArgs: true,
 	format: '<pre>formtextarea [title]\nformtextarea [title] [text]</pre>',
 	run: function(args, callback) {
 		
@@ -999,7 +1017,7 @@ Commands.register("alert", {
 	concatArgs: true,
 	run: function(args, callback) {	
 		alert(this.formatter(args, false, true));
-		callback();
+		callback(this.formatter(args, false, true));
 	},
 	man: function() {
 		return 'Alerts message.';
@@ -1012,7 +1030,7 @@ Commands.register("echo", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="regular">' + this.formatter(args) + '</div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs message.';
@@ -1025,7 +1043,7 @@ Commands.register("echoraw", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="regular">' + this.formatter(args, true, true, true) + '</div>');
-		callback();
+		callback(this.formatter(args, true, true, true));
 	},
 	man: function() {
 		return 'Outputs message in raw format. Even the html is shown as string.';
@@ -1038,7 +1056,7 @@ Commands.register("error", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="error"><i class="icon-attention"></i> ' + this.formatter(args) + '</div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs error message.';
@@ -1051,7 +1069,7 @@ Commands.register("hidden", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="hidden">' + args.join(" ") + '</div>');
-		callback();
+		callback(args.join(" "));
 	},
 	man: function() {
 		return 'Outputs invisible content. I.e. useful when you have to add hidden html markup.';
@@ -1077,7 +1095,7 @@ Commands.register("info", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="info"><i class="icon-info-circled"></i> ' + this.formatter(args) + '</div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs info message.';
@@ -1090,7 +1108,7 @@ Commands.register("small", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="small"><i class="icon-right-hand"></i> ' + this.formatter(args) + '</div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs small message.';
@@ -1103,7 +1121,7 @@ Commands.register("success", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="success"><i class="icon-ok"></i> ' + this.formatter(args) + '</div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs success message.';
@@ -1116,7 +1134,7 @@ Commands.register("title", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div><h1>' + this.formatter(args) + '</h1></div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs a title.';
@@ -1129,7 +1147,7 @@ Commands.register("warning", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="warning"><i class="icon-attention"></i> ' + this.formatter(args) + '</div>');
-		callback();
+		callback(this.formatter(args));
 	},
 	man: function() {
 		return 'Outputs warning message.';

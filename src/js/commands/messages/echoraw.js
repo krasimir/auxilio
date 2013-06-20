@@ -5,7 +5,7 @@ Commands.register("echoraw", {
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="regular">' + this.formatter(args, true, true, true) + '</div>');
-		callback();
+		callback(this.formatter(args, true, true, true));
 	},
 	man: function() {
 		return 'Outputs message in raw format. Even the html is shown as string.';

@@ -5,7 +5,7 @@ Commands.register("alert", {
 	concatArgs: true,
 	run: function(args, callback) {	
 		alert(this.formatter(args, false, true));
-		callback();
+		callback(this.formatter(args, false, true));
 	},
 	man: function() {
 		return 'Alerts message.';

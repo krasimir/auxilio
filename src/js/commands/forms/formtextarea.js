@@ -1,5 +1,6 @@
 Commands.register("formtextarea", {
 	requiredArguments: 0,
+	concatArgs: true,
 	format: '<pre>formtextarea [title]\nformtextarea [title] [text]</pre>',
 	run: function(args, callback) {
 		

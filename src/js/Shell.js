@@ -41,7 +41,8 @@ var Shell = (function() {
 			setContext();
 			if(res.command && _cache[res.command]) {
 				if(res.stderr !== "") {
-					exec("error " + res.stderr + "<pre>" + res.command + "</pre>");
+					// exec("small " + res.stderr + "<pre>" + res.command + "</pre>");
+					exec("small " + res.stderr);
 				} else if(res.stdout !== '') {
 					exec("echo " + res.stdout);
 				}
