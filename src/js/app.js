@@ -223,7 +223,7 @@ var App = {
 					(function(name, commands) {
 						Commands.register(name, {
 							requiredArguments: 0,
-							format: '[that\'s an alias]',
+							format: '',
 							lookForQuotes: true,
 							concatArgs: true,
 							run: function(args, callback) {
@@ -237,7 +237,7 @@ var App = {
 								exec(commandToCall, callback);
 							},
 							man: function() {
-								return '[that\'s an alias]';
+								return '<pre>' + commands + '</pre>';
 							}	
 						})
 					})(i, aliases[i]);

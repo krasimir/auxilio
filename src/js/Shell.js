@@ -10,7 +10,8 @@ var Shell = (function() {
 		_socket,
 		_connected = false,
 		_context,
-		_cache = {};
+		_cache = {},
+		_gitstatus = {};
 
 	var on = function() {
 		_body.className = "shell-on";
@@ -27,19 +28,15 @@ var Shell = (function() {
 			_connected = true;
 			on();
 		});
-		_socket.on('welcome', function(data) {
-			_context = data.context;
-			FilesDictionary = data.files;
-			setContext();
+		_socket.on('welcome', function(res) {
+			updateContext(res);
 		});
 		_socket.on('disconnect', function() {
 			_connected = false;
 			off();
 		});
 		_socket.on("result", function(res) {
-			_context = res.context;
-			FilesDictionary = res.files ? res.files : FilesDictionary;
-			setContext();
+			updateContext(res);
 			if(res.command && _cache[res.id]) {
 				var output = document.getElementById(res.id);
 				if(output) {
@@ -59,6 +56,9 @@ var Shell = (function() {
 				Autocomplete.showHint(res.files.join("<br />"));
 			}
 		});
+		_socket.on("updatecontext", function(res) {
+			updateContext(res);
+		})
 	}
 	var init = function() {
 		_body = document.querySelector("body");
@@ -81,8 +81,34 @@ var Shell = (function() {
 	var connected = function() {
 		return _connected;
 	}
+	var updateContext = function(res) {
+		_context = res.context;
+		_gitstatus = res.git;
+		FilesDictionary = res.files ? res.files : FilesDictionary;
+		setContext();
+	}
 	var setContext = function() {
-		_contextEl.innerHTML = _context;
+		var gitStatusMarkup = '';
+		if(_gitstatus && _gitstatus.branch) {
+			gitStatusMarkup += '&nbsp;&nbsp;<span style="background: #FFF;">&nbsp;';
+			gitStatusMarkup += '<b style="color:' + (_gitstatus.branch === 'master' ? '#F00' : '#B4833A') + '">' + _gitstatus.branch + '</b>';
+			if(_gitstatus.status) {
+				gitStatusMarkup += '&nbsp;/&nbsp;';
+				for(var i in _gitstatus.status) {
+					gitStatusMarkup += '<span style="color:#F00;font-weight:bold;">';
+					switch(i) {
+						case "M": gitStatusMarkup += "&#8764;"; break;
+						case "A": gitStatusMarkup += "+"; break;
+						case "D": gitStatusMarkup += "&#8722;"; break;
+						case "??": gitStatusMarkup += "&#8853;"; break;
+						default: gitStatusMarkup += i; break;
+					}
+					gitStatusMarkup += _gitstatus.status[i] + '&nbsp;';
+				}
+			}
+			gitStatusMarkup += '</span>';
+		}
+		_contextEl.innerHTML = _context + gitStatusMarkup;
 	}
 	var send = function(command, callback) {
 		var id = _.uniqueId("shellcommand");
