@@ -9,7 +9,8 @@ var Autocomplete = (function() {
 		_listeners = {},
 		_commandPart = [],
 		_delimeter = ' ',
-		_hint;
+		_hint,
+		_filesMode = false; // true if a path should be autocompleted
 
 	var init = function() {
 		_el = document.getElementById("js-suggest");
@@ -23,15 +24,19 @@ var Autocomplete = (function() {
 		_matches = [];
 		if(typeof commandStr === "undefined" || commandStr == "") return;
 
+		// requesting directory listing
+		var lastCharacter = commandStr.charAt(commandStr.length-1);
+		if(lastCharacter === "/") {
+			Shell.readdir(commandStr.split(" ").pop());
+			_filesMode = true;
+		} else if(lastCharacter === ' ' || commandStr.indexOf("/") === -1) {
+			_filesMode = false;
+		}
+
 		if(!splitCommandStr(commandStr, " ")) {
 			splitCommandStr(commandStr, "/")
 		}
 
-		// requesting path
-		if(commandStr.charAt(commandStr.length-1) === "/") {
-			var parts = commandStr.split(" ");
-			Shell.readdir(parts.pop());
-		}
 
 		if(_matches.length > 0) {
 			var suggestionStr = '';
@@ -52,7 +57,12 @@ var Autocomplete = (function() {
 	}
 	var performMatching = function(word) {
 		if(!word || word == '') return;
-		var arr = FilesDictionary && FilesDictionary.length > 0 ? CommandsDictionary.concat(FilesDictionary) : CommandsDictionary;
+		var arr = [];
+		if(!_filesMode) {
+			arr = FilesDictionary && FilesDictionary.length > 0 ? CommandsDictionary.concat(FilesDictionary) : CommandsDictionary;
+		} else {
+			arr = FilesDictionary && FilesDictionary.length > 0 ? FilesDictionary : CommandsDictionary;
+		}
 		for(var i=0; i<arr.length; i++) {
 			var suggestion = arr[i];
 			try {
@@ -116,7 +126,7 @@ var Autocomplete = (function() {
 		_hint.style.left = "10px";
 	}
 	var hideHint = function() {
-		_hint.style.left = "-400px";
+		_hint.style.left = "-800px";
 	}
 
 	return {
