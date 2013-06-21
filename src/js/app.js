@@ -161,7 +161,8 @@ var App = {
 				// sending the command to the shell
 				exec("shell " + str, function(res) {
 					getNextCommand(res);
-				})
+				});
+				
 			}
 		}
 		var getNextCommand = function(res) {

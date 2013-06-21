@@ -19,6 +19,7 @@ var Shell = (function() {
 		_body.className = "shell-off";
 	}
 	var connect = function() {
+		if(_connected) return;
 		_socket = io.connect('http://' + _host + ":" + _port, {
 			'force new connection': true
 		});
@@ -37,7 +38,7 @@ var Shell = (function() {
 		});
 		_socket.on("result", function(res) {
 			_context = res.context;
-			FilesDictionary = res.files;
+			FilesDictionary = res.files ? res.files : FilesDictionary;
 			setContext();
 			if(res.command && _cache[res.id]) {
 				var output = document.getElementById(res.id);
