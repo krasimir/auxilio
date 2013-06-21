@@ -27,7 +27,7 @@ var Autocomplete = (function() {
 		// requesting directory listing
 		var lastCharacter = commandStr.charAt(commandStr.length-1);
 		if(lastCharacter === "/") {
-			Shell.readdir(commandStr.split(" ").pop());
+			if(Shell.connected()) Shell.socket().emit("readdir", {path: commandStr.split(" ").pop()});
 			_filesMode = true;
 		} else if(lastCharacter === ' ' || commandStr.indexOf("/") === -1) {
 			_filesMode = false;

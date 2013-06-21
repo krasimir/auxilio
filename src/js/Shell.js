@@ -110,9 +110,11 @@ var Shell = (function() {
 		}
 		_contextEl.innerHTML = _context + gitStatusMarkup;
 	}
-	var send = function(command, callback) {
+	var send = function(command, callback, data, preventResultShowing) {
 		var id = _.uniqueId("shellcommand");
-		App.setOutputPanelContent('<div id="' + id + '" class="shell-wrapper"></div>');
+		if(!preventResultShowing) {
+			App.setOutputPanelContent('<div id="' + id + '" class="shell-wrapper"></div>');
+		}
 		_cache[id] = callback;
 		_socket.emit("command", {
 			command: command,
@@ -122,18 +124,13 @@ var Shell = (function() {
 	var formatOutput = function(str) {
 		return str.replace(/\n/g, '<br />').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 	}
-	var readdir = function(path) {
-		_socket.emit("readdir", {
-			path: path
-		});
-	}
 
 	return {
 		init: init,
 		send: send,
 		connected: connected,
 		connect: connect,
-		readdir: readdir
+		socket: function() { return _socket; }
 	}
 
 })();
