@@ -1174,6 +1174,7 @@ Commands.register("shell", {
 		return 'Executes shell command.';
 	}	
 })
+var TreeCommandIsSoketAdded = false;
 Commands.register("tree", {
 	requiredArguments: 0,
 	format: '<pre>tree [dir]</pre>',
@@ -1183,12 +1184,15 @@ Commands.register("tree", {
 		var self = this;
 		var dir = args.length > 0 ? args.join(" ") : '';
 		if(Shell.connected() && Shell.socket()) {
-			Shell.socket().on("tree", function(res) {
-				if(res.result) {
-					self.formatResult(res.result);
-				}
-				callback();
-			});
+			if(!TreeCommandIsSoketAdded) {
+				TreeCommandIsSoketAdded = true;
+				Shell.socket().on("tree", function(res) {
+					if(res.result) {
+						self.formatResult(res.result);
+					}
+					callback();
+				});
+			}
 			Shell.socket().emit("tree", {dir: dir});
 		} else {
 			exec("error The shell is currently not availalble.");
@@ -1196,18 +1200,28 @@ Commands.register("tree", {
 		}
 	},
 	formatResult: function(dirs) {
+		console.log(dirs);
 
 		var result = '';
 
 		var calcIndent = function(n) {
 			var res = '';
-			for(var i=0; i<n; i++) res += '&nbsp;&nbsp;';
+			for(var i=0; i<n; i++) res += '&nbsp;&nbsp;&nbsp;';
 			return res;
 		}
 		var formatItem = function(name, item, indent) {
-			var res = calcIndent(indent) + name + "<br />";
-			for(var i in item) {
-				res += formatItem(i, item[i], indent+1);
+			var res = '<div class="tree-item"><a href="">' + calcIndent(indent) + '<span>+' + name + '</span></a></div>';
+			var subfolders = false;
+			if(typeof item == "object") {
+				for(var i in item) {
+					subfolders = true;
+					res += formatItem(i, item[i], indent+1);
+				}
+				if(!subfolders) {
+					res = res.replace('+', '');
+				}
+			} else {
+				res = res.replace('+', '');
 			}
 			return res;
 		}
@@ -1216,7 +1230,7 @@ Commands.register("tree", {
 			result += formatItem(name, dirs[name], 0);
 		}
 
-		exec("echo " + result);
+		App.setOutputPanelContent('<div class="tree">' + result + '</div>');
 
 	},
 	man: function() {
