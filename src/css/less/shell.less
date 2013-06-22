@@ -21,6 +21,14 @@
 	overflow: hidden;
 	margin-top: -33px;
 	background: lighten(@color-a, 30%);
+	a {
+		text-decoration: none;
+		color: darken(@color-a, 100%);
+		&:hover {
+			background: darken(@color-a, 100%);
+			color: @color-c;
+		}
+	}
 }
 .shell-wrapper {
 	background: lighten(@color-a, 30%);

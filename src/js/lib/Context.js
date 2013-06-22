@@ -41,14 +41,27 @@ var Context = (function() {
 			}
 			gitStatusMarkup += '</span>';
 		}
-		_contextEl.innerHTML = _context + gitStatusMarkup;
+		_contextEl.innerHTML = convertContextToLinks() + gitStatusMarkup;
+	}
+	var convertContextToLinks = function() {
+		var str = _context;
+		str = str.replace(/\\/g, '/');
+		var parts = str.split('/');
+		var currentPath = str = parts[0] + '/';
+		for(var i=1; i<parts.length; i++) {
+			currentPath += parts[i] + '/';
+			var link = '<a href="javascript:exec(\'shell cd ' + currentPath + ' && tree\');">' + parts[i] + '</a>';
+			str += link + '/';
+		}
+		return str;
 	}
 
 	return {
 		init: init,
 		on: on,
 		off: off,
-		updateContext: updateContext
+		updateContext: updateContext,
+		get: function() { return _context; }
 	}
 
 })();
