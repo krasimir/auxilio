@@ -10,7 +10,7 @@ var Shell = (function() {
 		_cache = {};
 
 	var connect = function() {
-		if(_connected) return;
+		if(_connected) { return; }
 		_socket = io.connect('http://' + _host + ":" + _port, {
 			'force new connection': true
 		});
@@ -18,15 +18,12 @@ var Shell = (function() {
 			_connected = true;
 			Context.on();
 		});
-		_socket.on('welcome', function(res) {
-			
-		});
 		_socket.on('disconnect', function() {
 			_connected = false;
 			Context.off();
 		});
-		_socket.on("result", function(res) {
-			if(_cache[res.id]) {
+		_socket.on("command", function(res) {
+			if(res.id && _cache[res.id]) {
 				var output = document.getElementById(res.id);
 				if(output) {
 					if(res.stderr !== "") {
@@ -43,6 +40,7 @@ var Shell = (function() {
 		});
 		_socket.on("updatecontext", function(res) {
 			Context.updateContext(res);
+			Autocomplete.setContextFiles(res.files);
 		})
 	}
 	var init = function() {

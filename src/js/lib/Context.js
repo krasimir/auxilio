@@ -14,7 +14,6 @@ var Context = (function() {
 	var updateContext = function(res) {
 		_context = res.context;
 		_gitstatus = res.git;
-		Autocomplete.setContextFiles(res.files);
 		setContext();
 	}
 	var init = function() {
