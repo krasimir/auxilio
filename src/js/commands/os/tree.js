@@ -24,7 +24,6 @@ Commands.register("tree", {
 		}
 	},
 	formatResult: function(dirs) {
-		console.log(dirs);
 
 		var result = '';
 

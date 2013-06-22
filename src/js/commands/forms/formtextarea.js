@@ -15,7 +15,7 @@ Commands.register("formtextarea", {
 				</div>\
 				<h1>' + title + '</h1>\
 				<textarea id="' + id + '_area" class="clear">' + text + '</textarea>\
-				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
+				<small class="form-hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
 			</div>\
 		';
 		App.setOutputPanelContent('<div class="regular">' + html + '</div>');

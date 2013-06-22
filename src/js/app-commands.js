@@ -760,7 +760,7 @@ Commands.register("forminput", {
 				</div>\
 				<h1>' + title + '</h1>\
 				<input type="text" id="' + id + '_area" class="clear" value="' + text + '"/>\
-				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
+				<small class="form-hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
 			</div>\
 		';
 		App.setOutputPanelContent('<div class="regular">' + html + '</div>');
@@ -814,7 +814,7 @@ Commands.register("formtextarea", {
 				</div>\
 				<h1>' + title + '</h1>\
 				<textarea id="' + id + '_area" class="clear">' + text + '</textarea>\
-				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
+				<small class="form-hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
 			</div>\
 		';
 		App.setOutputPanelContent('<div class="regular">' + html + '</div>');
@@ -1200,7 +1200,6 @@ Commands.register("tree", {
 		}
 	},
 	formatResult: function(dirs) {
-		console.log(dirs);
 
 		var result = '';
 

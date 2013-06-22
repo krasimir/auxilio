@@ -14,7 +14,7 @@ Commands.register("forminput", {
 				</div>\
 				<h1>' + title + '</h1>\
 				<input type="text" id="' + id + '_area" class="clear" value="' + text + '"/>\
-				<small class="hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
+				<small class="form-hint">Ctrl+Enter = OK, Esc = CANCEL</small>\
 			</div>\
 		';
 		App.setOutputPanelContent('<div class="regular">' + html + '</div>');

@@ -1,6 +1,5 @@
 // Available commands
 var CommandsDictionary = [];
-var FilesDictionary = [];
 
 var Autocomplete = (function() {
 
@@ -10,7 +9,10 @@ var Autocomplete = (function() {
 		_commandPart = [],
 		_delimeter = ' ',
 		_hint,
-		_filesMode = false; // true if a path should be autocompleted
+		_filesMode = false, // true if a path should be autocompleted
+		_contextFiles = [],
+		_filesModeFiles = [],
+		isReadDirListenerAdded = false;
 
 	var init = function() {
 		_el = document.getElementById("js-suggest");
@@ -27,8 +29,19 @@ var Autocomplete = (function() {
 		// requesting directory listing
 		var lastCharacter = commandStr.charAt(commandStr.length-1);
 		if(lastCharacter === "/") {
-			if(Shell.connected()) Shell.socket().emit("readdir", {path: commandStr.split(" ").pop()});
-			_filesMode = true;
+			if(Shell.connected()) {
+				if(!isReadDirListenerAdded) {
+					isReadDirListenerAdded = true;
+					Shell.socket().on("readdir", function(res) {
+						_filesModeFiles = res.files || [];
+						showHint(_filesModeFiles.join('<br />'));
+					});
+				}
+				Shell.socket().emit("readdir", { path: commandStr.split(" ").pop() });
+				_filesMode = true;
+			} else {
+				_filesMode = false;
+			}
 		} else if(lastCharacter === ' ' || commandStr.indexOf("/") === -1) {
 			_filesMode = false;
 		}
@@ -59,9 +72,9 @@ var Autocomplete = (function() {
 		if(!word || word == '') return;
 		var arr = [];
 		if(!_filesMode) {
-			arr = FilesDictionary && FilesDictionary.length > 0 ? CommandsDictionary.concat(FilesDictionary) : CommandsDictionary;
+			arr = CommandsDictionary.concat(_contextFiles);
 		} else {
-			arr = FilesDictionary && FilesDictionary.length > 0 ? FilesDictionary : CommandsDictionary;
+			arr = _filesModeFiles;
 		}
 		for(var i=0; i<arr.length; i++) {
 			var suggestion = arr[i];
@@ -128,6 +141,12 @@ var Autocomplete = (function() {
 	var hideHint = function() {
 		_hint.style.left = "-800px";
 	}
+	var setContextFiles = function(files) {
+		_contextFiles = files || _contextFiles;
+	}
+	var setFileModeFiles = function(files) {
+		_filesModeFiles = files || _filesModeFiles;
+	}
 
 	return {
 		init: init,
@@ -137,7 +156,9 @@ var Autocomplete = (function() {
 		on: on,
 		prepareDictionary: prepareDictionary,
 		showHint: showHint,
-		hideHint: hideHint
+		hideHint: hideHint,
+		setContextFiles: setContextFiles,
+		setFileModeFiles: setFileModeFiles
 	}
 
 })();

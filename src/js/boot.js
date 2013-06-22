@@ -5,6 +5,7 @@ window.onload = function() {
 		App.setCommandValue(res.value);
 	});
 	App.init();
+	Context.init();
 	Shell.init();
 	document.querySelector("body").addEventListener("keydown", function(e) {
 		if(e.ctrlKey && e.keyCode === 123) {
