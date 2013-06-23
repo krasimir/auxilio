@@ -48,7 +48,7 @@ Commands.register("inject", {
 				reader.readAsText(f);
 			})(reader, f);
 		}
-		App.execute('echo ' + message);
+		exec('echo ' + message);
 	},
 	handleFileRead: function(file, content) {
 		var fileCommands = content.split("\n");

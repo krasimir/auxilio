@@ -17,7 +17,7 @@ Commands.register("shell", {
 			if(args.length === 0) {
 				Shell.connect();
 			} else {
-				exec("error Sorry, the corresponding nodejs module is not running or you misspell the command.");
+				NoShellError();
 			}
 			callback();
 		}

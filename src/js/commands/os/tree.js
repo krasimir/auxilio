@@ -22,7 +22,7 @@ Commands.register("tree", {
 			Shell.socket().on("tree", onTreeDataReceived);
 			Shell.socket().emit("tree", {dir: './'});
 		} else {
-			exec("error The shell is currently not availalble.");
+			NoShellError();
 			callback();
 		}
 	},

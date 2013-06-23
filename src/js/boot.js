@@ -15,8 +15,8 @@ window.onload = function() {
 };
 
 // shortcuts
-var exec = function(commandStr, callback) {
-	App.execute(commandStr, callback);
+var exec = function(commandStr, callback, arg) {
+	App.execute(commandStr, callback, arg);
 }
 // console.log in the background page
 var bglog = function(obj) {

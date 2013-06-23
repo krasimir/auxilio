@@ -42,6 +42,11 @@ var Shell = (function() {
 			Context.updateContext(res);
 			Autocomplete.setContextFiles(res.files);
 		})
+		_socket.on("error", function(res) {
+			if(res.stderr && res.stderr !== "") {
+				exec("error " + res.stderr);
+			}
+		})
 	}
 	var init = function() {
 		connect();
@@ -86,3 +91,12 @@ var Shell = (function() {
 	}
 
 })();
+
+var NoShellError = function() {
+	exec("\
+error Sorry, there is no back-end running or you misspell the command.\
+<br />To install the auxilio's nodejs module type:\
+<pre>npm install -g auxilio-backend\n\
+auxilio-backend</pre>\
+");
+}

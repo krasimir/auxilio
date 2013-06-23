@@ -45,7 +45,7 @@ var App = {
 		e.preventDefault();
 		var commandStr = this.command.value;
 		this.addToHistory(commandStr);
-		this.execute(commandStr, null, true);
+		this.execute(commandStr, null);
 		this.command.value = "";
 		Autocomplete.clear();
 		this.commandsHistoryIndex = -1;
@@ -113,7 +113,7 @@ var App = {
 	getCommandValue: function() {
 		return this.command.value;
 	},
-	execute: function(commandStr, callback) {		
+	execute: function(commandStr, callback, arg) {	
 
 		if(!commandStr || commandStr == "" || commandStr == " ") return;
 
@@ -173,7 +173,7 @@ var App = {
 			}
 		}
 
-		getNextCommand();
+		getNextCommand(arg);
 
 	},
 	addToHistory: function(commandStr) {
