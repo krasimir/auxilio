@@ -28,7 +28,7 @@ Commands.register("alias", {
 						if(newValue === '') { delete self.aliases[name]; }
 						else { self.aliases[name] = newValue; }
 						self.storeAliases(callback);
-					}, true);
+					});
 				}
 			} else {
 				var str = '';
