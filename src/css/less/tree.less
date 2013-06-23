@@ -7,6 +7,9 @@
 	.tree-wrapper-indent {
 		padding: 0 0 0 10px;
 	}
+	.tree-wrapper-no-indent {
+		padding: 0 0 0 10px;	
+	}
 	.tree-item {
 		a {
 			.transition(~"all 200ms ease-out");
@@ -28,6 +31,19 @@
 				font-weight: bold;
 			}
 		}
+	}
+	.tree-item-file {
+		a {
+			color: darken(@color-a, 10%);
+		}
+	}
+	.tree-item-dir {
+		a {
+			font-weight: bold;
+		}
+	}
+	.tree-item-hidden {
+		display: none;
 	}
 	.tree-item-filter-match {
 		background: lighten(@color-a, 20%);
