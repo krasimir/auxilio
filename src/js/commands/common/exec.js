@@ -7,6 +7,6 @@ Commands.register("exec", {
 		});
 	},
 	man: function() {
-		return 'Executes a given command.';
+		return 'Executes a given command. Accepts a command separated by <i>&&</i>.';
 	}	
 })

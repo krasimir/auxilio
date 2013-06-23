@@ -187,7 +187,7 @@ Commands.register("exec", {
 		});
 	},
 	man: function() {
-		return 'Executes a given command.';
+		return 'Executes a given command. Accepts a command separated by <i>&&</i>.';
 	}	
 })
 Commands.register("execjs", {
@@ -225,18 +225,16 @@ Commands.register("execjs", {
 	}	
 })
 Commands.register("execl", {
-	requiredArguments: 0,
+	requiredArguments: 1,
 	format: '<pre>execl</pre>',
 	run: function(args, callback) {
-		exec("formtextarea Command:", function(command) {
-			command = command.replace(/\n/g, ' && ');
-			exec(command, function(res) {
-				callback(res);
-			});
-		});		
+		args = args.join(" ").replace(/\n/g, ' && ');
+		exec(args, function(res) {
+			callback(res);
+		});
 	},
 	man: function() {
-		return 'Executes a given command, but provides a textarea for writing it.';
+		return 'Executes a given command/s. Accepts a command separated by new line.';
 	}	
 })
 Commands.register("history", {
@@ -410,6 +408,61 @@ Commands.register("marker", {
 		return 'Gives you ability to place markers on the current page. <i>screenshot</i> command could be used after that.';
 	}	
 })
+Commands.register("readobj", {
+	requiredArguments: 2,
+	format: '<pre>readobj [path] [json object]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		var path = args.shift();
+		var obj = args.shift();
+
+		if(typeof obj == 'object' && path != '') {
+
+			var parse = function(currentPath, o) {
+				console.log(currentPath, o);
+				if(currentPath.length === 0) {
+					callback(o);
+					return;
+				}
+				var part = currentPath.shift(),
+					index = null,
+					arrName = null;
+				if(part.indexOf("[") >= 0 && part.indexOf("]") > 0) {
+					var subParts = part.split('[');
+					var arrName = subParts.shift();
+					var index = parseInt(subParts.shift().replace(']', ''));
+				}
+				if(index !== null) {
+					if(typeof o[arrName].length !== 'undefined' && o[arrName][index]) {
+						parse(currentPath, o[arrName][index]);
+					} else {
+						exec('error readobj: wrong path (error working with arrays)');
+					}
+				} else {
+					if(o[part]) {
+						parse(currentPath, o[part]);
+					} else {
+						exec('error readobj: wrong path');
+						callback();
+					}
+				}
+			}
+
+			parse(path.split('.'), obj);
+
+		} else {
+			exec('error Second argument of readobj should be an object.');
+			callback();
+		}
+	},
+	man: function() {
+		return 'Extracts a value from json object. For example:\
+		<br />Let\'s say that we have the following object - {data: { users: [10, 11, 12] }}\
+		<br /><i>readobj data.users[1] object</i> will return 11\
+		';
+	}	
+});
 Commands.register("request", {
 	requiredArguments: 1,
 	format: '<pre>request [url]<br />request [url] [raw]</pre>',
@@ -505,7 +558,7 @@ Commands.register("alias", {
 						if(newValue === '') { delete self.aliases[name]; }
 						else { self.aliases[name] = newValue; }
 						self.storeAliases(callback);
-					}, true);
+					});
 				}
 			} else {
 				var str = '';
