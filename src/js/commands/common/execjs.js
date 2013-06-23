@@ -29,6 +29,7 @@ Commands.register("execjs", {
 	man: function() {
 		return 'Evals a javascript function. It is very useful to use the command together with others. Like for example:<br />\
 		date &amp;&amp; execjs "function fName(date) { exec(\'echo \' + date); }"\
+		[js function] could be also a regular command, like <i>inject</i> for example\
 		';
 	}	
 })

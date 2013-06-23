@@ -70,6 +70,6 @@ Commands.register("diff", {
 		return parts[parts.length-1].toLowerCase();
 	},
 	man: function() {
-		return 'Comparison of files.';
+		return 'Comparison of files or strings.';
 	}	
 })
