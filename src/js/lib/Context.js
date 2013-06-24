@@ -50,7 +50,7 @@ var Context = (function() {
 		var currentPath = str = parts[0] + '/';
 		for(var i=1; i<parts.length; i++) {
 			currentPath += parts[i] + '/';
-			var link = '<a href="javascript:exec(\'shell cd ' + currentPath + ' && tree\');">' + parts[i] + '</a>';
+			var link = '<a href="javascript:void(0);" class="goto" data-path="' + currentPath + '">' + parts[i] + '</a>';
 			str += link + '/';
 		}
 		return str;

@@ -1274,11 +1274,8 @@ Commands.register("tree", {
 				var subfolders = !self.isEmpty(item);
 				res += '\
 					<div class="tree-item tree-item-dir' + (visible ? '' : ' tree-item-hidden') + '">\
-						<a href="\
-							javascript:exec(\'shell cd ' + path + name + ' && tree\');\
-							document.getElementById(\'' + id + '\').style.display=\'none\';\
-						"><span>\
-						<i class="icon-folder' + (subfolders ? '-open' : '') + '"></i>\
+						<a href="javascript:void(0);" class="goto" data-path="' + path + name + '"><span data-path="' + path + name + '">\
+						<i class="icon-folder' + (subfolders ? '-open' : '') + '" data-path="' + path + name + '"></i>\
 						' + name + '\
 						</span></a>\
 					</div>\
@@ -1290,7 +1287,8 @@ Commands.register("tree", {
 				var filePath = (Context.get().replace(/\\/g, '/') + '/' + path + name).replace(/\.\//g, '');
 				res += '\
 					<div class="tree-item tree-item-file' + (visible ? '' : ' tree-item-hidden') + '">\
-						<a href="javascript:exec(\'shell ' + filePath + '\');"><span><i class="icon-right-open"></i>\
+						<a href="javascript:void(0)" class="goto" data-path="' + filePath + '" data-type="file">\
+							<span data-path="' + filePath + '" data-type="file"><i class="icon-right-open"  data-type="file" data-path="' + filePath + '"></i>\
 						' + name + '\
 						</span></a>\
 					</div>\
