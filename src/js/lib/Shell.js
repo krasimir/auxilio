@@ -29,7 +29,8 @@ var Shell = (function() {
 					if(res.stderr !== "") {
 						output.style.display = "block";
 						output.innerHTML += '<div class="regular-shell">' + formatOutput(res.stderr) + '</div>';
-					} else if(res.stdout !== '') {
+					}
+					if(res.stdout !== '') {
 						output.style.display = "block";
 						output.innerHTML += '<div class="regular-shell">' + formatOutput(res.stdout) + '</div>';
 					}
