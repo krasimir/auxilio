@@ -47,9 +47,10 @@ var Autocomplete = (function() {
 		}
 
 		if(!splitCommandStr(commandStr, " ")) {
-			splitCommandStr(commandStr, "/")
+			if(!splitCommandStr(commandStr, "/")) {
+				splitCommandStr(commandStr, "$$");
+			}
 		}
-
 
 		if(_matches.length > 0) {
 			var suggestionStr = '';
@@ -111,6 +112,12 @@ var Autocomplete = (function() {
 				}
 			}
 			if(!added) CommandsDictionary.push(i);
+		}
+		// adding variables
+		if(VarStorage) {
+			for(var varName in VarStorage) {
+				CommandsDictionary.push(varName);
+			}
 		}
 		// sort the array by command length
 		for(var i=0; i<CommandsDictionary.length; i++) {

@@ -196,7 +196,7 @@ Commands.register("execjs", {
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
-		var js = args.shift();
+		var js = args.shift().replace(/\n/g, '');
 		var parameter = args.shift();
 		var self = this;
 		if(js.toString().indexOf("function") === 0) {
@@ -574,6 +574,7 @@ Commands.register("var", {
 			}
 		} else {
 			VarStorage[name] = value;
+			Autocomplete.prepareDictionary();
 		}
 		callback(value);
 	},

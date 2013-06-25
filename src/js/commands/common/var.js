@@ -28,6 +28,7 @@ Commands.register("var", {
 			}
 		} else {
 			VarStorage[name] = value;
+			Autocomplete.prepareDictionary();
 		}
 		callback(value);
 	},
