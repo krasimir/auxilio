@@ -11,6 +11,9 @@ Commands.register("execjs", {
 			this.evalJSCode(js, parameter, callback);
 		} else {
 			exec(js, function(res) {
+				if(typeof res == 'object') {
+					res = res.join(' ');
+				}
 				self.evalJSCode(res.replace(/ && /g, '\n'), parameter, callback);
 			});
 		}

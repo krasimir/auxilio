@@ -187,7 +187,7 @@ Commands.register("exec", {
 		});
 	},
 	man: function() {
-		return 'Executes a given command. Accepts a command separated by <i>&&</i>.';
+		return 'Executes a given command. Accepts commands separated by <i>&&</i>.';
 	}	
 })
 Commands.register("execjs", {
@@ -203,6 +203,9 @@ Commands.register("execjs", {
 			this.evalJSCode(js, parameter, callback);
 		} else {
 			exec(js, function(res) {
+				if(typeof res == 'object') {
+					res = res.join(' ');
+				}
 				self.evalJSCode(res.replace(/ && /g, '\n'), parameter, callback);
 			});
 		}
@@ -235,7 +238,7 @@ Commands.register("execl", {
 		});
 	},
 	man: function() {
-		return 'Executes a given command/s. Accepts a command separated by new line.';
+		return 'Executes a given command/s. Accepts commands separated by new line.';
 	}	
 })
 Commands.register("history", {
@@ -409,9 +412,21 @@ Commands.register("marker", {
 		return 'Gives you ability to place markers on the current page. <i>screenshot</i> command could be used after that.';
 	}	
 })
-Commands.register("readobj", {
+Commands.register("middleman", {
+	requiredArguments: 1,
+	format: '<pre>middleman [resource]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {		
+		callback(args);
+	},
+	man: function() {
+		return 'The command simply passes the given argument to its callback';
+	}	
+})
+Commands.register("read", {
 	requiredArguments: 2,
-	format: '<pre>readobj [path] [json object]</pre>',
+	format: '<pre>read [path] [json object]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -438,13 +453,13 @@ Commands.register("readobj", {
 					if(typeof o[arrName].length !== 'undefined' && o[arrName][index]) {
 						parse(currentPath, o[arrName][index]);
 					} else {
-						exec('error readobj: wrong path (error working with arrays)');
+						exec('error read: wrong path (error working with arrays)');
 					}
 				} else {
 					if(o[part]) {
 						parse(currentPath, o[part]);
 					} else {
-						exec('error readobj: wrong path');
+						exec('error read: wrong path');
 						callback();
 					}
 				}
@@ -453,14 +468,14 @@ Commands.register("readobj", {
 			parse(path.split('.'), obj);
 
 		} else {
-			exec('error Second argument of readobj should be an object.');
+			exec('error Second argument of read should be an object.');
 			callback();
 		}
 	},
 	man: function() {
 		return 'Extracts a value from json object. For example:\
-		<br />Let\'s say that we have the following object - {data: { users: [10, 11, 12] }}\
-		<br /><i>readobj data.users[1] object</i> will return 11\
+		<br />Let\'s say that we have the following <i>object</i> - {data: { users: [10, 11, 12] }}\
+		<br /><i>read data.users[1] object</i> will return 11\
 		';
 	}	
 });

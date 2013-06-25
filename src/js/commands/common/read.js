@@ -1,6 +1,6 @@
-Commands.register("readobj", {
+Commands.register("read", {
 	requiredArguments: 2,
-	format: '<pre>readobj [path] [json object]</pre>',
+	format: '<pre>read [path] [json object]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -27,13 +27,13 @@ Commands.register("readobj", {
 					if(typeof o[arrName].length !== 'undefined' && o[arrName][index]) {
 						parse(currentPath, o[arrName][index]);
 					} else {
-						exec('error readobj: wrong path (error working with arrays)');
+						exec('error read: wrong path (error working with arrays)');
 					}
 				} else {
 					if(o[part]) {
 						parse(currentPath, o[part]);
 					} else {
-						exec('error readobj: wrong path');
+						exec('error read: wrong path');
 						callback();
 					}
 				}
@@ -42,14 +42,14 @@ Commands.register("readobj", {
 			parse(path.split('.'), obj);
 
 		} else {
-			exec('error Second argument of readobj should be an object.');
+			exec('error Second argument of read should be an object.');
 			callback();
 		}
 	},
 	man: function() {
 		return 'Extracts a value from json object. For example:\
-		<br />Let\'s say that we have the following object - {data: { users: [10, 11, 12] }}\
-		<br /><i>readobj data.users[1] object</i> will return 11\
+		<br />Let\'s say that we have the following <i>object</i> - {data: { users: [10, 11, 12] }}\
+		<br /><i>read data.users[1] object</i> will return 11\
 		';
 	}	
 });

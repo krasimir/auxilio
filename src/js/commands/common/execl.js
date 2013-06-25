@@ -8,6 +8,6 @@ Commands.register("execl", {
 		});
 	},
 	man: function() {
-		return 'Executes a given command/s. Accepts a command separated by new line.';
+		return 'Executes a given command/s. Accepts commands separated by new line.';
 	}	
 })
