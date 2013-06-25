@@ -183,5 +183,8 @@ quotes =[
 	["Responsive web design isn’t your site working on phones and tablets. It’s about your site working everywhere.", "Scott Kellum"],
 	["If you can't explain it simply, you don't understand it well enough.", "Einstein"],
 	["You haven’t fixed it if you can’t explain it.", "Sam Stephenson"],
-	["We’re not designing pages, we’re designing systems of components.", "Stephen Hay"]
+	["We’re not designing pages, we’re designing systems of components.", "Stephen Hay"],
+	["We designed from the content out, meaning that the content shaped the layout and grid, as opposed to having the layout define the content.", "Matt Gibson"],
+	["80-90% of the end-user response time is spent downloading all the components in the page: images, stylesheets, scripts, Flash, etc.", "Yahoo"],
+	["When you are finished changing, you’re finished.", "Benjamin Franklin"]
 ];
