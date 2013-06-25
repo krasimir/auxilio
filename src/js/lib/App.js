@@ -113,9 +113,11 @@ var App = {
 	getCommandValue: function() {
 		return this.command.value;
 	},
-	execute: function(commandStr, callback, arg) {	
+	execute: function(commandStr, callback, arg) {
 
 		if(!commandStr || commandStr == "" || commandStr == " ") return;
+
+		commandStr = ApplyVariables(commandStr);
 
 		var lines = commandStr.split(" && ");
 		var commands = [];
