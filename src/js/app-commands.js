@@ -199,6 +199,7 @@ Commands.register("execjs", {
 		var js = args.shift().replace(/\n/g, '');
 		var parameter = args.shift();
 		var self = this;
+		js = ApplyVariables(js);
 		if(js.toString().indexOf("function") === 0) {
 			this.evalJSCode(js, parameter, callback);
 		} else {
@@ -214,12 +215,12 @@ Commands.register("execjs", {
 		try {
 			eval("var auxilioFunction=" + js);
 			if(typeof auxilioFunction !== "undefined") {
-				auxilioFunction(parameter);
+				var funcResult = auxilioFunction(parameter);
 			}
 		} catch(e) {
 			exec("error Error executing<pre>" + js + "</pre>" + e.message + "<pre>" + e.stack + "</pre>");
 		}
-		callback();
+		callback(funcResult);
 	},
 	man: function() {
 		return 'Evals a javascript function. It is very useful to use the command together with others. Like for example:<br />\

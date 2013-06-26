@@ -127,6 +127,7 @@ var App = {
 		}
 
 		var processCommand = function(str, resultFromPreviousCommand) {
+			str = ApplyVariables(str);
 			var command = CommandParser.getCommandName(str);
 			var c = Commands.get(command);
 			if(c) {

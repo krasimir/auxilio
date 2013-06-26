@@ -19,6 +19,15 @@ var getRawOfDOMElements = function(elements) {
     }
     return raw;
 }
+var queryAll = function(selector) {
+    try {
+        var result = document.querySelectorAll(selector);
+        return result;
+    } catch(e) {
+        alert('Wrong selector ' + selector);
+        return [];
+    }
+}
 
 // communication
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
@@ -29,7 +38,7 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     		})
     	break;
     	case "pageclick":
-    		var elements = filterDOMElements(document.querySelectorAll(message.selector), message.filter);
+    		var elements = filterDOMElements(queryAll(message.selector), message.filter);
     		if(elements && elements.length > 0) {
     			elements[0].click();
     			sendResponse({elements: elements.length, raw: getRawOfDOMElements(elements)});
@@ -38,7 +47,7 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     		}
     	break;
         case "pagehighlight":
-    		var elements = filterDOMElements(document.querySelectorAll(message.selector), message.filter);
+    		var elements = filterDOMElements(queryAll(message.selector), message.filter);
             sendResponse({elements: elements && elements.length > 0 ? elements.length : 0});
         	for(var i=0; i<elements.length; i++) {
         		if(message.selector != "img") {
@@ -53,11 +62,19 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
             }
         break;
         case "pagequery":
-            var elements = filterDOMElements(document.querySelectorAll(message.selector), message.filter);
-            sendResponse({
-                elements: elements && elements.length > 0 ? elements.length : 0,
-                raw: getRawOfDOMElements(elements)
-            });
+            try {
+                var elements = filterDOMElements(queryAll(message.selector), message.filter);
+                sendResponse({
+                    elements: elements && elements.length > 0 ? elements.length : 0,
+                    raw: getRawOfDOMElements(elements)
+                });
+            } catch(e) {
+                sendResponse({
+                    elements: 0,
+                    error: 'Wrong selector - ' + message.selector,
+                    raw: []
+                });
+            }
         break;
     }
     return true;
