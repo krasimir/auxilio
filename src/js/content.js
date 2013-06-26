@@ -62,19 +62,11 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
             }
         break;
         case "pagequery":
-            try {
-                var elements = filterDOMElements(queryAll(message.selector), message.filter);
-                sendResponse({
-                    elements: elements && elements.length > 0 ? elements.length : 0,
-                    raw: getRawOfDOMElements(elements)
-                });
-            } catch(e) {
-                sendResponse({
-                    elements: 0,
-                    error: 'Wrong selector - ' + message.selector,
-                    raw: []
-                });
-            }
+            var elements = filterDOMElements(queryAll(message.selector), message.filter);
+            sendResponse({
+                elements: elements && elements.length > 0 ? elements.length : 0,
+                raw: getRawOfDOMElements(elements)
+            });
         break;
     }
     return true;
