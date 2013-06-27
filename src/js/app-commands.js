@@ -1702,7 +1702,9 @@ Commands.register("jshint", {
 		callback(data);
 	},
 	noError: function(filePath) {
-		exec("success No errors in <b>" + filePath + "</b>.");
+		if(filePath.split('.').pop().toLowerCase() === '.js') {
+			exec("success JSHint: No errors in <b>" + filePath + "</b>.");
+		}
 	},
 	man: function() {
 		return 'Formats an output of jshint execution.';
