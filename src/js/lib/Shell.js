@@ -28,7 +28,7 @@ var Shell = (function() {
 				if(output) {
 					if(res.stderr !== "") {
 						output.style.display = "block";
-						output.innerHTML += '<div class="regular-shell">' + formatOutput(res.stderr) + '</div>';
+						output.innerHTML += '<div class="regular-shell shell-error">' + formatOutput(res.stderr) + '</div>';
 					}
 					if(res.stdout !== '') {
 						output.style.display = "block";
