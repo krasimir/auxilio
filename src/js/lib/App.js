@@ -206,7 +206,8 @@ var App = {
 			"pagequery",
 			"title",
 			"newtab",
-			"hr"
+			"hr",
+			"jshint"
 		];
 		return _.indexOf(commandsToAvoid, command) >= 0;
 	},

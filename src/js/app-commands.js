@@ -1384,8 +1384,12 @@ var WatchHelper = (function() {
 		if(!_isSocketListenerAttached) {
 			_isSocketListenerAttached = true;
 			Shell.socket().on("watch-change", function(res) {
-				if(_callbacks[res.auxilioId]) {
-					exec(_callbacks[res.auxilioId], null, res);
+				if(_callbacks[res.auxilioId] && _callbacks[res.auxilioId].length > 0) {
+					for(var i=0; c = _callbacks[res.auxilioId][i]; i++) {
+						if(c != '') {
+							exec(c, null, res);
+						}
+					}
 				}
 			});
 			Shell.socket().on("watch-started", function(res) {
@@ -1406,13 +1410,16 @@ var WatchHelper = (function() {
 					exec("info Watchers:<br />" + str);
 				}
 			});
+			Shell.socket().on("watch-stopped-all", function(res) {
+				exec('success All watchers are stopped.');
+			});
 		}
 	}
 	var init = function(data, callback) {
 		if(Shell.connected() && Shell.socket()) {
 			attachSocketListeners();
 			var auxilioId = _.uniqueId("watch");
-			if(data.operation == 'start' && data.watchCallback != '') {
+			if(data.operation == 'start') {
 				_callbacks[auxilioId] = data.watchCallback;
 			}
 			Shell.socket().emit("watch", _.extend({auxilioId: auxilioId}, data));
@@ -1437,10 +1444,15 @@ Commands.register("watch", {
 		var operation = args.length > 0 ? args.shift() : 'list';
 		var parameter = args.length > 0 ? args.shift() : '';
 		var watchCallback = args.length > 0 ? args.shift() : '';
-		if(operation != 'list' && operation != 'start' && operation != 'stop') {
-			exec("error Wrong watch operation. User <i>start</i> or <i>stop</i>. Type <i>man watch</i> to get more information.")
+		if(operation != 'list' && operation != 'start' && operation != 'stop' && operation != 'stopall') {
+			exec("error Wrong watch operation. User <i>start</i>, <i>stop</i> or <i>stopall</i>. Type <i>man watch</i> to get more information.")
 			callback();
 		} else {
+			if(watchCallback.indexOf(",") >= 0) {
+				watchCallback = watchCallback.replace(/ /g, '').split(',');
+			} else {
+				watchCallback = [watchCallback]
+			}
 			WatchHelper.init({
 				operation: operation,
 				parameter: parameter,
@@ -1454,6 +1466,7 @@ Commands.register("watch", {
 		<br />a) watch (without arguments) - shows the current watched file or directory\
 		<br />b) watch start [path to file or directory] [callback command] - start watching\
 		<br />c) watch stop [id] - stop watching. Use a) to find out the ids\
+		<br />c) watch stopall - stop the all watchers\
 		';
 	}	
 })
@@ -1663,6 +1676,36 @@ Commands.register("pagequery", {
 		return 'Returns the number of matched elements and the elements in raw html string format.<br />\
 		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.\
 		Example: {"elements": 1, "raw": ["&lt;a href=\"#\">test&lt;/a>"]}';
+	}	
+})
+Commands.register("jshint", {
+	requiredArguments: 1,
+	format: '<pre>jshint [{filePath: ... file path here..., jshint: ... jshint result here ...}]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		var data = args.shift();
+		if(data.jshint && typeof data.jshint === 'object') {
+			var jshintData = data.jshint;
+			if(jshintData.errors && jshintData.errors.length > 0) {
+				var str = 'JSHint (<b>' + data.filePath + '</b>): <br />';
+				for(var i=0; error = jshintData.errors[i]; i++) {
+					str += error.line + ':' + error.character + ' -> ' + error.reason + ' -> ' + error.evidence + '<br />';
+				}
+				exec("error " + str);
+			} else {
+				this.noError(data.filePath);
+			}
+		} else {
+			this.noError(data.filePath);
+		}
+		callback(data);
+	},
+	noError: function(filePath) {
+		exec("success No errors in <b>" + filePath + "</b>.");
+	},
+	man: function() {
+		return 'Formats an output of jshint execution.';
 	}	
 })
 Commands.register("load", {
