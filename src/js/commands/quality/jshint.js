@@ -22,7 +22,7 @@ Commands.register("jshint", {
 		callback(data);
 	},
 	noError: function(filePath) {
-		if(filePath.split('.').pop().toLowerCase() === '.js') {
+		if(filePath && filePath.split('.').pop().toLowerCase() === '.js') {
 			exec("success JSHint: No errors in <b>" + filePath + "</b>.");
 		}
 	},

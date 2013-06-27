@@ -2,7 +2,13 @@ var WatchHelper = (function() {
 
 	var _isSocketListenerAttached = false;
 	var _callbacks = {};
+	var _initCallback = null;
 
+	var callInitCallback = function() {
+		if(_initCallback) {
+			_initCallback();
+		}
+	}
 	var attachSocketListeners = function() {
 		if(!_isSocketListenerAttached) {
 			_isSocketListenerAttached = true;
@@ -16,9 +22,11 @@ var WatchHelper = (function() {
 			});
 			Shell.socket().on("watch-started", function(res) {
 				exec('success Watcher started (<b>' + res.path + '</b>).');
+				callInitCallback();
 			});
 			Shell.socket().on("watch-stopped", function(res) {
 				exec('success Watcher stopped (<b>' + res.path + '</b>).');
+				callInitCallback();
 			});
 			Shell.socket().on("watch-list", function(res) {
 				var watchers = res.watchers ? res.watchers : [];
@@ -31,9 +39,11 @@ var WatchHelper = (function() {
 					}
 					exec("info Watchers:<br />" + str);
 				}
+				callInitCallback();
 			});
 			Shell.socket().on("watch-stopped-all", function(res) {
 				exec('success All watchers are stopped.');
+				callInitCallback();
 			});
 		}
 	}
@@ -44,6 +54,7 @@ var WatchHelper = (function() {
 			if(data.operation == 'start') {
 				_callbacks[auxilioId] = data.watchCallback;
 			}
+			_initCallback = callback;
 			Shell.socket().emit("watch", _.extend({auxilioId: auxilioId}, data));
 		} else {
 			NoShellError();
@@ -90,7 +101,7 @@ Commands.register("watch", {
 		<br />Have in mind that you can pass multiple callbacks like for example:\
 		<i>watch start ./ "read jshint.errors[0], info"</i>\
 		<br />c) watch stop [id] - stop watching. Use a) to find out the ids\
-		<br />c) watch stopall - stop the all watchers\
+		<br />d) watch stopall - stop the all watchers\
 		';
 	}	
 })
