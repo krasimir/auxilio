@@ -46,11 +46,11 @@ var Autocomplete = (function() {
 			_filesMode = false;
 		}
 
-		if(!splitCommandStr(commandStr, " ")) {
-			if(!splitCommandStr(commandStr, "/")) {
-				splitCommandStr(commandStr, "$$");
-			}
-		}
+		splitCommandStr(commandStr, " ") || 
+		splitCommandStr(commandStr, "/") ||
+		splitCommandStr(commandStr, "$$") ||
+		splitCommandStr(commandStr, "\"") ||
+		splitCommandStr(commandStr, ",");
 
 		if(_matches.length > 0) {
 			var suggestionStr = '';

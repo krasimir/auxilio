@@ -10,7 +10,6 @@ Commands.register("read", {
 		if(typeof obj == 'object' && path != '') {
 
 			var parse = function(currentPath, o) {
-				console.log(currentPath, o);
 				if(currentPath.length === 0) {
 					callback(o);
 					return;
@@ -24,7 +23,7 @@ Commands.register("read", {
 					var index = parseInt(subParts.shift().replace(']', ''));
 				}
 				if(index !== null) {
-					if(typeof o[arrName].length !== 'undefined' && o[arrName][index]) {
+					if(o[arrName] && typeof o[arrName].length !== 'undefined' && o[arrName][index]) {
 						parse(currentPath, o[arrName][index]);
 					} else {
 						exec('error read: wrong path (error working with arrays)');

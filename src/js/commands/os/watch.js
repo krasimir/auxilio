@@ -8,10 +8,9 @@ var WatchHelper = (function() {
 			_isSocketListenerAttached = true;
 			Shell.socket().on("watch-change", function(res) {
 				if(_callbacks[res.auxilioId] && _callbacks[res.auxilioId].length > 0) {
-					for(var i=0; c = _callbacks[res.auxilioId][i]; i++) {
-						if(c != '') {
-							exec(c, null, res);
-						}
+					var line = _callbacks[res.auxilioId].join(" && ");
+					if(line != '') {
+						exec(_callbacks[res.auxilioId].join(" && "), null, res);
 					}
 				}
 			});
@@ -72,7 +71,7 @@ Commands.register("watch", {
 			callback();
 		} else {
 			if(watchCallback.indexOf(",") >= 0) {
-				watchCallback = watchCallback.replace(/ /g, '').split(',');
+				watchCallback = watchCallback.replace(/, /g, ',').split(',');
 			} else {
 				watchCallback = [watchCallback];
 			}
@@ -87,7 +86,9 @@ Commands.register("watch", {
 		return 'Watch directory or file for changes.\
 		<br />Operations:\
 		<br />a) watch (without arguments) - shows the current watched file or directory\
-		<br />b) watch start [path to file or directory] [callback command] - start watching\
+		<br />b) watch start [path to file or directory] [callback command] - start watching.\
+		<br />Have in mind that you can pass multiple callbacks like for example:\
+		<i>watch start ./ "read jshint.errors[0], info"</i>\
 		<br />c) watch stop [id] - stop watching. Use a) to find out the ids\
 		<br />c) watch stopall - stop the all watchers\
 		';
