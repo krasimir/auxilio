@@ -4,6 +4,14 @@
 	padding: 6px;
 	margin: 0 0 4px 0;
 	border-radius: 5px;
+	a {
+		color: darken(@color-a, 30%);
+		text-decoration: none;
+		&:hover {
+			color: darken(@color-a, 80%);
+			text-decoration: underline;
+		}
+	}
 }
 .error {
 	.regular();
