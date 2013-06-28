@@ -1,0 +1,622 @@
+.termkitOutputView {
+}
+
+.termkitOutputView .isolate {
+  overflow: hidden;
+  width: 100%;
+  margin: 0;
+}
+
+.termkitOutputView .widgetList {
+  padding: .5em 1em;
+  -webkit-column-width: 150px;
+  max-height: 400px;
+  overflow-x: auto;
+}
+
+.termkitOutputView .widgetText {
+  margin: 1em;
+}
+
+.termkitOutputView .widgetText .contents {
+  padding: 0 0.5em;
+  white-space: pre-wrap;
+}
+
+.termkitOutputView .widgetCode pre {
+  margin: 0;
+  padding: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.termkitOutputView .widgetCode pre {
+  
+}
+
+.termkitAnsiFg0 {
+  color: #000;
+}
+.termkitAnsiFg1 {
+  color: #ba3615;
+}
+.termkitAnsiFg2 {
+  color: #65970b;
+}
+.termkitAnsiFg3 {
+  color: #ba7215;
+}
+.termkitAnsiFg4 {
+  color: #4362d1;
+}
+.termkitAnsiFg5 {
+  color: #a64e80;
+}
+.termkitAnsiFg6 {
+  color: #419197;
+}
+.termkitAnsiFg7 {
+  color: #8c805f;
+}
+.termkitAnsiFg0b {
+  color: #524b37;
+  font-weight: bolder;
+}
+.termkitAnsiFg1b {
+  color: #ff623b;
+  font-weight: bolder;
+}
+.termkitAnsiFg2b {
+  color: #c8f82d;
+  font-weight: bolder;
+}
+.termkitAnsiFg3b {
+  color: #fddc35;
+  font-weight: bolder;
+}
+.termkitAnsiFg4b {
+  color: #97c4ff;
+  font-weight: bolder;
+}
+.termkitAnsiFg5b {
+  color: #fa8fc6;
+  font-weight: bolder;
+}
+.termkitAnsiFg6b {
+  color: #adffe9;
+  font-weight: bolder;
+}
+.termkitAnsiFg7b {
+  color: #f3ebe2;
+  font-weight: bolder;
+}
+.termkitAnsiBg0 {
+  background-color: whiteSmoke;
+}
+.termkitAnsiBg1 {
+  background-color: #ba3615;
+}
+.termkitAnsiBg2 {
+  background-color: #65970b;
+}
+.termkitAnsiBg3 {
+  background-color: #ba7215;
+}
+.termkitAnsiBg4 {
+  background-color: #4362d1;
+}
+.termkitAnsiBg5 {
+  background-color: #a64e80;
+}
+.termkitAnsiBg6 {
+  background-color: #419197;
+}
+.termkitAnsiBg7 {
+  background-color: #8c805f;
+}
+.termkitAnsiBg0b {
+  background-color: #524b37;
+}
+.termkitAnsiBg1b {
+  background-color: #ff623b;
+}
+.termkitAnsiBg2b {
+  background-color: #c8f82d;
+}
+.termkitAnsiBg3b {
+  background-color: #fddc35;
+}
+.termkitAnsiBg4b {
+  background-color: #97c4ff;
+}
+.termkitAnsiBg5b {
+  background-color: #fa8fc6;
+}
+.termkitAnsiBg6b {
+  background-color: #adffe9;
+}
+.termkitAnsiBg7b {
+  background-color: #f3ebe2;
+}
+
+.termkitOutputView .widgetCode div.syntaxhighlighter > div.toolbar {
+  display: none;
+}
+
+.termkitOutputView .widgetFile {
+  padding: .5em;
+  clear: left;
+  overflow: hidden;
+}
+
+.termkitOutputView .widgetFile .icon, .termkitOutputView .widgetFile .icon * {
+  float: left;
+  width: 32px;
+  height: 32px;
+}
+
+.termkitOutputView .widgetFile .name, .termkitOutputView .widgetFile .meta {
+  padding-left: 42px;
+  background: #000;
+}
+
+.termkitOutputView .widgetFile .name {
+}
+
+.termkitOutputView .widgetFile.file-hidden .icon {
+/*  opacity: 0.5; */
+}
+
+.termkitOutputView .widgetImage {
+  margin: 5px 15px 5px 5px;
+  padding: 0 1em;
+}
+
+.termkitOutputView .widgetImage img {
+  margin: 0 auto;
+  display: block;
+  padding: 5px;
+  background: #fff;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.termkitOutputView .widgetProgress {
+  padding: .5em 1em;
+}
+
+.termkitOutputView .widgetProgress .ui-progressbar-value {
+  -webkit-transition: width 0.15s ease-in-out;
+}
+
+.termkitOutputView .widgetHTML .contents {
+  padding: .5em 1em;
+}
+.termkitOutputView .widgetHTML iframe {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.termkitOutputView .widgetHex table,
+.termkitOutputView .widgetHex table td,
+.termkitOutputView .widgetHex table th {
+  border-spacing: 0;
+  border: 0;
+  margin: 0;
+}
+.termkitOutputView .widgetHex table {
+  margin: 0 1em;
+}
+.termkitOutputView .widgetHex table th {
+  padding: 2px 2em 2px 2px;
+  color: #999;
+}
+.termkitOutputView .widgetHex table td.spacer {
+  width: 2em;
+}
+.termkitOutputView .widgetHex table td.view {
+  color: #bbb;
+  padding: 2px 0px;
+  white-space: pre;
+}
+.termkitOutputView .widgetHex table td.view.odd {
+  color: #f7f7f7;
+  background: #2a2a2a;
+}
+.termkitOutputView .widgetHex table td.view.even {
+  color: #ccc;
+}
+.termkitOutputView .widgetHex table td.bytes {
+  padding: 2px 5px;
+}
+.termkitOutputView .widgetHex table td.bytes.odd {
+  color: #eee;
+  background: #2a2a2a;
+}
+.termkitOutputView .widgetHex table td.bytes.even {
+  color: #ccc;
+}
+.termkitOutputView .widgetHex table tr:hover th,
+.termkitOutputView .widgetHex table tr:hover td {
+  background: #444;
+  color: #fff !important;
+}
+.termkitOutputView .widgetHex table tr:hover td.odd {
+  background: #666;
+}
+.termkitOutputView .widgetHex table tr:hover th {
+  color: #bbb;
+}
+.termkitOutputView .widgetHex table tr:hover td.view {
+  color: #fff;
+}
+.termkitOutputView .widgetHex .measure {
+  visibility: hidden;
+}
+
+/************/
+
+.termkitCommandView {
+  padding-bottom: 34px;
+}
+
+.termkitCommandView .context {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px;
+  z-index: 3;
+  
+  color: #ddf;
+  background: #444 -webkit-gradient(linear, left top, left bottom, from(#346), to(#124));
+  -webkit-box-shadow: 0 0px 10px #000;
+}
+
+.termkitCommandView .context .path {
+  float: left;
+}
+
+.termkitCommandView .context .path span {
+  padding-right: .5em;
+}
+
+.termkitCommandView .context .path span::before {
+  padding-right: .5em;
+  content: '/';
+  color: #99c;
+}
+
+.termkitCommandView .context .user {
+  float: right;
+}
+
+.termkitCommand {
+  position: relative;
+}
+
+.termkitCommand > span.sigil {
+  position: absolute;
+  left: 15px;
+  top: 11px;
+  color: #ccc;
+  font-size: 12px;
+}
+
+.termkitCommand > span.sigil-ok {
+  color: #9f7;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 1), 0 0 10px rgba(0, 255, 0, 1), 0 0 20px rgba(0, 255, 0, 1);
+}
+
+.termkitCommand > span.sigil-warning {
+  top: 9px;
+  font-size: 14px;
+  color: #fd3;
+  text-shadow: 0 0 5px rgba(255, 200, 0, 1),
+               0 0 10px rgba(255, 100, 0, 1),
+               0 0 20px rgba(255, 0, 0, 1);
+}
+
+.termkitCommand > span.sigil-error {
+  color: #f77;
+  text-shadow: 0 0 5px rgba(255, 0 , 0, 1), 0 0 10px rgba(255, 0 , 0, 1), 0 0 20px rgba(255, 0 , 0, 1);
+}
+
+.termkitCommand .termkitSpinner {
+  position: absolute;
+  left: -2px;
+  top: -1px;
+}
+
+.termkitCommand .termkitTokenField {
+/*  background: #000 -webkit-gradient(linear, left top, left bottom, from(#333), color-stop(0.1, #000));*/
+}
+
+.termkitCommand.command-open {
+/*  background: #000 -webkit-gradient(linear, left 80%, left bottom, from(#000), color-stop(0.7, #111), to(#222));*/
+}
+
+/************/
+
+.termkitTokenField {
+  line-height: 22px;
+  padding: 7px 10px 4px 35px;
+  margin-top: -1px;
+  
+  cursor: text;
+}
+
+.termkitTokenField::after {
+  content: ' ';
+}
+
+.termkitTokenField.focused {
+  outline: auto 5px -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+/************/
+
+.termkitTokenField span#caret {
+  display: inline-block;
+  overflow: hidden;
+  height: 22px;
+  vertical-align: bottom;
+}
+
+.termkitTokenField span#caret input {
+  position: absolute;
+  z-index: 5;
+  padding: 0;
+  border: 0;
+  margin: 0 0 0 -1px;
+  background: transparent;
+  font-size: inherit;
+  font-family: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  white-space: pre-wrap;
+  
+  color: #fff;
+}
+
+.termkitTokenField span#caret input:focus {
+  outline: 0;
+}
+
+.termkitTokenField span#caret > span.measure {
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  white-space: pre;
+}
+
+.termkitTokenField span.token > span.measure {
+  position: absolute;
+  z-index: 2;
+  opacity: 0;
+  white-space: pre;
+}
+
+
+/************/
+
+.termkitTokenField span.autocomplete {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  width: 0;
+  line-height: 22px;
+  vertical-align: top;
+}
+
+.termkitTokenField span.autocomplete .stretch {
+  position: absolute;
+  margin-top: 0em;
+}
+
+.termkitTokenField span.autocomplete .lines {
+}
+
+.termkitTokenField span.autocomplete .fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  -webkit-box-shadow: 0px -1px 1px rgba(128,128,128,1), 0px 1px 6px rgba(0,0,0,1), 3px 1px 6px rgba(0,0,0,1);
+  -webkit-border-radius: .25em;
+  background: #555 -webkit-gradient(linear, left top, left bottom, from(#555), to(#333));
+}
+
+.termkitTokenField span.autocomplete .line {
+  position: relative;
+  z-index: 2;
+  display: block;
+  white-space: nowrap;
+  height: 20px;
+  z-index: 5;
+}
+
+.termkitTokenField span.autocomplete .line span.prefix {
+  padding: 4px 0 3px;
+  color: rgba(207, 207, 207, .65);
+}
+
+.termkitTokenField span.autocomplete .line:nth-child(2n) {
+/*  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,.2)), to(rgba(0,0,0,.25)));*/
+}
+
+.termkitTokenField span.autocomplete .line.active {
+  background: rgba(0, 0, 0, .35);
+}
+
+.termkitTokenField span.autocomplete .line.active span.prefix {
+  opacity: 0;
+}
+
+.termkitTokenField span.token-plain span.autocomplete > span {
+  margin-left: -.5em;
+}  
+
+.termkitTokenField span.token-quoted span.autocomplete > span {
+  margin-left: -.75em;
+}  
+
+.termkitTokenField span.token-plain span.autocomplete .line {
+  padding: 0 .5em 0;
+}
+
+.termkitTokenField span.token-quoted span.autocomplete .line {
+  padding: 0 .75em 0;
+}
+
+.termkitTokenField span.token-quoted span.autocomplete .fill {
+  -webkit-box-shadow: 0px -1px 1px rgba(160,180,192,1), 0px 1px 6px rgba(0,0,0,1), 3px 1px 6px rgba(0,0,0,1);
+  background: #678 -webkit-gradient(linear, left top, left bottom, from(#678), to(#456));
+}
+
+.termkitTokenField span.autocomplete .line.style-command .prefix {
+  margin-left: -1px;
+  padding-left: 21px;
+  background: url(Images/command.png) no-repeat 0 50%;
+}
+.termkitTokenField span.autocomplete .line.style-file .prefix {
+  margin-left: -1px;
+  padding-left: 21px;
+  background: url(Images/file.png) no-repeat 0 50%;
+}
+.termkitTokenField span.autocomplete .line.style-folder .prefix {
+  margin-left: -1px;
+  padding-left: 21px;
+  background: url(Images/folder.png) no-repeat 0 50%;
+}
+
+.termkitTokenField span#caret input.style-command {
+  padding-left: 20px;
+  height: 20px;
+  background: url(Images/command.png) no-repeat 0 50%;
+}
+.termkitTokenField span#caret input.style-file {
+  padding-left: 20px;
+  height: 20px;
+  background: url(Images/file.png) no-repeat 0 50%;
+}
+.termkitTokenField span#caret input.style-folder {
+  padding-left: 20px;
+  height: 20px;
+  background: url(Images/folder.png) no-repeat 0 50%;
+}
+
+.termkitTokenField .token.style-command span.contents {
+  margin-left: -.1em;
+  padding-left: 21px;
+  background: url(Images/command.png) no-repeat 0 50%;
+}
+.termkitTokenField .token.style-file span.contents {
+  margin-left: -.1em;
+  padding-left: 21px;
+  background: url(Images/file.png) no-repeat 0 50%;
+}
+.termkitTokenField .token.style-folder span.contents {
+  margin-left: -.1em;
+  padding-left: 21px;
+  background: url(Images/folder.png) no-repeat 0 50%;
+}
+
+
+/************/
+
+.termkitTokenField > span.token {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.termkitTokenField > span.token > span.contents {
+  padding: 4px 0 3px;
+}
+
+.termkitTokenField > span.token input {
+  max-width: 100%;
+}
+
+.termkitTokenField > span.token,
+.termkitTokenField > span.token input {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .75);
+}
+
+.termkitTokenField > span.token:not(:first-child)::after {
+  white-space: normal;
+  content: ' ';
+}
+
+.termkitTokenField > span.token:last-child::after {
+  white-space: pre;
+  content: ' ';
+}
+
+.termkitTokenField > span.token:after {
+  font-size: 0;
+  content: ' ';
+  vertical-align: bottom;
+}
+
+.termkitTokenField > span.token-plain {
+  padding: .4em .5em .35em;
+  -webkit-border-radius: .25em;
+  margin: 0 2px 0 0;
+  -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,.6);
+  background: #555 -webkit-gradient(linear, left top, left bottom, from(#666), to(#444));
+  background: #333 -webkit-gradient(linear, left top, left bottom, from(#4a4a4a), to(#333333));
+  color: #ddd;
+}
+
+.termkitTokenField > span.token-quoted {
+  padding: .4em .5em .35em;
+  -webkit-border-radius: .25em;
+  margin: 0 3px 0 2px;
+
+  -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,1);
+  background: #777 -webkit-gradient(linear, left top, left bottom, from(#808080), to(#555));
+  color: #f2f2f2;
+}
+
+.termkitTokenField > span.token-pipe {
+  padding: .6em .2em .45em .1em;
+  -webkit-border-radius: .25em;
+  margin: 0 5px 0 3px;
+  -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,.6);
+  background: #333 -webkit-gradient(linear, left top, left 80%, from(#ffffff), to(#aaaaaa));
+  color: #ddd;
+}
+
+.termkitTokenField > span.token-regex {
+  padding: .4em 1em .35em;
+  -webkit-border-radius: .25em;
+  -webkit-border-top-left-radius: 2em;
+  -webkit-border-bottom-right-radius: 2em;
+  margin: 0 3px 0 2px;
+
+  -webkit-box-shadow: 0px -1px 1px rgba(192,192,192,1);
+  background: #57a -webkit-gradient(linear, left top, left bottom, from(#5090c0), to(#269));
+  color: #eef;
+}
+
+.termkitTokenField > span.token-empty span#caret input {
+  width: 1px !important;
+  margin-top: -2px;
+}
+
+.termkitTokenField > span.token-empty {
+  background: none;
+  padding: 0;
+  margin: 0;
+}
