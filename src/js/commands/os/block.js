@@ -21,7 +21,7 @@ Commands.register("block", {
 				callback();
 			}
 		} else {
-			exec("error <b>block</b> accepts only <i>start</i> and <i>end<i> operations. <i>" + operation + "</i> given.");
+			exec("error <b>block</b> accepts only <i>start</i> and <i>end</i> operations. <i>" + operation + "</i> given.");
 			callback();
 		}
 	},
