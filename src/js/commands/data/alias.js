@@ -80,6 +80,7 @@ Commands.register("alias", {
 	},
 	exportAliases: function(callback) {
 		exec("storage get aliases", function(data) {
+			var result = '';
 			if(data.aliases && data.aliases != "") {
 				self.aliases = JSON.parse(data.aliases);
 				var names = [];
@@ -87,17 +88,11 @@ Commands.register("alias", {
 					names.push(i);
 				}
 				names.sort();
-				var result = '';
 				for(var i=0; name=names[i]; i++) {
 					result += 'alias ' + name + ' ' + self.aliases[name].toString().replace(/\n/g, "\\n") + '\n';
 				}
-				if(result == '') {
-					exec('info No data.');
-				} else {
-					exec('info <pre>' + result + '</pre>')
-				}
 			}
-			callback();
+			callback(result);
 		});
 	},
 	man: function() {
