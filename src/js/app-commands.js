@@ -1312,6 +1312,35 @@ Commands.register("warning", {
 		return 'Outputs warning message.';
 	}	
 })
+Commands.register("readfile", {
+	requiredArguments: 1,
+	format: '<pre>readfile [file]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		var file = args.shift();
+		if(Shell.connected() && Shell.socket()) {
+			var onFileRead = function(res) {
+				Shell.socket().removeListener("readfile", onFileRead);
+				if(res.error) {
+					exec("error " + res.error);
+				} else if(res.content) {
+					callback(res.content);
+				} else {
+					callback(res);
+				}
+			}
+			Shell.socket().on("readfile", onFileRead);
+			Shell.socket().emit("readfile", {file: file});
+		} else {
+			NoShellError();
+			callback();
+		}
+	},
+	man: function() {
+		return 'Read content of a file.';
+	}	
+})
 Commands.register("shell", {
 	requiredArguments: 0,
 	format: '<pre>shell [command]</pre>',
@@ -1535,6 +1564,35 @@ Commands.register("watch", {
 		<br />c) watch stop [id] - stop watching. Use a) to find out the ids\
 		<br />d) watch stopall - stop the all watchers\
 		';
+	}	
+})
+Commands.register("writefile", {
+	requiredArguments: 1,
+	format: '<pre>writefile [file] [content]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		var file = args.shift();
+		var content = args.join(" ");
+		if(Shell.connected() && Shell.socket()) {
+			var onFileSaved = function(res) {
+				Shell.socket().removeListener("writefile", onFileSaved);
+				if(res.error) {
+					exec("error " + res.error);
+				} else if(res.content) {
+					exec("success " + res.content);
+				}
+				callback();
+			}
+			Shell.socket().on("writefile", onFileSaved);
+			Shell.socket().emit("writefile", {file: file, content: content});
+		} else {
+			NoShellError();
+			callback();
+		}
+	},
+	man: function() {
+		return 'Write content to a file.';
 	}	
 })
 Commands.register("pageclick", {
