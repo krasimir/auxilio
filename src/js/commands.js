@@ -5,7 +5,7 @@ Commands.register("clear", {
 	},
 	man: function() {
 		return 'Clearing the current console\'s output.';
-	}	
+	}
 })
 Commands.register("compare", {
 	requiredArguments: 4,

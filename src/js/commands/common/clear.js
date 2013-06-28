@@ -5,5 +5,5 @@ Commands.register("clear", {
 	},
 	man: function() {
 		return 'Clearing the current console\'s output.';
-	}	
+	}
 })
