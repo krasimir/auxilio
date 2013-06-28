@@ -150,15 +150,14 @@ Commands.register("editor", {
 	},
 	man: function() {
 		return 'Opens an editor for changing files.';
-	},
-	
+	}	
 });
 
-setTimeout(function() {
-	exec("editor README.md", function() {
-		exec("editor index.js");
-	});
-}, 500);
+// setTimeout(function() {
+// 	exec("editor README.md", function() {
+// 		exec("editor index.js");
+// 	});
+// }, 500);
 
 /*
 
