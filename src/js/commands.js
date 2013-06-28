@@ -811,69 +811,166 @@ Commands.register("storage", {
 		';
 	}	
 })
+var Editor = (function() {
+
+	var _files = [],
+		_id = "editor",
+		_added = false,
+		_editorHolder = null,
+		_editor = null,
+		_currentFile = null,
+		_editorToolbar = null;
+
+	var _markup = '\
+		<div class="editor-ace">\
+			<div id="' + _id + '" class="editor"></div>\
+			<div class="editor-toolbar"></div>\
+			<div class="editor-hint">\
+			Ctrl+S = save, \
+			Esc = close, \
+			Ctrl+[ = previous project, \
+			Ctrl+] = next project</div>\
+		</div>\
+	';
+
+	var addEditor = function() {
+		if(!_added) {
+			_editorHolder = document.querySelector(".editor-holder");
+			_editorHolder.innerHTML = _markup;
+			_editor = ace.edit(_id);
+		    _editor.setTheme("ace/theme/textmate");
+		    _editor.getSession().setMode("ace/mode/javascript");
+		    _editor.getSession().setUseWrapMode(true);
+		    _editor.getSession().setUseWorker(false);
+		    _editor.focus();
+		    _editor.commands.addCommand({
+			    name: 'Save',
+			    bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+			    exec: function(editor) {
+			        save();
+			    },
+			    readOnly: true
+			});
+			_editor.commands.addCommand({
+			    name: 'Close',
+			    bindKey: {win: 'Esc',  mac: 'Esc'},
+			    exec: function(editor) {
+			        close();
+			    },
+			    readOnly: true
+			});
+			_editor.commands.addCommand({
+			    name: 'PreviousFile',
+			    bindKey: {win: 'Ctrl+[',  mac: 'Ctrl+['},
+			    exec: function(editor) {
+			        if(_currentFile == 0) {
+			        	changeCurrentFile(_files.length-1);
+			        } else {
+			        	changeCurrentFile(_currentFile-1);
+			        }
+			    },
+			    readOnly: true
+			});
+			_editor.commands.addCommand({
+			    name: 'NextFile',
+			    bindKey: {win: 'Ctrl+]',  mac: 'Ctrl+]'},
+			    exec: function(editor) {
+			        if(_currentFile == _files.length-1) {
+			        	changeCurrentFile(0);
+			        } else {
+			        	changeCurrentFile(_currentFile+1);
+			        }
+			    },
+			    readOnly: true
+			});
+			_editorToolbar = document.querySelector(".editor-toolbar");
+		}
+	}
+	var addFile = function(file) {
+		exec("readfile " + file, function(content) {
+			if(content !== null) {
+				_files.push({
+					file: file,
+					content: content
+				});
+				_currentFile = _files.length-1;
+				showCurrentFile();
+			}
+		});
+	}
+	var showCurrentFile = function() {
+		addEditor();
+		_editor.setValue(_files[_currentFile].content);
+		_editor.setReadOnly(false);
+		_editor.clearSelection();
+		updateToolbar();
+		if(_files[_currentFile].position) {
+			_editor.selection.moveCursorToPosition(_files[_currentFile].position);
+		} else {
+			_editor.selection.moveCursorToPosition({row: 0, column: 0});
+		}
+	}
+	var save = function() {
+		_files[_currentFile].content = _editor.getValue();
+		exec("writefile " + _files[_currentFile].file + " " + _files[_currentFile].content);
+	}
+	var close = function() {
+		_editorHolder.innerHTML = '';
+		_added = false;
+		_files = [];
+		setTimeout(function() {
+			App.setFocus();
+		}, 200);
+	}
+	var updateToolbar = function() {
+		var str = '';
+		for(var i=0; file = _files[i]; i++) {
+			str += '<a href="javascript:void(0);" data-index="' + i + '"\
+			class="editor-file' + (i == _currentFile ? ' current-file' : '') + '">' + file.file.replace(/\\/g,'/').replace( /.*\//, '' ) + '</a>';
+		}
+		_editorToolbar.innerHTML = str;
+		var links = document.querySelectorAll(".editor-file");
+		for(var i=0; link = links[i]; i++) {
+			link.addEventListener("click", function(e) {
+				changeCurrentFile(parseInt(e.target.getAttribute("data-index")));
+			});
+		}
+	}
+	var changeCurrentFile = function(index) {
+		if(_files[_currentFile]) {
+			_files[_currentFile].position = _editor.selection.getCursor();
+		}
+		_currentFile = index;
+		showCurrentFile();
+	}
+
+	return {
+		addFile: addFile
+	}
+
+})();
+
 Commands.register("editor", {
 	requiredArguments: 1,
 	format: '<pre>editor [file]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	editor: null,
+	editorHolder: null,
 	run: function(args, callback) {
-
-		var id = "editor",
-			self = this,
-			markup = '<div class="editor-ace"><div class="toolbar"></div><div id="' + id + '"></div></div>',
-			fileToLoad = args.shift();
-
-		exec("echo " + markup);
-		this.editor = ace.edit(id);
-	    this.editor.setTheme("ace/theme/textmate");
-	    this.editor.getSession().setMode("ace/mode/javascript");
-	    this.editor.focus();
-	    this.editor.getSession().setUseWorker(false);
-	    this.editor.commands.addCommand({
-		    name: 'Save',
-		    bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
-		    exec: function(editor) {
-		        self.save();
-		    },
-		    readOnly: true
-		});
-		this.editor.commands.addCommand({
-		    name: 'Close',
-		    bindKey: {win: 'Ctrl-W',  mac: 'Command-W'},
-		    exec: function(editor) {
-		        self.close();
-		    },
-		    readOnly: true
-		});
-
-		this.loadFile(fileToLoad);
+		Editor.addFile(args.shift());
 		callback();
-
 	},
 	man: function() {
 		return 'Opens an editor for changing files.';
 	},
-	loadFile: function(file) {
-		var self = this;
-		this.editor.setReadOnly(true);
-		this.editor.setValue("// loading " + file + " ...");
-		exec("readfile " + file, function(content) {
-			self.editor.setValue(content);
-			self.editor.setReadOnly(false);
-			self.editor.clearSelection();
-		})
-	},
-	save: function(editor) {
-
-	},
-	close: function(editor) {
-
-	}
+	
 });
 
 setTimeout(function() {
-	exec("editor README.md");
+	exec("editor README.md", function() {
+		exec("editor index.js");
+	});
 }, 500);
 
 /*
@@ -1497,10 +1594,16 @@ Commands.register("readfile", {
 	run: function(args, callback) {
 		var file = args.shift();
 		if(Shell.connected() && Shell.socket()) {
+			var id = _.uniqueId("shellcommand");
 			var onFileRead = function(res) {
+				if(res.id !== id) return;
 				Shell.socket().removeListener("readfile", onFileRead);
 				if(res.error) {
+					if(typeof res.error === 'object') {
+						res.error = JSON.stringify(res.error);
+					}
 					exec("error " + res.error);
+					callback(null);
 				} else if(res.content) {
 					callback(res.content);
 				} else {
@@ -1508,7 +1611,7 @@ Commands.register("readfile", {
 				}
 			}
 			Shell.socket().on("readfile", onFileRead);
-			Shell.socket().emit("readfile", {file: file});
+			Shell.socket().emit("readfile", {file: file, id: id});
 		} else {
 			NoShellError();
 			callback();

@@ -207,7 +207,9 @@ var App = {
 			"title",
 			"newtab",
 			"hr",
-			"jshint"
+			"jshint",
+			"readfile",
+			"writefile"
 		];
 		return _.indexOf(commandsToAvoid, command) >= 0;
 	},

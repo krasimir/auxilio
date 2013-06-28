@@ -1,12 +1,51 @@
+.editor-holder {
+	margin: 59px 0 32px 0;
+}
 .editor-ace {
-	position: relative;
 	width: 100%;
-	height: 400px;
-	#editor { 
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+	height: 430px;
+	padding: 2px;
+	background: #FFF;
+	box-sizing: border-box;
+	padding: 0;
+	border: solid 1px #CFCFCF;
+	.editor {
+		width: 100%;
+		height: 400px;
+        box-sizing: border-box;
     }
+    .editor-hint {
+    	color: #8D8D8D;
+    	font-size: 12px;
+    	background: #F0F0F0;
+    	padding: 4px 6px 4px 6px;
+    }
+    .editor-toolbar {
+    	.editor-hint();
+    	background: #FFFFFF;
+    	border-bottom: dotted 1px #8E8E8E;
+    	border-top: dotted 1px #8E8E8E;
+    	padding: 6px;
+    	a {
+    		display: inline-block;
+    		text-decoration: none;
+    		color: #FFF;
+    		background: #8E8E8E;
+    		font-size: 12px;
+    		padding: 2px 6px 2px 6px;
+    		margin: 0 2px 0 0;
+    		border-radius: 2px;
+    		&:hover {
+    			background: #5C5C5C;
+    		}
+    	}
+    	a.current-file {
+    		background: #000;
+    	}
+    }
+}
+.shell-off {
+	.editor-holder {
+		margin: 30px 0 0 0;
+	}
 }
