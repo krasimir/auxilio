@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('assemble-less');
 
-	grunt.registerTask('default', ['concat', 'less']);
-	// grunt.registerTask('default', ['concat', 'less', 'watch']);
+	// grunt.registerTask('default', ['concat', 'less']);
+	grunt.registerTask('default', ['concat', 'less', 'watch']);
 
 }
