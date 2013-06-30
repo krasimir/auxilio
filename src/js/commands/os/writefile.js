@@ -19,7 +19,7 @@ Commands.register("writefile", {
 			Shell.socket().on("writefile", onFileSaved);
 			Shell.socket().emit("writefile", {file: file, content: content});
 		} else {
-			NoShellError();
+			NoShellError("writefile: no shell");
 			callback();
 		}
 	},

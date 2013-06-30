@@ -1,13 +1,14 @@
 var TreeCommandIsSoketAdded = false;
 Commands.register("tree", {
 	requiredArguments: 0,
-	format: '<pre>tree [regex or deep]</pre>',
+	format: '<pre>tree [regex | deep] [suppressdisplay]</pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
 		var self = this;
 		var deep = -1;
 		var regex = args.length > 0 ? args.shift() : '';
+		var suppressdisplay = args.length > 0 ? args.shift() : false;
 		regex = typeof regex != 'string' ? '' : regex;
 		if(!isNaN(regex)) {
 			deep = parseInt(regex);
@@ -16,13 +17,15 @@ Commands.register("tree", {
 		if(Shell.connected() && Shell.socket()) {
 			var onTreeDataReceived = function(res) {
 				Shell.socket().removeListener("tree", onTreeDataReceived);
-				if(res.result) self.formatResult(res.result, regex, deep);
-				callback();
+				if(suppressdisplay === false && res.result) {
+					self.formatResult(res.result, regex, deep);
+				}
+				callback(res);
 			}
 			Shell.socket().on("tree", onTreeDataReceived);
 			Shell.socket().emit("tree", {dir: './'});
 		} else {
-			NoShellError();
+			NoShellError("tree: no shell");
 			callback();
 		}
 	},
@@ -84,7 +87,9 @@ Commands.register("tree", {
 	},
 	man: function() {
 		return 'Shows a directory tree.<br />\
-		regex - regular expression for filtering the output</i>\
+		regex - regular expression for filtering the output</i><br />\
+		deep - the depth of the directory tree<br />\
+		suppressdisplay - just return the result in a command\'s callback without to display the result\
 		';
 	}	
 })

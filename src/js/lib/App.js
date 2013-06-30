@@ -11,7 +11,6 @@ var App = {
 		this.commandsHistory = [];
 		this.commandsHistoryIndex = -1;
 		this.defineUserEvents();
-		this.loadProfile();
 		this.registerAliases();
 		this.getCommandsHistory();
 		this.command.focus();
@@ -209,16 +208,11 @@ var App = {
 			"hr",
 			"jshint",
 			"readfile",
-			"writefile"
+			"writefile",
+			"profile",
+			"tree"
 		];
 		return _.indexOf(commandsToAvoid, command) >= 0;
-	},
-	loadProfile: function() {
-		exec("storage get profiledata", function(data) {
-			if(data.profiledata && data.profiledata !== "") {
-				exec(data.profiledata.replace(/\n/g, ' && '));
-			}
-		});
 	},
 	registerAliases: function() {
 		var self = this;

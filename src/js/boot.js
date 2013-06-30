@@ -7,6 +7,7 @@ window.onload = function() {
 	App.init();
 	Context.init();
 	Shell.init();
+	Profile.init();
 	document.querySelector("body").addEventListener("keydown", function(e) {
 		if(e.ctrlKey && e.keyCode === 123) {
 			App.command.focus();

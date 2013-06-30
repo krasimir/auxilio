@@ -17,7 +17,7 @@ Commands.register("shell", {
 			if(args.length === 0) {
 				Shell.connect();
 			} else {
-				NoShellError();
+				NoShellError("shell: shell is not connected");
 			}
 			callback();
 		}

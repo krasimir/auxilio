@@ -25,7 +25,7 @@ Commands.register("readfile", {
 			Shell.socket().on("readfile", onFileRead);
 			Shell.socket().emit("readfile", {file: file, id: id});
 		} else {
-			NoShellError();
+			NoShellError("readfile: no shell");
 			callback();
 		}
 	},

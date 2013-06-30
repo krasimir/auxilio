@@ -57,7 +57,7 @@ var WatchHelper = (function() {
 			_initCallback = callback;
 			Shell.socket().emit("watch", _.extend({auxilioId: auxilioId}, data));
 		} else {
-			NoShellError();
+			NoShellError("watch: no shell");
 			callback();
 		}
 	}

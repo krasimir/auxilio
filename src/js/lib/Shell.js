@@ -93,11 +93,12 @@ var Shell = (function() {
 
 })();
 
-var NoShellError = function() {
+var NoShellError = function(reason) {
 	exec("\
 error Sorry, there is no back-end running or you misspell the command.\
 <br />To install the auxilio's nodejs module type:\
 <pre>npm install -g auxilio-backend\n\
 auxilio-backend</pre>\
+" + (reason ? "Reason:<pre>" + reason + "</pre>" : "") + "\
 ");
 }

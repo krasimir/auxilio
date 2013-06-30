@@ -1,11 +1,11 @@
 Commands.register("execjs", {
-	requiredArguments: 2,
+	requiredArguments: 1,
 	format: '<pre>execjs [js function] [parameter]</pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
 		var js = args.shift().replace(/\n/g, '');
-		var parameter = args.shift();
+		var parameter = args.length > 0 ? args.shift() : false;
 		var self = this;
 		js = ApplyVariables(js);
 		if(js.toString().indexOf("function") === 0) {
@@ -15,7 +15,7 @@ Commands.register("execjs", {
 				if(typeof res == 'object') {
 					res = res.join(' ');
 				}
-				self.evalJSCode(res.replace(/ && /g, '\n'), parameter, callback);
+				self.evalJSCode(res.replace(/ && /g, '\n').replace(/\n/g, '').replace(/\r/g, ''), parameter, callback);
 			});
 		}
 	},
