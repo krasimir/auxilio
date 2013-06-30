@@ -24,7 +24,7 @@ var Context = (function() {
 		var gitStatusMarkup = '';
 		if(_gitstatus && _gitstatus.branch) {
 			gitStatusMarkup += '&nbsp;&nbsp;<span style="background: #FFF;">&nbsp;';
-			gitStatusMarkup += '<b style="color:' + (_gitstatus.branch === 'master' ? '#F00' : '#B4833A') + '">' + _gitstatus.branch + '</b>';
+			gitStatusMarkup += '<b style="color:' + (_gitstatus.branch.replace(/(<([^>]+)>)/ig, '') === 'master' ? '#F00' : '#18B6AE') + '">' + _gitstatus.branch + '</b>';
 			if(_gitstatus.status) {
 				gitStatusMarkup += '&nbsp;/&nbsp;';
 				for(var i in _gitstatus.status) {
