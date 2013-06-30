@@ -182,6 +182,10 @@ Commands.register("exec", {
 	requiredArguments: 1,
 	format: '<pre>exec [command/s]</pre>',
 	run: function(args, callback) {
+		var strToExecute = args.join(" ");
+		if(strToExecute.indexOf('\n') >= 0) {
+			strToExecute = strToExecute.join(" ").replace(/\n/g, ' && ');
+		}
 		exec(args.join(" "), function(res) {
 			callback(res);
 		});
@@ -228,19 +232,6 @@ Commands.register("execjs", {
 		date &amp;&amp; execjs "function fName(date) { exec(\'echo \' + date); }"\
 		[js function] could be also a regular command, like <i>inject</i> for example\
 		';
-	}	
-})
-Commands.register("execl", {
-	requiredArguments: 1,
-	format: '<pre>execl</pre>',
-	run: function(args, callback) {
-		args = args.join(" ").replace(/\n/g, ' && ');
-		exec(args, function(res) {
-			callback(res);
-		});
-	},
-	man: function() {
-		return 'Executes a given command/s. Accepts commands separated by new line.';
 	}	
 })
 Commands.register("history", {
