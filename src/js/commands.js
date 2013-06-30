@@ -747,30 +747,36 @@ var Profile = (function() {
 			Autocomplete.prepareDictionary();
 		});	
 	}
-	var loadOtherFiles = function() {
+	var loadOtherFiles = function(callback) {
 		var parts = _path.replace(/\\/g, '/').split("/");
 		parts.pop();
 		var dir = parts.join("/");
 		var cwd = Context.get();
-		exec("cd " + dir, function() {
-			exec("tree -1 suppressdislay", function(res) {
-				if(res && res.result) {
-					var indexFile = _path.replace(/\\/g, '/').split('/').pop();
-					var parseDir = function(childs, dir) {
-						for(var f in childs) {
-							if(f != indexFile) {
-								if(typeof childs[f] === 'string') {
-									registerFile(dir + "/" + f);
-								} else {
-									parseDir(childs[f], dir + "/" + f);
+		exec("cd " + dir, function(res) {
+			if(res.stderr && res.stderr != '') {
+				exec('error Wrong profile path ' + _path);
+				callback(false);
+			} else {
+				exec("tree -1 suppressdislay", function(res) {
+					if(res && res.result) {
+						var indexFile = _path.replace(/\\/g, '/').split('/').pop();
+						var parseDir = function(childs, dir) {
+							for(var f in childs) {
+								if(f != indexFile) {
+									if(typeof childs[f] === 'string') {
+										registerFile(dir + "/" + f);
+									} else {
+										parseDir(childs[f], dir + "/" + f);
+									}
 								}
 							}
 						}
+						parseDir(res.result, dir);	
 					}
-					parseDir(res.result, dir);	
-				}
-				exec("cd " + cwd);
-			});
+					exec("cd " + cwd);
+				});
+				callback(true);
+			}
 		});		
 	}
 	var init = function() {
@@ -778,8 +784,9 @@ var Profile = (function() {
 			exec("profile", function(path) {
 				if(path && path !== '') {
 					_path = path.toString();
-					loadOtherFiles();
-					loadFile(_path);
+					loadOtherFiles(function(res) {
+						if(res) loadFile(_path);
+					});
 				}
 			});
 			Shell.socket().removeListener("updatecontext", onSocketConnect);
