@@ -951,6 +951,9 @@ var Editor = (function() {
 	}
 	var addFile = function(file) {
 		exec("readfile " + file, function(content) {
+			if(typeof content === 'object') {
+				content = content.content;
+			}
 			if(content !== null) {
 				_files.push({
 					file: Context.get() + "/" + file,
