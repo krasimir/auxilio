@@ -12,7 +12,7 @@ Commands.register("writefile", {
 				if(res.error) {
 					exec("error " + res.error);
 				} else if(res.content) {
-					exec("success " + res.content);
+					exec("success <small>" + res.content + "</small>");
 				}
 				callback();
 			}

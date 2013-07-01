@@ -77,7 +77,7 @@ var Editor = (function() {
 		exec("readfile " + file, function(content) {
 			if(content !== null) {
 				_files.push({
-					file: file,
+					file: Context.get() + "/" + file,
 					content: content
 				});
 				_currentFile = _files.length-1;

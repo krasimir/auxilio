@@ -953,7 +953,7 @@ var Editor = (function() {
 		exec("readfile " + file, function(content) {
 			if(content !== null) {
 				_files.push({
-					file: file,
+					file: Context.get() + "/" + file,
 					content: content
 				});
 				_currentFile = _files.length-1;
@@ -1927,7 +1927,7 @@ Commands.register("writefile", {
 				if(res.error) {
 					exec("error " + res.error);
 				} else if(res.content) {
-					exec("success " + res.content);
+					exec("success <small>" + res.content + "</small>");
 				}
 				callback();
 			}
