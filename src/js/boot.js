@@ -30,7 +30,7 @@ var gotoClick = function(e) {
 	if(e.target.getAttribute("data-type") === "file") {
 		exec('shell ' + e.target.getAttribute("data-path"));
 	} else {
-		exec('shell cd ' + e.target.getAttribute("data-path") + ' && ls');
+		exec('shell cd ' + e.target.getAttribute("data-path"));
 	}
 }
 var attachGotoEvents = function() {
