@@ -3,6 +3,8 @@ Commands.register("import", {
 	format: '<pre>import [path]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
+	totalFiles: 0,
+	totalFilesProcessed: 0,
 	run: function(args, callback) {
 
 		var _path = args.join(" ");
@@ -57,7 +59,9 @@ Commands.register("import", {
 		var loadFiles = function(callback) {
 			var dir = _path;
 			var cwd = Context.get();
+			var self = this;
 			Shell.suppressErrorsOnce(); // suppress the errors if cd to a file
+			this.totalFiles = this.totalFilesProcessed = 0;
 			exec("cd " + dir, function(res) {
 				if(res.stderr && res.stderr != '') {
 					// tries to import a specific file
@@ -66,10 +70,29 @@ Commands.register("import", {
 				} else {
 					exec("tree -1 suppressdislay", function(res) {
 						if(res && res.result) {
+
+							// counting files
+							var count = function(files) {
+								for(var f in files) {
+									if(files[f] === "file") {
+										self.totalFiles += 1;
+									} else {
+										count(files[f]);
+									}
+								}
+							}
+							count(res.result);
+
+							// processing files
 							var parseDir = function(childs, dir) {
 								for(var f in childs) {
 									if(typeof childs[f] === 'string') {
-										processFile(dir + "/" + f);
+										processFile(dir + "/" + f, function() {
+											self.totalFilesProcessed += 1;
+											if(self.totalFilesProcessed === self.totalFiles) {
+												callback(self.totalFilesProcessed);
+											}
+										});
 									} else {
 										parseDir(childs[f], dir + "/" + f);
 									}
@@ -77,10 +100,10 @@ Commands.register("import", {
 							}
 							exec("cd " + cwd, function() {
 								parseDir(res.result, dir);
-							});							
+							});
+
 						}
 					});
-					callback(true);
 				}
 			});		
 		}
@@ -89,12 +112,12 @@ Commands.register("import", {
 			fileName.pop();
 			return fileName.join(".");
 		}
-		var processFile = function(filePath) {
+		var processFile = function(filePath, callback) {
 			var fileName = getFileName(filePath);
 			if(fileName.indexOf("exec.") === 0) {
-				execFile(filePath);
+				execFile(filePath, callback);
 			} else {
-				registerFile(filePath);
+				registerFile(filePath, callback);
 			}
 		}
 

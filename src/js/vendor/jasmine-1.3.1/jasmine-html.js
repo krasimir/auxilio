@@ -58,7 +58,7 @@ jasmine.HtmlReporterHelpers.addHelpers = function(ctor) {
   }
 };
 
-jasmine.HtmlReporter = function(_doc) {
+jasmine.HtmlReporter = function(_doc, renderIn) {
   var self = this;
   var doc = _doc || window.document;
 
@@ -77,7 +77,7 @@ jasmine.HtmlReporter = function(_doc) {
     }
 
     createReporterDom(runner.env.versionString());
-    doc.body.appendChild(dom.reporter);
+    (renderIn || doc.body).appendChild(dom.reporter);
     setExceptionHandling();
 
     reporterView = new jasmine.HtmlReporter.ReporterView(dom);

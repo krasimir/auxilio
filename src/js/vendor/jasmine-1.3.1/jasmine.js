@@ -797,6 +797,9 @@ jasmine.Env.prototype.nextSuiteId = function () {
 jasmine.Env.prototype.addReporter = function(reporter) {
   this.reporter.addReporter(reporter);
 };
+jasmine.Env.prototype.clearReporters = function(reporter) {
+  this.reporter.clear();
+};
 
 jasmine.Env.prototype.execute = function() {
   this.currentRunner_.execute();
@@ -1767,6 +1770,10 @@ jasmine.util.inherit(jasmine.MultiReporter, jasmine.Reporter);
 
 jasmine.MultiReporter.prototype.addReporter = function(reporter) {
   this.subReporters_.push(reporter);
+};
+
+jasmine.MultiReporter.prototype.clear = function(reporter) {
+  this.subReporters_ = [];
 };
 
 (function() {

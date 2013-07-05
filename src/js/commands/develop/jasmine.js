@@ -6,20 +6,21 @@ Commands.register("jasmine", {
 	run: function(args, callback) {
 		var path = args.join(" ");
 		var id = _.uniqueId("jasminetest");
-		var markup = '<div id="' + id + '"></div>';
-		App.setOutputPanelContent(markup);
-		exec("import " + path, function() {
-			setTimeout(function() {
+		(function(id) {
+			var markup = '<div id="' + id + '"></div>';
+			App.setOutputPanelContent(markup);
+			exec("import " + path, function(totalFilesProcessed) {
 				var jasmineEnv = jasmine.getEnv();
-				var htmlReporter = new jasmine.HtmlReporter(document.getElementById(id));
+				var htmlReporter = new jasmine.HtmlReporter(null, document.getElementById(id));
 				jasmineEnv.updateInterval = 1000;
+				jasmineEnv.clearReporters();
 				jasmineEnv.addReporter(htmlReporter);
 				jasmineEnv.specFilter = function(spec) {
 					return htmlReporter.specFilter(spec);
 				};
 				jasmineEnv.execute();
-			}, 2000)
-		});
+			});
+		})(id);
 	},
 	man: function() {
 		return 'Runs jasmine tests.';
