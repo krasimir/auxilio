@@ -7,7 +7,8 @@ var Shell = (function() {
 		_retryTriesMax = 20,
 		_socket,
 		_connected = false,
-		_cache = {};
+		_cache = {},
+		_suppressErrorsOnce = false;
 
 	var connect = function() {
 		if(_connected) { return; }
@@ -26,9 +27,11 @@ var Shell = (function() {
 			if(res.id && _cache[res.id]) {
 				var output = document.getElementById(res.id);
 				if(output) {
-					if(res.stderr !== "") {
+					if(res.stderr !== "" && !_suppressErrorsOnce) {
 						output.style.display = "block";
-						output.innerHTML += '<div class="regular-shell shell-error">' + formatOutput(res.stderr) + '</div>';
+						output.innerHTML += '<div class="regular-shell shell-error">' + formatOutput(res.stderr) + '</div>';		
+					} else {
+						_suppressErrorsOnce = false;
 					}
 					if(res.stdout !== '') {
 						output.style.display = "block";
@@ -82,13 +85,17 @@ var Shell = (function() {
 	var formatOutput = function(str) {
 		return str.replace(/\n/g, '<br />').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 	}
+	var suppressErrorsOnce = function() {
+		_suppressErrorsOnce = true;
+	}
 
 	return {
 		init: init,
 		send: send,
 		connected: connected,
 		connect: connect,
-		socket: function() { return _socket; }
+		socket: function() { return _socket; },
+		suppressErrorsOnce: suppressErrorsOnce
 	}
 
 })();

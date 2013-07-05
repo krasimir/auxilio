@@ -210,7 +210,8 @@ var App = {
 			"readfile",
 			"writefile",
 			"profile",
-			"tree"
+			"tree",
+			"import"
 		];
 		return _.indexOf(commandsToAvoid, command) >= 0;
 	},

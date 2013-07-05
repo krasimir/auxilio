@@ -1,86 +1,10 @@
 var Profile = (function() {
 
-	var _path = null;
-
-	var evalJSCode = function(js, parameter, callback) {
-		var funcResult = null;
-		try {
-			eval("var auxilioFunction=" + js);
-			if(typeof auxilioFunction !== "undefined") {
-				funcResult = auxilioFunction(parameter);
-			}
-		} catch(e) {
-			exec("error Error executing<pre>" + js + "</pre>" + e.message + "<pre>" + e.stack + "</pre>");
-		}
-		callback(funcResult);
-	}
-	var loadFile = function(path, callback) {
-		exec("readfile " + path, function(content) {
-			var js = content.replace(/\n/g, '').replace(/\r/g, '');
-			evalJSCode(js, null, callback);
-		});
-	}
-	var registerFile = function(path, callback) {
-		exec("readfile " + path, function(content) {
-			var js = content.replace(/\n/g, '').replace(/\r/g, '');
-			var fileName = path.replace(/\\/g, '/').split('/').pop().split(".");
-			fileName.pop();
-			fileName = fileName.join(".");
-			Commands.register(fileName, {
-				requiredArguments: 0,
-				format: 'profile method',
-				lookForQuotes: true,
-				concatArgs: true,
-				run: function(args, callback) {
-					evalJSCode(js, args, callback);
-				},
-				man: function() {
-					return '<pre>profile method</pre>';
-				}	
-			});
-			Autocomplete.prepareDictionary();
-		});	
-	}
-	var loadOtherFiles = function(callback) {
-		var parts = _path.replace(/\\/g, '/').split("/");
-		parts.pop();
-		var dir = parts.join("/");
-		var cwd = Context.get();
-		exec("cd " + dir, function(res) {
-			if(res.stderr && res.stderr != '') {
-				exec('error Wrong profile path ' + _path);
-				callback(false);
-			} else {
-				exec("tree -1 suppressdislay", function(res) {
-					if(res && res.result) {
-						var indexFile = _path.replace(/\\/g, '/').split('/').pop();
-						var parseDir = function(childs, dir) {
-							for(var f in childs) {
-								if(f != indexFile) {
-									if(typeof childs[f] === 'string') {
-										registerFile(dir + "/" + f);
-									} else {
-										parseDir(childs[f], dir + "/" + f);
-									}
-								}
-							}
-						}
-						parseDir(res.result, dir);	
-					}
-					exec("cd " + cwd);
-				});
-				callback(true);
-			}
-		});		
-	}
 	var init = function() {
 		var onSocketConnect = function() {
 			exec("profile", function(path) {
 				if(path && path !== '') {
-					_path = path.toString();
-					loadOtherFiles(function(res) {
-						if(res) loadFile(_path);
-					});
+					exec("import " + path);
 				}
 			});
 			Shell.socket().removeListener("updatecontext", onSocketConnect);

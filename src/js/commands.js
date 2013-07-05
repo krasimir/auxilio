@@ -111,7 +111,7 @@ Commands.register("diff", {
 	run: function(args, callback) {
 		if(args.length === 0) {
 			var self = this;
-			exec("inject raw", function(res) {
+			exec("readfiles raw", function(res) {
 				if(!res) {
 					callback();
 					return;
@@ -194,46 +194,6 @@ Commands.register("exec", {
 		return 'Executes a given command. Accepts commands separated by <i>&&</i>.';
 	}	
 })
-Commands.register("execjs", {
-	requiredArguments: 1,
-	format: '<pre>execjs [js function] [parameter]</pre>',
-	lookForQuotes: true,
-	concatArgs: true,
-	run: function(args, callback) {
-		var js = args.shift().replace(/\n/g, '');
-		var parameter = args.length > 0 ? args.shift() : false;
-		var self = this;
-		js = ApplyVariables(js);
-		if(js.toString().indexOf("function") === 0) {
-			this.evalJSCode(js, parameter, callback);
-		} else {
-			exec(js, function(res) {
-				if(typeof res == 'object') {
-					res = res.join(' ');
-				}
-				self.evalJSCode(res.replace(/ && /g, '\n').replace(/\n/g, '').replace(/\r/g, ''), parameter, callback);
-			});
-		}
-	},
-	evalJSCode: function(js, parameter, callback) {
-		var funcResult = null;
-		try {
-			eval("var auxilioFunction=" + js);
-			if(typeof auxilioFunction !== "undefined") {
-				funcResult = auxilioFunction(parameter);
-			}
-		} catch(e) {
-			exec("error Error executing<pre>" + js + "</pre>" + e.message + "<pre>" + e.stack + "</pre>");
-		}
-		callback(funcResult);
-	},
-	man: function() {
-		return 'Evals a javascript function. It is very useful to use the command together with others. Like for example:<br />\
-		date &amp;&amp; execjs "function fName(date) { exec(\'echo \' + date); }"\
-		[js function] could be also a regular command, like <i>inject</i> for example\
-		';
-	}	
-})
 Commands.register("history", {
 	requiredArguments: 0,
 	format: '<pre>history</pre>',
@@ -258,95 +218,6 @@ Commands.register("history", {
 	},
 	man: function() {
 		return 'Outputs the current console\'s history.';
-	}	
-})
-Commands.register("inject", {
-	requiredArguments: 0,
-	format: '<pre>inject [type]</pre>',
-	processing: false,
-	files: null,
-	filesRaw: null,
-	proccessedFiles: -1,
-	commands: [],
-	callback: null,
-	type: 'auxilio',
-	run: function(args, callback) {
-		this.type = args.length > 0 ? args.shift() : 'auxilio';
-		this.callback = callback;
-		if(this.processing) {
-			exec("error Sorry but <b>inject</b> command is working right now. Try again later.");
-			this.callback();
-			return;
-		}
-		this.reset();
-		var id = _.uniqueId("files");
-		var self = this;
-		var input = 'Choose a file(s): <input type="file" id="' + id + '" name="files[]" multiple />';
-		exec('echo ' + input);
-		this.inputElement = document.getElementById(id);
-		this.inputElement.addEventListener('change', function(e) {
-			self.processing = true;
-			self.handleFileSelected(e);
-		}, false);
-		this.inputElement.focus();
-		this.inputElement.click();
-	},
-	handleFileSelected: function(e) {
-		this.files = e.target.files;
-		var message = '<b>Selected file(s):</b><br />';
-		var self = this;
-		for(var i=0, f; f=this.files[i]; i++) {
-			message += f.name + "<br />";
-			var reader = new FileReader();
-			(function(reader, f) {
-				reader.onload = function(e) {
-					if(e.target.result) {
-						switch(self.type) {
-							case 'raw': self.handleFileReadRaw(f, e.target.result); break;
-							default: self.handleFileRead(f, e.target.result); break;
-						}						
-					}
-				};
-				reader.readAsText(f);
-			})(reader, f);
-		}
-		exec('echo ' + message);
-	},
-	handleFileRead: function(file, content) {
-		var fileCommands = content.split("\n");
-		for(var i=0, c; c = fileCommands[i]; i++) {
-			this.commands.push(c.replace(/\n/g, '').replace(/\r/g, ''));
-		}
-		this.proccessedFiles += 1;
-		if(this.proccessedFiles == this.files.length-1) {
-			var commandsString = this.commands.join(" && ");
-			this.inputElement.style.display = "none";
-			App.setFocus();
-			this.callback(commandsString);
-			this.reset();
-		}
-	},
-	handleFileReadRaw: function(file, content) {
-		if(!this.filesRaw) this.filesRaw = [];
-		this.filesRaw.push({file: file, content: content});
-		this.proccessedFiles += 1;
-		if(this.proccessedFiles == this.files.length-1) {			
-			this.inputElement.style.display = "none";
-			App.setFocus();
-			this.callback(this.filesRaw);
-			this.reset();
-		}
-	},
-	reset: function() {
-		this.processing = false;
-		this.files = null;
-		this.proccessedFiles = -1;
-		this.commands = [];
-		this.filesRaw = null;
-	},
-	man: function() {
-		return 'Inject external javascript to be run in the context of Auxilio and current page. By default the command works with <i>type=auxilio</i>.\
-		It could be also <i>type=raw</i>. Then instead of string the callback is called with an object containing the files.';
 	}	
 })
 Commands.register("l", {
@@ -697,87 +568,11 @@ Commands.register("alias", {
 })
 var Profile = (function() {
 
-	var _path = null;
-
-	var evalJSCode = function(js, parameter, callback) {
-		var funcResult = null;
-		try {
-			eval("var auxilioFunction=" + js);
-			if(typeof auxilioFunction !== "undefined") {
-				funcResult = auxilioFunction(parameter);
-			}
-		} catch(e) {
-			exec("error Error executing<pre>" + js + "</pre>" + e.message + "<pre>" + e.stack + "</pre>");
-		}
-		callback(funcResult);
-	}
-	var loadFile = function(path, callback) {
-		exec("readfile " + path, function(content) {
-			var js = content.replace(/\n/g, '').replace(/\r/g, '');
-			evalJSCode(js, null, callback);
-		});
-	}
-	var registerFile = function(path, callback) {
-		exec("readfile " + path, function(content) {
-			var js = content.replace(/\n/g, '').replace(/\r/g, '');
-			var fileName = path.replace(/\\/g, '/').split('/').pop().split(".");
-			fileName.pop();
-			fileName = fileName.join(".");
-			Commands.register(fileName, {
-				requiredArguments: 0,
-				format: 'profile method',
-				lookForQuotes: true,
-				concatArgs: true,
-				run: function(args, callback) {
-					evalJSCode(js, args, callback);
-				},
-				man: function() {
-					return '<pre>profile method</pre>';
-				}	
-			});
-			Autocomplete.prepareDictionary();
-		});	
-	}
-	var loadOtherFiles = function(callback) {
-		var parts = _path.replace(/\\/g, '/').split("/");
-		parts.pop();
-		var dir = parts.join("/");
-		var cwd = Context.get();
-		exec("cd " + dir, function(res) {
-			if(res.stderr && res.stderr != '') {
-				exec('error Wrong profile path ' + _path);
-				callback(false);
-			} else {
-				exec("tree -1 suppressdislay", function(res) {
-					if(res && res.result) {
-						var indexFile = _path.replace(/\\/g, '/').split('/').pop();
-						var parseDir = function(childs, dir) {
-							for(var f in childs) {
-								if(f != indexFile) {
-									if(typeof childs[f] === 'string') {
-										registerFile(dir + "/" + f);
-									} else {
-										parseDir(childs[f], dir + "/" + f);
-									}
-								}
-							}
-						}
-						parseDir(res.result, dir);	
-					}
-					exec("cd " + cwd);
-				});
-				callback(true);
-			}
-		});		
-	}
 	var init = function() {
 		var onSocketConnect = function() {
 			exec("profile", function(path) {
 				if(path && path !== '') {
-					_path = path.toString();
-					loadOtherFiles(function(res) {
-						if(res) loadFile(_path);
-					});
+					exec("import " + path);
 				}
 			});
 			Shell.socket().removeListener("updatecontext", onSocketConnect);
@@ -1651,6 +1446,113 @@ Commands.register("cwd", {
 		return 'Returns the current working directory of auxilio-backend.';
 	}	
 })
+Commands.register("import", {
+	requiredArguments: 1,
+	format: '<pre>import [path]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+
+		var _path = args.join(" ");
+
+		var evalJSCode = function(js, parameter, callback) {
+			var funcResult = null;
+			try {
+				eval("var auxilioFunction=" + js);
+				if(typeof auxilioFunction !== "undefined") {
+					funcResult = auxilioFunction(parameter);
+				}
+			} catch(e) {
+				exec("error Error executing<pre>" + js + "</pre>" + e.message + "<pre>" + e.stack + "</pre>");
+			}
+			callback(funcResult);
+		}
+		var execFile = function(path, callback) {
+			exec("readfile " + path, function(content) {
+				var js = content.replace(/\n/g, '').replace(/\r/g, '');
+				if(js.indexOf("function ") !== 0) {
+					exec("warning The file <b>" + path + "</b> doesn't contain a valid command definition");
+					callback();
+					return;
+				}
+				evalJSCode(js, null, callback);
+			});
+		}
+		var registerFile = function(path, callback) {
+			exec("readfile " + path, function(content) {
+				var js = content.replace(/\n/g, '').replace(/\r/g, '');
+				if(js.indexOf("function ") !== 0) {
+					exec("warning The file <b>" + path + "</b> doesn't contain a valid command definition");
+					callback();
+					return;
+				};
+				var fileName = getFileName(path);
+				Commands.register(fileName, {
+					requiredArguments: 0,
+					format: '',
+					lookForQuotes: true,
+					concatArgs: true,
+					run: function(args, callback) {
+						evalJSCode(js, args, callback);
+					},
+					man: function() {
+						return '';
+					}	
+				});
+				Autocomplete.prepareDictionary();
+			});	
+		}
+		var loadFiles = function(callback) {
+			var dir = _path;
+			var cwd = Context.get();
+			Shell.suppressErrorsOnce(); // suppress the errors if cd to a file
+			exec("cd " + dir, function(res) {
+				if(res.stderr && res.stderr != '') {
+					// tries to import a specific file
+					processFile(dir);
+					callback();
+				} else {
+					exec("tree -1 suppressdislay", function(res) {
+						if(res && res.result) {
+							var parseDir = function(childs, dir) {
+								for(var f in childs) {
+									if(typeof childs[f] === 'string') {
+										processFile(dir + "/" + f);
+									} else {
+										parseDir(childs[f], dir + "/" + f);
+									}
+								}
+							}
+							exec("cd " + cwd, function() {
+								parseDir(res.result, dir);
+							});							
+						}
+					});
+					callback(true);
+				}
+			});		
+		}
+		var getFileName = function(path) {
+			var fileName = path.replace(/\\/g, '/').split('/').pop().split(".");
+			fileName.pop();
+			return fileName.join(".");
+		}
+		var processFile = function(filePath) {
+			var fileName = getFileName(filePath);
+			if(fileName.indexOf("exec.") === 0) {
+				execFile(filePath);
+			} else {
+				registerFile(filePath);
+			}
+		}
+
+		loadFiles(callback);
+
+	},
+	man: function() {
+		return 'Register or execute commands stored in external files. Accepts just a path.';
+	}	
+})
 Commands.register("readfile", {
 	requiredArguments: 1,
 	format: '<pre>readfile [file]</pre>',
@@ -1684,6 +1586,95 @@ Commands.register("readfile", {
 	},
 	man: function() {
 		return 'Read content of a file.';
+	}	
+})
+Commands.register("readfiles", {
+	requiredArguments: 0,
+	format: '<pre>readfiles [type]</pre>',
+	processing: false,
+	files: null,
+	filesRaw: null,
+	proccessedFiles: -1,
+	commands: [],
+	callback: null,
+	type: 'auxilio',
+	run: function(args, callback) {
+		this.type = args.length > 0 ? args.shift() : 'auxilio';
+		this.callback = callback;
+		if(this.processing) {
+			exec("error Sorry but <b>readfiles</b> command is working right now. Try again later.");
+			this.callback();
+			return;
+		}
+		this.reset();
+		var id = _.uniqueId("files");
+		var self = this;
+		var input = 'Choose a file(s): <input type="file" id="' + id + '" name="files[]" multiple />';
+		exec('echo ' + input);
+		this.inputElement = document.getElementById(id);
+		this.inputElement.addEventListener('change', function(e) {
+			self.processing = true;
+			self.handleFileSelected(e);
+		}, false);
+		this.inputElement.focus();
+		this.inputElement.click();
+	},
+	handleFileSelected: function(e) {
+		this.files = e.target.files;
+		var message = '<b>Selected file(s):</b><br />';
+		var self = this;
+		for(var i=0, f; f=this.files[i]; i++) {
+			message += f.name + "<br />";
+			var reader = new FileReader();
+			(function(reader, f) {
+				reader.onload = function(e) {
+					if(e.target.result) {
+						switch(self.type) {
+							case 'raw': self.handleFileReadRaw(f, e.target.result); break;
+							default: self.handleFileRead(f, e.target.result); break;
+						}						
+					}
+				};
+				reader.readAsText(f);
+			})(reader, f);
+		}
+		exec('echo ' + message);
+	},
+	handleFileRead: function(file, content) {
+		var fileCommands = content.split("\n");
+		for(var i=0, c; c = fileCommands[i]; i++) {
+			this.commands.push(c.replace(/\n/g, '').replace(/\r/g, ''));
+		}
+		this.proccessedFiles += 1;
+		if(this.proccessedFiles == this.files.length-1) {
+			var commandsString = this.commands.join(" && ");
+			this.inputElement.style.display = "none";
+			App.setFocus();
+			this.callback(commandsString);
+			this.reset();
+		}
+	},
+	handleFileReadRaw: function(file, content) {
+		if(!this.filesRaw) this.filesRaw = [];
+		this.filesRaw.push({file: file, content: content});
+		this.proccessedFiles += 1;
+		if(this.proccessedFiles == this.files.length-1) {			
+			this.inputElement.style.display = "none";
+			App.setFocus();
+			this.callback(this.filesRaw);
+			this.reset();
+		}
+	},
+	reset: function() {
+		this.processing = false;
+		this.files = null;
+		this.proccessedFiles = -1;
+		this.commands = [];
+		this.filesRaw = null;
+	},
+	man: function() {
+		return 'Inject external javascript to be run in the context of Auxilio and current page. By default the command works with <i>type=auxilio</i>.\
+		It could be also <i>type=raw</i>. Then instead of string the callback is called with an object containing the files.';
 	}	
 })
 Commands.register("shell", {

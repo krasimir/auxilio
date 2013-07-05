@@ -1,6 +1,6 @@
-Commands.register("inject", {
+Commands.register("readfiles", {
 	requiredArguments: 0,
-	format: '<pre>inject [type]</pre>',
+	format: '<pre>readfiles [type]</pre>',
 	processing: false,
 	files: null,
 	filesRaw: null,
@@ -12,7 +12,7 @@ Commands.register("inject", {
 		this.type = args.length > 0 ? args.shift() : 'auxilio';
 		this.callback = callback;
 		if(this.processing) {
-			exec("error Sorry but <b>inject</b> command is working right now. Try again later.");
+			exec("error Sorry but <b>readfiles</b> command is working right now. Try again later.");
 			this.callback();
 			return;
 		}

@@ -6,7 +6,7 @@ Commands.register("diff", {
 	run: function(args, callback) {
 		if(args.length === 0) {
 			var self = this;
-			exec("inject raw", function(res) {
+			exec("readfiles raw", function(res) {
 				if(!res) {
 					callback();
 					return;
