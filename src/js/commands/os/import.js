@@ -17,7 +17,7 @@ Commands.register("import", {
 			} catch(e) {
 				exec("error Error executing<pre>" + js + "</pre>" + e.message + "<pre>" + e.stack + "</pre>");
 			}
-			callback(funcResult);
+			if(callback) callback(funcResult);
 		}
 		var execFile = function(path, callback) {
 			exec("readfile " + path, function(content) {
