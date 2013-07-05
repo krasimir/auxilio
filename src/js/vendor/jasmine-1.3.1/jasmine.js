@@ -1060,16 +1060,19 @@ jasmine.Block = function(env, func, spec) {
 
 jasmine.Block.prototype.execute = function(onComplete) {
   if (!jasmine.CATCH_EXCEPTIONS) {
-    this.func.apply(this.spec);
+    this.func.apply(this.spec, [function() {
+      onComplete();
+    }]);
   }
   else {
     try {
-      this.func.apply(this.spec);
+      this.func.apply(this.spec, [function() {
+      onComplete();
+    }]);
     } catch (e) {
       this.spec.fail(e);
     }
   }
-  onComplete();
 };
 /** JavaScript API reporter.
  *
