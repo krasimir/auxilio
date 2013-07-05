@@ -883,7 +883,7 @@ Commands.register("jasmine", {
 			exec("import " + path, function(totalFilesProcessed) {
 				var jasmineEnv = jasmine.getEnv();
 				var htmlReporter = new jasmine.HtmlReporter(null, document.getElementById(id));
-				jasmineEnv.updateInterval = 1000;
+				jasmineEnv.updateInterval = 4000;
 				jasmineEnv.clearReporters();
 				jasmineEnv.addReporter(htmlReporter);
 				jasmineEnv.specFilter = function(spec) {
@@ -1541,8 +1541,7 @@ Commands.register("import", {
 			exec("cd " + dir, function(res) {
 				if(res.stderr && res.stderr != '') {
 					// tries to import a specific file
-					processFile(dir);
-					callback();
+					processFile(dir, callback);
 				} else {
 					exec("tree -1 suppressdislay", function(res) {
 						if(res && res.result) {

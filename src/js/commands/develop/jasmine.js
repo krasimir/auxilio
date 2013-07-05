@@ -12,7 +12,7 @@ Commands.register("jasmine", {
 			exec("import " + path, function(totalFilesProcessed) {
 				var jasmineEnv = jasmine.getEnv();
 				var htmlReporter = new jasmine.HtmlReporter(null, document.getElementById(id));
-				jasmineEnv.updateInterval = 1000;
+				jasmineEnv.updateInterval = 4000;
 				jasmineEnv.clearReporters();
 				jasmineEnv.addReporter(htmlReporter);
 				jasmineEnv.specFilter = function(spec) {

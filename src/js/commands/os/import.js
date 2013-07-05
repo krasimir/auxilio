@@ -65,8 +65,7 @@ Commands.register("import", {
 			exec("cd " + dir, function(res) {
 				if(res.stderr && res.stderr != '') {
 					// tries to import a specific file
-					processFile(dir);
-					callback();
+					processFile(dir, callback);
 				} else {
 					exec("tree -1 suppressdislay", function(res) {
 						if(res && res.result) {
