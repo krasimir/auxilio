@@ -1,0 +1,49 @@
+.manual {
+	padding: 6px;
+	background: lighten(@color-a, 35%);
+	border-radius: 4px;
+	p {
+		margin: 0;
+		padding: 0;
+	}
+	pre {
+		font-size: 14px;
+		line-height: 16px;
+	}
+	.c1, .c2 {
+		box-sizing: border-box;
+		float: left;
+	}
+	.c1 {
+		width: 30%;
+		padding: 0 10px 0 0;
+		.title {
+			font-size: 20px;
+			background: @color-tree;
+			padding: 2px 6px 2px 6px;
+			border-radius: 4px;
+			font-weight: bold;
+			margin: 0 0 4px 0;
+			border: solid 1px darken(@color-tree, 20%);
+		}
+		.title-small {
+			font-size: 14px;
+			font-weight: bold;
+			margin: 8px 0 0 0;
+		}
+		.desc {
+			font-size: 18px;
+		}
+	}
+	.c2 {
+		width: 70%;
+		border-left: solid 1px @color-a;
+		font-size: 11px;
+		padding: 2px 4px 2px 10px;
+		border-radius: 2px;
+		.title {
+			font-size: 14px;
+			margin: 0 0 10px 0;
+		}
+	}
+}

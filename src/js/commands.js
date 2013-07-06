@@ -3,13 +3,19 @@ Commands.register("clear", {
 		App.clear();
 		callback();
 	},
-	man: function() {
-		return 'Clearing the current console\'s output.';
+	man: {
+		desc: 'Clearing the current console\'s output.',
+		format: 'clear',
+		examples: [
+			{text: '', code: 'clear'},
+			{text: 'In script', code: 'clear()'}
+		],
+		returns: 'null',
+		group: 'common'
 	}
 })
 Commands.register("compare", {
 	requiredArguments: 4,
-	format: '<pre>compare [title] [value1] [expression] [value2]</pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -49,13 +55,23 @@ Commands.register("compare", {
 			return parseInt(v);
 		}
 	},
-	man: function() {
-		return 'Compares values. (Have in mind that it works with strings and numbers.)';
-	}	
+	man: {
+		desc: 'Compares values. (Have in mind that it works only with strings and numbers.)',
+		format: 'compare [title] [value1] [expression] [value2]',
+		examples: [
+			{text: 'Command line', code: 'compare "Check those values" 10 == 20'},
+			{text: 'Command line (chaining)', code: 'date true && read monthName && compare "Is it July?" July =='},
+			{text: 'In script', code: 'compare(["My title here", 10, "==", 10], function(res) {\n\
+	console.log(res);\n\
+})'},
+		],
+		returns: 'Boolean (true | false)',
+		group: 'common'
+	}
 })
 Commands.register("date", {
 	requiredArguments: 0,
-	format: '<pre>date [as object (true | false)]</pre>',
+	format: '<pre></pre>',
 	run: function(args, callback) {
 		var asObject = args.length > 0 ? args.shift() === "true" : false;
 		var currentDate = new Date();
@@ -84,8 +100,27 @@ Commands.register("date", {
 			return d;
 		}
 	},
-	man: function() {
-		return 'Gets the current date.';
+	man: {
+		desc: 'Gets the current date.',
+		format: 'date [true | false]',
+		examples: [
+			{text: 'Command line', code: 'date'},
+			{text: 'Command line (chaining)', code: 'date true && read monthName && info'},
+			{text: 'In script', code: 'date(["true"], function(date) {\n\
+	console.log(date.year);\n\
+})'}
+		],
+		returns: 'String if you use just <i>date</i> and object if use <i>data true</i><pre>6 July 2013 14:43</pre><pre>\
+Object {\n\
+	day: 6\n\
+	hour: 14\n\
+	minutes: 41\n\
+	month: 6\n\
+	monthName: "July"\n\
+	year: 2013\n\
+}\
+		</pre>',
+		group: 'common'
 	}	
 })
 Commands.register("delay", {
@@ -252,16 +287,37 @@ Commands.register("man", {
 	},
 	showCommand:function(commandName) {
 		var c = Commands.get(commandName);
-		if(c) {
-			var message = '(<b>' + commandName + '</b>) ' + (c.man ? c.man() : '');
-			c.format && c.format != '' ? message += '<br />' + c.format : null;
-			exec("echo " + message);
+		var manual = c.man;
+		if(typeof manual === 'object') {
+			var examples = '';
+			for(var i=0; e = manual.examples[i]; i++) {
+				examples += e.text != '' ? '<p>' + e.text + '</p>': '';
+				examples += '<pre>' + e.code + '</pre>';
+			}
+			var markup = '\
+				<div class="manual">\
+					<div class="c1">\
+						<p class="title">' + commandName + '</p>\
+						<p class="desc">' + manual.desc + '</p>\
+						<p class="title-small">Format:</p>\
+						<p>' + manual.format + '</p>\
+						<p class="title-small">Returns:</p>\
+						<p>' + manual.returns + '</p>\
+					</div>\
+					<div class="c2">\
+						<p class="title"><i class="icon-right-hand"></i> Examples:</p>\
+						' + examples + '\
+					</div>\
+					<br class="clear" />\
+				</div>\
+			';
+			App.setOutputPanelContent(markup);
 		}
 	},
 	man: function() {
 		return 'Shows information about available commands.';
 	}
-})
+});
 Commands.register("marker", {
 	requiredArguments: 0,
 	format: '<pre>marker</pre>',
@@ -869,9 +925,9 @@ Commands.register("editor", {
 
 */
 
-Commands.register("jasmine", {
+Commands.register("jasminerunner", {
 	requiredArguments: 1,
-	format: '<pre>jasmine [path]</pre>',
+	format: '<pre>jasminerunner [path]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {

@@ -1,6 +1,5 @@
 Commands.register("compare", {
 	requiredArguments: 4,
-	format: '<pre>compare [title] [value1] [expression] [value2]</pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -40,7 +39,17 @@ Commands.register("compare", {
 			return parseInt(v);
 		}
 	},
-	man: function() {
-		return 'Compares values. (Have in mind that it works with strings and numbers.)';
-	}	
+	man: {
+		desc: 'Compares values. (Have in mind that it works only with strings and numbers.)',
+		format: 'compare [title] [value1] [expression] [value2]',
+		examples: [
+			{text: 'Command line', code: 'compare "Check those values" 10 == 20'},
+			{text: 'Command line (chaining)', code: 'date true && read monthName && compare "Is it July?" July =='},
+			{text: 'In script', code: 'compare(["My title here", 10, "==", 10], function(res) {\n\
+	console.log(res);\n\
+})'},
+		],
+		returns: 'Boolean (true | false)',
+		group: 'common'
+	}
 })

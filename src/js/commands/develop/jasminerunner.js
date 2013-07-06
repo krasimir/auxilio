@@ -1,6 +1,6 @@
-Commands.register("jasmine", {
+Commands.register("jasminerunner", {
 	requiredArguments: 1,
-	format: '<pre>jasmine [path]</pre>',
+	format: '<pre>jasminerunner [path]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {

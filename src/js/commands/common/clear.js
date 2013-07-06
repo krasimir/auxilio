@@ -3,7 +3,14 @@ Commands.register("clear", {
 		App.clear();
 		callback();
 	},
-	man: function() {
-		return 'Clearing the current console\'s output.';
+	man: {
+		desc: 'Clearing the current console\'s output.',
+		format: 'clear',
+		examples: [
+			{text: '', code: 'clear'},
+			{text: 'In script', code: 'clear()'}
+		],
+		returns: 'null',
+		group: 'common'
 	}
 })
