@@ -1,6 +1,5 @@
 Commands.register("exec", {
 	requiredArguments: 1,
-	format: '<pre>exec [command/s]</pre>',
 	run: function(args, callback) {
 		var strToExecute = args.join(" ");
 		if(strToExecute.indexOf('\n') >= 0) {
@@ -10,7 +9,17 @@ Commands.register("exec", {
 			callback(res);
 		});
 	},
-	man: function() {
-		return 'Executes a given command. Accepts commands separated by <i>&&</i>.';
-	}	
+	man: {
+		desc: 'Executes a given command. Accepts commands separated by <i>&&</i>.',
+		format: 'exec [command/s]',
+		examples: [
+			{text: 'Command line', code: 'exec echo "test"'},
+			{text: 'Command line (chaining)', code: 'readfile showing-date.aux && exec'},
+			{text: 'In script', code: 'exec("echo Hello world! && date true", function(res) {\n\
+	console.log(res);\n\
+})'}
+		],
+		returns: 'The result of the executed command.',
+		group: 'common'
+	}
 })

@@ -1,6 +1,5 @@
 Commands.register("read", {
 	requiredArguments: 2,
-	format: '<pre>read [path] [json object]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -45,10 +44,14 @@ Commands.register("read", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Extracts a value from json object. For example:\
-		<br />Let\'s say that we have the following <i>object</i> - {data: { users: [10, 11, 12] }}\
-		<br /><i>read data.users[1] object</i> will return 11\
-		';
+	man: {
+		desc: 'Extracts a value from json object',
+		format: 'read [path] [json object]',
+		examples: [
+			{text: 'Command line (chaining)', code: 'date true && read day && success Today is '},
+			{text: 'If you have a complex object like this one {data: { users: [10, 11, 12] }}', code: 'read data.users[1]'},
+		],
+		returns: 'Value of a property of the sent object',
+		group: 'common'
 	}	
 });

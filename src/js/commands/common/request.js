@@ -1,6 +1,5 @@
 Commands.register("request", {
 	requiredArguments: 1,
-	format: '<pre>request [url]<br />request [url] [raw]</pre>',
 	run: function(args, finished) {
 		var self = this;
 		var url = args.shift();
@@ -25,11 +24,16 @@ Commands.register("request", {
 			request(url, callback);
 		}
 	},
-	man: function() {
-		return 'Sends ajax request and shows the result in the console.<br />\
-		Use <b>raw</b> parameter to leave the data as it is received from the url. \
-		For example:<br />\
-		request github.com true';
+	man: {
+		desc: 'Sends ajax request and returns the result.',
+		format: 'request [url]<br />request [url] [raw (true | false)]',
+		examples: [
+			{text: 'Command line', code: 'request github.com && echo'},
+			{text: 'Getting raw html', code: 'request github.com true && echo'},
+			{text: 'In script', code: 'This command is not supported in external scripts.'}
+		],
+		returns: 'Response of the given url or the raw output if <i>raw</i> parameter is passed.',
+		group: 'common'
 	}
 })
 

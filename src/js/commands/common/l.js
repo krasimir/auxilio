@@ -4,6 +4,15 @@ Commands.register("l", {
 		callback();
 	},
 	man: function() {
-		return 'Clearing the current console\'s output.';
+		return '';
+	},
+	man: {
+		desc: 'Clearing the current console\'s output.',
+		format: 'l',
+		examples: [
+			{text: 'Just type <i>l</i> and press Enter', code: 'l'}
+		],
+		returns: 'null',
+		group: 'common'
 	}	
 })

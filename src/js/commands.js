@@ -125,22 +125,28 @@ Object {\n\
 })
 Commands.register("delay", {
 	requiredArguments: 1,
-	format: '<pre>delay [miliseconds]</pre>',
 	run: function(args, callback) {
 		var interval = parseInt(args.shift());
 		setTimeout(function() {
 			callback();
 		}, interval)
 	},
-	man: function() {
-		return 'Delay the next command. For example<br />\
-		echo A &amp;&amp; delay 2000 &amp;&amp; echo B\
-		';
+	man: {
+		desc: 'Delays the next command',
+		format: 'delay [miliseconds]',
+		examples: [
+			{text: 'Command line', code: 'delay 2000'},
+			{text: 'Command line (chaining)', code: 'echo A && delay 2000 && echo B'},
+			{text: 'In script', code: 'delay([2000], function() {\n\
+	console.log("hello");\n\
+})'}
+		],
+		returns: 'null',
+		group: 'common'
 	}	
 })
 Commands.register("diff", {
 	requiredArguments: 0,
-	format: '<pre>diff\ndiff [string1] [string2]</pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -209,13 +215,23 @@ Commands.register("diff", {
 		var parts = filename.split(".");
 		return parts[parts.length-1].toLowerCase();
 	},
-	man: function() {
-		return 'Comparison of files or strings.';
-	}	
+	man: {
+		desc: 'Comparison of files (text and json) or strings.',
+		format: 'diff<br />diff [string1] [string2]',
+		examples: [
+			{text: 'Opens a browse window for picking two files', code: 'diff'},
+			{text: 'Comparing two strings', code: 'diff "Hello world!" "Hello world, dude!"'},
+			{text: 'Command line (chaining)', code: 'date true && read monthName && diff "Current month is July"'},
+			{text: 'In script', code: 'diff(["Hello world!", "Hello world dude!"], function(res) {\n\
+	console.log(res);\n\
+})'}
+		],
+		returns: 'Object containing the differences.',
+		group: 'common'
+	}
 })
 Commands.register("exec", {
 	requiredArguments: 1,
-	format: '<pre>exec [command/s]</pre>',
 	run: function(args, callback) {
 		var strToExecute = args.join(" ");
 		if(strToExecute.indexOf('\n') >= 0) {
@@ -225,13 +241,23 @@ Commands.register("exec", {
 			callback(res);
 		});
 	},
-	man: function() {
-		return 'Executes a given command. Accepts commands separated by <i>&&</i>.';
-	}	
+	man: {
+		desc: 'Executes a given command. Accepts commands separated by <i>&&</i>.',
+		format: 'exec [command/s]',
+		examples: [
+			{text: 'Command line', code: 'exec echo "test"'},
+			{text: 'Command line (chaining)', code: 'readfile showing-date.aux && exec'},
+			{text: 'In script', code: 'exec("echo Hello world! && date true", function(res) {\n\
+	console.log(res);\n\
+})'}
+		],
+		returns: 'The result of the executed command.',
+		group: 'common'
+	}
 })
 Commands.register("history", {
 	requiredArguments: 0,
-	format: '<pre>history</pre>',
+	format: '<pre></pre>',
 	run: function(args, callback) {
 		var message = 'History:<pre class="history-panel">';
 		for(var i=App.commandsHistory.length-2; i>=0; i--) {
@@ -249,10 +275,16 @@ Commands.register("history", {
 			}
 		}
 		message += '</pre>';
-		exec('info ' + message, callback, true);
+		exec('info ' + message, callback);
 	},
-	man: function() {
-		return 'Outputs the current console\'s history.';
+	man: {
+		desc: 'Outputs the current console\'s history.',
+		format: 'history',
+		examples: [
+			{text: 'Command line', code: 'history'}
+		],
+		returns: 'null',
+		group: 'common'
 	}	
 })
 Commands.register("l", {
@@ -261,12 +293,20 @@ Commands.register("l", {
 		callback();
 	},
 	man: function() {
-		return 'Clearing the current console\'s output.';
+		return '';
+	},
+	man: {
+		desc: 'Clearing the current console\'s output.',
+		format: 'l',
+		examples: [
+			{text: 'Just type <i>l</i> and press Enter', code: 'l'}
+		],
+		returns: 'null',
+		group: 'common'
 	}	
 })
 Commands.register("man", {
-	requiredArguments: 0, 
-	format: "<pre>man\nman [name of command]</pre>",
+	requiredArguments: 0,
 	run: function(args, callback) {
 		var commandToViewName = args[0];
 		if(commandToViewName) {
@@ -314,13 +354,18 @@ Commands.register("man", {
 			App.setOutputPanelContent(markup);
 		}
 	},
-	man: function() {
-		return 'Shows information about available commands.';
+	man: {
+		desc: 'Shows manual page about available commands.',
+		format: 'man<br />man [regex | name of a command]',
+		examples: [
+			{text: 'Command line', code: 'man'}
+		],
+		returns: 'Manual page/s',
+		group: 'common'
 	}
 });
 Commands.register("marker", {
 	requiredArguments: 0,
-	format: '<pre>marker</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -328,37 +373,53 @@ Commands.register("marker", {
 			chrome.runtime.sendMessage({type: "marker"}, callback);
 		}
 	},
-	man: function() {
-		return 'Gives you ability to place markers on the current page. <i>screenshot</i> command could be used after that.';
+	man: {
+		desc: 'Gives you ability to place markers on the current page. <i>screenshot</i> command could be used after that.',
+		format: 'marker',
+		examples: [
+			{text: 'Command line', code: 'marker'}
+		],
+		returns: 'null',
+		group: 'common'
 	}	
 })
 Commands.register("middleman", {
 	requiredArguments: 1,
-	format: '<pre>middleman [resource]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {		
 		callback(args);
 	},
-	man: function() {
-		return 'The command simply passes the given argument to its callback';
+	man: {
+		desc: 'The command simply passes the given argument to its callback',
+		format: 'middleman [resource]',
+		examples: [
+			{text: 'Command line (chaining)', code: 'date && middleman && echo'}
+		],
+		returns: 'The result of the previous command in the chain.',
+		group: 'common'
 	}	
 })
 Commands.register("pass", {
 	requiredArguments: 1,
-	format: '<pre>pass</pre>',
+	format: '<pre></pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {		
 		callback();
 	},
-	man: function() {
-		return 'If there are some commands in a chain, sometimes is needed to stop passing a result from one to another. This command simply calls its callback without any arguments.';
+	man: {
+		desc: 'Sometimes is needed to stop passing a result from one command to another. This command simply calls its callback without any arguments.',
+		format: 'pass',
+		examples: [
+			{text: 'Command line (chaining)', code: 'date true && pass && echo That\'s a string without date.'}
+		],
+		returns: 'null',
+		group: 'common'
 	}	
 })
 Commands.register("read", {
 	requiredArguments: 2,
-	format: '<pre>read [path] [json object]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -403,16 +464,19 @@ Commands.register("read", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Extracts a value from json object. For example:\
-		<br />Let\'s say that we have the following <i>object</i> - {data: { users: [10, 11, 12] }}\
-		<br /><i>read data.users[1] object</i> will return 11\
-		';
+	man: {
+		desc: 'Extracts a value from json object',
+		format: 'read [path] [json object]',
+		examples: [
+			{text: 'Command line (chaining)', code: 'date true && read day && success Today is '},
+			{text: 'If you have a complex object like this one {data: { users: [10, 11, 12] }}', code: 'read data.users[1]'},
+		],
+		returns: 'Value of a property of the sent object',
+		group: 'common'
 	}	
 });
 Commands.register("request", {
 	requiredArguments: 1,
-	format: '<pre>request [url]<br />request [url] [raw]</pre>',
 	run: function(args, finished) {
 		var self = this;
 		var url = args.shift();
@@ -437,11 +501,16 @@ Commands.register("request", {
 			request(url, callback);
 		}
 	},
-	man: function() {
-		return 'Sends ajax request and shows the result in the console.<br />\
-		Use <b>raw</b> parameter to leave the data as it is received from the url. \
-		For example:<br />\
-		request github.com true';
+	man: {
+		desc: 'Sends ajax request and returns the result.',
+		format: 'request [url]<br />request [url] [raw (true | false)]',
+		examples: [
+			{text: 'Command line', code: 'request github.com && echo'},
+			{text: 'Getting raw html', code: 'request github.com true && echo'},
+			{text: 'In script', code: 'This command is not supported in external scripts.'}
+		],
+		returns: 'Response of the given url or the raw output if <i>raw</i> parameter is passed.',
+		group: 'common'
 	}
 })
 

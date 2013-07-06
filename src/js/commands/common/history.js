@@ -1,6 +1,6 @@
 Commands.register("history", {
 	requiredArguments: 0,
-	format: '<pre>history</pre>',
+	format: '<pre></pre>',
 	run: function(args, callback) {
 		var message = 'History:<pre class="history-panel">';
 		for(var i=App.commandsHistory.length-2; i>=0; i--) {
@@ -18,9 +18,15 @@ Commands.register("history", {
 			}
 		}
 		message += '</pre>';
-		exec('info ' + message, callback, true);
+		exec('info ' + message, callback);
 	},
-	man: function() {
-		return 'Outputs the current console\'s history.';
+	man: {
+		desc: 'Outputs the current console\'s history.',
+		format: 'history',
+		examples: [
+			{text: 'Command line', code: 'history'}
+		],
+		returns: 'null',
+		group: 'common'
 	}	
 })

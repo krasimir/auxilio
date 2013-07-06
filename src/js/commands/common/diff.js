@@ -1,6 +1,5 @@
 Commands.register("diff", {
 	requiredArguments: 0,
-	format: '<pre>diff\ndiff [string1] [string2]</pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -69,7 +68,18 @@ Commands.register("diff", {
 		var parts = filename.split(".");
 		return parts[parts.length-1].toLowerCase();
 	},
-	man: function() {
-		return 'Comparison of files or strings.';
-	}	
+	man: {
+		desc: 'Comparison of files (text and json) or strings.',
+		format: 'diff<br />diff [string1] [string2]',
+		examples: [
+			{text: 'Opens a browse window for picking two files', code: 'diff'},
+			{text: 'Comparing two strings', code: 'diff "Hello world!" "Hello world, dude!"'},
+			{text: 'Command line (chaining)', code: 'date true && read monthName && diff "Current month is July"'},
+			{text: 'In script', code: 'diff(["Hello world!", "Hello world dude!"], function(res) {\n\
+	console.log(res);\n\
+})'}
+		],
+		returns: 'Object containing the differences.',
+		group: 'common'
+	}
 })

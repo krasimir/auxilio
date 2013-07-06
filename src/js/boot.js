@@ -13,7 +13,7 @@ window.onload = function() {
 			App.command.focus();
 		}
 	});
-	exec("man date");
+	exec("man request");
 };
 
 // shortcuts

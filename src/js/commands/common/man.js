@@ -1,6 +1,5 @@
 Commands.register("man", {
-	requiredArguments: 0, 
-	format: "<pre>man\nman [name of command]</pre>",
+	requiredArguments: 0,
 	run: function(args, callback) {
 		var commandToViewName = args[0];
 		if(commandToViewName) {
@@ -48,7 +47,13 @@ Commands.register("man", {
 			App.setOutputPanelContent(markup);
 		}
 	},
-	man: function() {
-		return 'Shows information about available commands.';
+	man: {
+		desc: 'Shows manual page about available commands.',
+		format: 'man<br />man [regex | name of a command]',
+		examples: [
+			{text: 'Command line', code: 'man'}
+		],
+		returns: 'Manual page/s',
+		group: 'common'
 	}
 });
