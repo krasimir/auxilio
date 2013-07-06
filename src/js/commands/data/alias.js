@@ -2,7 +2,6 @@ Commands.register("alias", {
 	requiredArguments: 0,
 	lookForQuotes: false,
 	concatArgs: true,
-	format: '<pre>alias [name] [value]</pre>',
 	aliases: {},
 	run: function(args, callback) {
 		var name = args.length > 0 ? args.shift() : null;
@@ -95,13 +94,21 @@ Commands.register("alias", {
 			callback(result);
 		});
 	},
-	man: function() {
-		return 'Managing aliases.<br />\
-		alias - brings all the aliases<br />\
-		alias [name] - openes an editor for adding or editing. If you leave the textarea empty and click \'OK\', the alias will be deleted.<br />\
-		alias [name] [value] - directly pass the content of the alias<br />\
-		alias clearallplease - clears all the added aliases<br />\
-		alias exportallplease - exports all the aliases\
-		';
+	man: {
+		desc: 'Managing aliases.',
+		format: 'alias [name] [value]',
+		examples: [
+			{text: 'Showing current added aliases', code: 'alias'},
+			{text: 'Opening an editor for adding alias', code: 'alias my-alias-name'},
+			{text: 'Directly pass the content of the alias', code: 'alias my-alias-name date && echo'},
+			{text: 'Clearing all aliases', code: 'alias clearallplease'},
+			{text: 'Exporting all aliases', code: 'alias exportallplease'},
+			{text: 'Command line (chaining)', code: 'readfile showing-date.aux && exec'},
+			{text: 'In script', code: 'alias(["my-alias-name", "date && echo"], function() {\n\
+	console.log("Alias added.");\n\
+})'}
+		],
+		returns: 'Check the examples.',
+		group: 'data'
 	}	
 })

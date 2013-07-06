@@ -22,7 +22,6 @@ Commands.register("profile", {
 	requiredArguments: 0,
 	lookForQuotes: true,
 	concatArgs: true,
-	format: '<pre>profile [path]</pre>',
 	run: function(args, callback) {
 		var path = args.join(" ");
 		var self = this;
@@ -46,9 +45,15 @@ Commands.register("profile", {
 			});
 		}
 	},
-	man: function() {
-		return 'Manages your current profile file.\
-		If you pass <i>clear</i> the profile will be not active next time when you launch auxilio.\
-		';
+	man: {
+		desc: 'Manages your current profile file. Every time when you start auxilio the extension reads the files of the given directory (recursively). It searches for files which start with <i>function </i> and register them as commands. If the file starts with <i>exec.</i> directly executes the function inside the file. Check <i>man import</i> for more information.',
+		format: 'profile [path]',
+		examples: [
+			{text: 'Getting current profile path', code: 'profile'},
+			{text: 'Setting profile', code: 'profile D:/work/auxilio/profile'},
+			{text: 'Clearing profile', code: 'profile clear'}
+		],
+		returns: 'Check examples.',
+		group: 'data'
 	}	
 })

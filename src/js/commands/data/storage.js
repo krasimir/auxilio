@@ -1,6 +1,5 @@
 Commands.register("storage", {
 	requiredArguments: 1,
-	format: '<pre>storage [operation] [key] [value]</pre>',
 	lookForQuotes: false,
 	run: function(args, callback) {
 		var operation = args.shift();
@@ -36,14 +35,16 @@ Commands.register("storage", {
 			});
 		}
 	},
-	man: function() {
-		return '\
-			Store key-value pairs by using chrome.storage.sync API.<br />\
-			Examples:<br />\
-			storage put username Auxilio // stores username=Auxilio<br />\
-			storage get username // returns Auxilio<br />\
-			storage remove username // returns Auxilio<br />\
-			storage get // returns all stored values<br />\
-		';
+	man: {
+		desc: 'Stores key-value pairs by using chrome.storage.sync API.',
+		format: 'storage [operation] [key] [value]',
+		examples: [
+			{text: 'Storing variable', code: 'storage put username Auxilio'},
+			{text: 'Getting variable', code: 'storage get username'},
+			{text: 'Removing variable', code: 'storage remove username'},
+			{text: 'Get all variable', code: 'storage get'}
+		],
+		returns: 'The result of the executed command.',
+		group: 'data'
 	}	
 })

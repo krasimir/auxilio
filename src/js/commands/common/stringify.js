@@ -1,6 +1,5 @@
 Commands.register("stringify", {
 	requiredArguments: 1,
-	format: '<pre>stringify [text or object]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -11,7 +10,13 @@ Commands.register("stringify", {
 		}
 		callback(args.join(" "));
 	},
-	man: function() {
-		return 'Just bypasses the given arguments as string';
+	man: {
+		desc: 'Just bypasses the given arguments as string',
+		format: 'stringify [text or object]',
+		examples: [
+			{text: 'Command line', code: 'date true && stringify && info'}
+		],
+		returns: 'string',
+		group: 'common'
 	}	
 })

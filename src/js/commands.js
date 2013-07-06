@@ -529,7 +529,6 @@ var request = function(url, callback) {
 }
 Commands.register("stringify", {
 	requiredArguments: 1,
-	format: '<pre>stringify [text or object]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -540,8 +539,14 @@ Commands.register("stringify", {
 		}
 		callback(args.join(" "));
 	},
-	man: function() {
-		return 'Just bypasses the given arguments as string';
+	man: {
+		desc: 'Just bypasses the given arguments as string',
+		format: 'stringify [text or object]',
+		examples: [
+			{text: 'Command line', code: 'date true && stringify && info'}
+		],
+		returns: 'string',
+		group: 'common'
 	}	
 })
 var VarStorage = {};
@@ -578,17 +583,21 @@ Commands.register("var", {
 		}
 		callback(value);
 	},
-	man: function() {
-		return 'Define a variable.<br />Example:\
-		<br />var n 10\
-		<br />echo $$n is a great position';
+	man: {
+		desc: 'Define a variable.',
+		format: 'var [name] [value]',
+		examples: [
+			{text: 'Command line', code: 'var n 10\necho $$n is a great position'},
+			{text: 'Command line (chaining)', code: 'date && var currentDate\necho Current date is $$currentDate'},
+		],
+		returns: 'The value of the variable',
+		group: 'common'
 	}	
 })
 Commands.register("alias", {
 	requiredArguments: 0,
 	lookForQuotes: false,
 	concatArgs: true,
-	format: '<pre>alias [name] [value]</pre>',
 	aliases: {},
 	run: function(args, callback) {
 		var name = args.length > 0 ? args.shift() : null;
@@ -681,14 +690,22 @@ Commands.register("alias", {
 			callback(result);
 		});
 	},
-	man: function() {
-		return 'Managing aliases.<br />\
-		alias - brings all the aliases<br />\
-		alias [name] - openes an editor for adding or editing. If you leave the textarea empty and click \'OK\', the alias will be deleted.<br />\
-		alias [name] [value] - directly pass the content of the alias<br />\
-		alias clearallplease - clears all the added aliases<br />\
-		alias exportallplease - exports all the aliases\
-		';
+	man: {
+		desc: 'Managing aliases.',
+		format: 'alias [name] [value]',
+		examples: [
+			{text: 'Showing current added aliases', code: 'alias'},
+			{text: 'Opening an editor for adding alias', code: 'alias my-alias-name'},
+			{text: 'Directly pass the content of the alias', code: 'alias my-alias-name date && echo'},
+			{text: 'Clearing all aliases', code: 'alias clearallplease'},
+			{text: 'Exporting all aliases', code: 'alias exportallplease'},
+			{text: 'Command line (chaining)', code: 'readfile showing-date.aux && exec'},
+			{text: 'In script', code: 'alias(["my-alias-name", "date && echo"], function() {\n\
+	console.log("Alias added.");\n\
+})'}
+		],
+		returns: 'Check the examples.',
+		group: 'data'
 	}	
 })
 var Profile = (function() {
@@ -715,7 +732,6 @@ Commands.register("profile", {
 	requiredArguments: 0,
 	lookForQuotes: true,
 	concatArgs: true,
-	format: '<pre>profile [path]</pre>',
 	run: function(args, callback) {
 		var path = args.join(" ");
 		var self = this;
@@ -739,15 +755,20 @@ Commands.register("profile", {
 			});
 		}
 	},
-	man: function() {
-		return 'Manages your current profile file.\
-		If you pass <i>clear</i> the profile will be not active next time when you launch auxilio.\
-		';
+	man: {
+		desc: 'Manages your current profile file. Every time when you start auxilio the extension reads the files of the given directory (recursively). It searches for files which start with <i>function </i> and register them as commands. If the file starts with <i>exec.</i> directly executes the function inside the file. Check <i>man import</i> for more information.',
+		format: 'profile [path]',
+		examples: [
+			{text: 'Getting current profile path', code: 'profile'},
+			{text: 'Setting profile', code: 'profile D:/work/auxilio/profile'},
+			{text: 'Clearing profile', code: 'profile clear'}
+		],
+		returns: 'Check examples.',
+		group: 'data'
 	}	
 })
 Commands.register("storage", {
 	requiredArguments: 1,
-	format: '<pre>storage [operation] [key] [value]</pre>',
 	lookForQuotes: false,
 	run: function(args, callback) {
 		var operation = args.shift();
@@ -783,15 +804,17 @@ Commands.register("storage", {
 			});
 		}
 	},
-	man: function() {
-		return '\
-			Store key-value pairs by using chrome.storage.sync API.<br />\
-			Examples:<br />\
-			storage put username Auxilio // stores username=Auxilio<br />\
-			storage get username // returns Auxilio<br />\
-			storage remove username // returns Auxilio<br />\
-			storage get // returns all stored values<br />\
-		';
+	man: {
+		desc: 'Stores key-value pairs by using chrome.storage.sync API.',
+		format: 'storage [operation] [key] [value]',
+		examples: [
+			{text: 'Storing variable', code: 'storage put username Auxilio'},
+			{text: 'Getting variable', code: 'storage get username'},
+			{text: 'Removing variable', code: 'storage remove username'},
+			{text: 'Get all variable', code: 'storage get'}
+		],
+		returns: 'The result of the executed command.',
+		group: 'data'
 	}	
 })
 var Editor = (function() {

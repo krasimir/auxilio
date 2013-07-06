@@ -32,9 +32,14 @@ Commands.register("var", {
 		}
 		callback(value);
 	},
-	man: function() {
-		return 'Define a variable.<br />Example:\
-		<br />var n 10\
-		<br />echo $$n is a great position';
+	man: {
+		desc: 'Define a variable.',
+		format: 'var [name] [value]',
+		examples: [
+			{text: 'Command line', code: 'var n 10\necho $$n is a great position'},
+			{text: 'Command line (chaining)', code: 'date && var currentDate\necho Current date is $$currentDate'},
+		],
+		returns: 'The value of the variable',
+		group: 'common'
 	}	
 })
