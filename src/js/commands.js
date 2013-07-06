@@ -961,7 +961,6 @@ var Editor = (function() {
 
 Commands.register("editor", {
 	requiredArguments: 1,
-	format: '<pre>editor [file]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	editor: null,
@@ -970,8 +969,19 @@ Commands.register("editor", {
 		Editor.addFile(args.shift());
 		callback();
 	},
-	man: function() {
-		return 'Opens an editor for changing files.';
+	man: {
+		desc: 'Opens an editor for editing files. Available shortcuts:<br />\
+		Ctrl+S - save<br />\
+		Esc - closing the editor<br />\
+		Ctrl+[ - showing previous file<br />\
+		Ctrl+] - showing next file<br />\
+		',
+		format: 'editor [file]',
+		examples: [
+			{text: 'Open file for editing', code: 'editor ./styles.css'}
+		],
+		returns: 'null',
+		group: 'develop'
 	}	
 });
 
@@ -1019,7 +1029,6 @@ Commands.register("editor", {
 
 Commands.register("jasminerunner", {
 	requiredArguments: 1,
-	format: '<pre>jasminerunner [path]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -1040,14 +1049,20 @@ Commands.register("jasminerunner", {
 				jasmineEnv.execute();
 			});
 		})(id);
+		callback();
 	},
-	man: function() {
-		return 'Runs jasmine tests.';
+	man: {
+		desc: 'Runs jasmine tests.',
+		format: 'jasminerunner [path]',
+		examples: [
+			{text: 'Command line', code: 'jasminerunner ./tests'}
+		],
+		returns: 'null',
+		group: 'develop'
 	}	
 })
 Commands.register("jshint", {
 	requiredArguments: 1,
-	format: '<pre>jshint [{filePath: ... file path here..., jshint: ... jshint result here ...}]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -1073,13 +1088,18 @@ Commands.register("jshint", {
 			exec("success JSHint: No errors in <b>" + filePath + "</b>.");
 		}
 	},
-	man: function() {
-		return 'Formats an output of jshint execution.';
+	man: {
+		desc: 'Formats an output of jshint execution. The command is meant to be used together with <i>watch</i>.',
+		format: 'jshint [{filePath: [path], jshint: [jshint]}]',
+		examples: [
+			{text: 'Watching a javascript file for changes and passing the result to jshint.', code: 'watch start ./code.js jshint'}
+		],
+		returns: 'null',
+		group: 'develop'
 	}	
 })
 Commands.register("formconfirm", {
 	requiredArguments: 1,
-	format: '<pre>formconfirm [question]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("formconfirm");
@@ -1111,13 +1131,21 @@ Commands.register("formconfirm", {
 		});
 
 	},
-	man: function() {
-		return 'Shows a text (question) with two options - YES and NO. The callback accepts only one boolean parameter.';
+	man: {
+		desc: 'Shows a text (question) with two options - YES and NO.',
+		format: 'formconfirm [question]',
+		examples: [
+			{text: 'Command line', code: 'formconfirm Are you sure?'},
+			{text: 'In script', code: 'formconfirm(["Are you sure?"], function(res) {\n\
+	console.log(res ? "yes" : "no");\n\
+});'}
+		],
+		returns: 'Boolean (true | false)',
+		group: 'forms'
 	}	
 })
 Commands.register("formfile", {
 	requiredArguments: 0,
-	format: '<pre>formfile [title]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("formfile");
@@ -1172,13 +1200,21 @@ Commands.register("formfile", {
 		});
 
 	},
-	man: function() {
-		return 'Shows a simple form with input[type="file"] and button. Use the callback of the command to get the content of the file.';
+	man: {
+		desc: 'Shows a simple form with input[type="file"] and button. Use the callback of the command to get the content of the file.',
+		format: 'formfile [title]',
+		examples: [
+			{text: 'Command line', code: 'formfile Please choose a file.'},
+			{text: 'In script', code: 'formfile(["Please choose a file."], function(fileContent) {\n\
+	console.log(fileContent);\n\
+})'}
+		],
+		returns: 'Content of the file',
+		group: 'forms'
 	}	
 })
 Commands.register("forminput", {
 	requiredArguments: 0,
-	format: '<pre>forminput [title]\forminput [title] [text]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("forminput");
@@ -1225,14 +1261,22 @@ Commands.register("forminput", {
 		textarea.addEventListener("keydown", onKeyDown);
 
 	},
-	man: function() {
-		return 'Shows a simple form with input and button. Use the callback of the command to get the text submitted by the form.';
+	man: {
+		desc: 'Shows a simple form with input and button.',
+		format: 'forminput<br />forminput [title]<br />forminput [title] [default text]',
+		examples: [
+			{text: 'Command line', code: 'forminput "Please type your age." 18'},
+			{text: 'In script', code: 'forminput(["Please type your age.", 18], function(age) {\n\
+	console.log(age);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'forms'
 	}	
 })
 Commands.register("formtextarea", {
 	requiredArguments: 0,
 	concatArgs: true,
-	format: '<pre>formtextarea [title]\nformtextarea [title] [text]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("formtextarea");
@@ -1279,13 +1323,21 @@ Commands.register("formtextarea", {
 		textarea.addEventListener("keydown", onKeyDown);
 
 	},
-	man: function() {
-		return 'Shows a simple form with textarea and button. Use the callback of the command to get the text submitted by the form.';
+	man: {
+		desc: 'Shows a simple form with textarea and button. Use the callback of the command to get the text submitted by the form.',
+		format: 'formtextarea<br />formtextarea [title]<br />formtextarea [title] [text]',
+		examples: [
+			{text: 'Command line', code: 'formtextarea "Please type your bio." "Sample text" && echo'},
+			{text: 'In script', code: 'formtextarea(["Please type your bio.", "Sample text"], function(bio) {\n\
+	console.log(bio);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'forms'
 	}	
 })
 Commands.register("tetris", {
 	requiredArguments: 0,
-	format: '<pre>tetris [level to start from]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -1418,91 +1470,123 @@ Commands.register("tetris", {
 
 		callback();
 	},
-	man: function() {
-		return 'Tetris game.';
+	man: {
+		desc: 'Tetris game.',
+		format: 'tetris<br />tetris [level to start from]',
+		examples: [
+			{text: 'Command line', code: 'tetris'}
+		],
+		returns: 'null',
+		group: 'games'
 	}	
 });
-Commands.register("alert", {
-	requiredArguments: 1,
-	format: '<pre>alert [text]</pre>',
-	lookForQuotes: false,
-	concatArgs: true,
-	run: function(args, callback) {	
-		alert(this.formatter(args, false, true));
-		callback(this.formatter(args, false, true));
-	},
-	man: function() {
-		return 'Alerts message.';
-	}	
-})
 Commands.register("echo", {
 	requiredArguments: 1,
-	format: '<pre>echo [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="regular">' + this.formatter(args) + '</div>');
 		callback(this.formatter(args));
 	},
-	man: function() {
-		return 'Outputs message.';
+	man: {
+		desc: 'Outputs message.',
+		format: 'echo [text]',
+		examples: [
+			{text: 'Command line', code: 'echo Hello world!'},
+			{text: 'In script', code: 'echo(["Hello world!"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
 	}	
 })
 Commands.register("echoraw", {
 	requiredArguments: 1,
-	format: '<pre>echoraw [string]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="regular">' + this.formatter(args, true, true, true) + '</div>');
 		callback(this.formatter(args, true, true, true));
 	},
-	man: function() {
-		return 'Outputs message in raw format. Even the html is shown as string.';
-	}	
+	man: {
+		desc: 'Outputs message in raw format. Even the html is shown as string.',
+		format: 'echoraw [text]',
+		examples: [
+			{text: 'Command line', code: 'echoraw Hello world!'},
+			{text: 'In script', code: 'echoraw(["Hello world!"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
+	}		
 })
 Commands.register("echoshell", {
 	requiredArguments: 1,
-	format: '<pre>echoshell [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="regular-shell">' + this.formatter(args) + '</div>');
 		callback(this.formatter(args));
 	},
-	man: function() {
-		return 'Outputs message.';
+	man: {
+		desc: 'Outputs message.',
+		format: 'echoshell [text]',
+		examples: [
+			{text: 'Command line', code: 'echoshell Hello world!'},
+			{text: 'In script', code: 'echoshell(["Hello world!"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
 	}	
 })
 Commands.register("error", {
 	requiredArguments: 1,
-	format: '<pre>error [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="error"><i class="icon-attention"></i> ' + this.formatter(args) + '</div>');
 		callback(this.formatter(args));
 	},
-	man: function() {
-		return 'Outputs error message.';
+	man: {
+		desc: 'Outputs message.',
+		format: 'error [text]',
+		examples: [
+			{text: 'Command line', code: 'error Hello world!'},
+			{text: 'In script', code: 'error(["Hello world!"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
 	}	
 })
 Commands.register("hidden", {
 	requiredArguments: 1,
-	format: '<pre>hidden [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="hidden">' + args.join(" ") + '</div>');
 		callback(args.join(" "));
 	},
-	man: function() {
-		return 'Outputs invisible content. I.e. useful when you have to add hidden html markup.';
+	man: {
+		desc: 'Outputs invisible content. I.e. useful when you have to add hidden html markup.',
+		format: 'hidden [text]',
+		examples: [
+			{text: 'Command line', code: 'hidden &lt;input type="hidden" name="property" />'},
+			{text: 'In script', code: 'hidden(["&lt;input type="hidden" name="property" />"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
 	}	
 })
 Commands.register("hr", {
 	requiredArguments: 0,
-	format: '<pre>hr</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -1511,72 +1595,122 @@ Commands.register("hr", {
 	},
 	man: function() {
 		return 'Adds &lt;hr /> tag to the console\'s output panel';
+	},
+	man: {
+		desc: 'Adds &lt;hr /> tag to the console\'s output panel',
+		format: 'hr',
+		examples: [
+			{text: 'Command line', code: 'hr'},
+			{text: 'In script', code: 'hr();'}
+		],
+		returns: 'null',
+		group: 'messages'
 	}	
 })
 Commands.register("info", {
 	requiredArguments: 1,
-	format: '<pre>info [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="info"><i class="icon-info-circled"></i> ' + this.formatter(args) + '</div>');
 		callback(this.formatter(args));
 	},
-	man: function() {
-		return 'Outputs info message.';
+	man: {
+		desc: 'Outputs message.',
+		format: 'info [text]',
+		examples: [
+			{text: 'Command line', code: 'info Hello world!'},
+			{text: 'In script', code: 'info(["Hello world!"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
 	}	
 })
 Commands.register("small", {
 	requiredArguments: 1,
-	format: '<pre>small [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="small"><i class="icon-right-hand"></i> ' + this.formatter(args) + '</div>');
 		callback(this.formatter(args));
 	},
-	man: function() {
-		return 'Outputs small message.';
-	}	
+	man: {
+		desc: 'Outputs message.',
+		format: 'small [text]',
+		examples: [
+			{text: 'Command line', code: 'small Hello world!'},
+			{text: 'In script', code: 'small(["Hello world!"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
+	}		
 })
 Commands.register("success", {
 	requiredArguments: 1,
-	format: '<pre>success [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="success"><i class="icon-ok"></i> ' + this.formatter(args) + '</div>');
 		callback(this.formatter(args));
 	},
-	man: function() {
-		return 'Outputs success message.';
+	man: {
+		desc: 'Outputs message.',
+		format: 'success [text]',
+		examples: [
+			{text: 'Command line', code: 'success Hello world!'},
+			{text: 'In script', code: 'success(["Hello world!"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
 	}	
 })
 Commands.register("title", {
 	requiredArguments: 1,
-	format: '<pre>title [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div><h1>' + this.formatter(args) + '</h1></div>');
 		callback(this.formatter(args));
 	},
-	man: function() {
-		return 'Outputs a title.';
+	man: {
+		desc: 'Outputs message.',
+		format: 'title [text]',
+		examples: [
+			{text: 'Command line', code: 'title Hello world!'},
+			{text: 'In script', code: 'title(["Hello world!"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
 	}	
 })
 Commands.register("warning", {
 	requiredArguments: 1,
-	format: '<pre>warning [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="warning"><i class="icon-attention"></i> ' + this.formatter(args) + '</div>');
 		callback(this.formatter(args));
 	},
-	man: function() {
-		return 'Outputs warning message.';
-	}	
+	man: {
+		desc: 'Outputs message.',
+		format: 'warning [text]',
+		examples: [
+			{text: 'Command line', code: 'warning Hello world!'},
+			{text: 'In script', code: 'warning(["Hello world!"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
+	}		
 })
 var CurrentBlockDirectory = null;
 Commands.register("block", {

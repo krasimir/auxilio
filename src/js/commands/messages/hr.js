@@ -1,6 +1,5 @@
 Commands.register("hr", {
 	requiredArguments: 0,
-	format: '<pre>hr</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -9,5 +8,15 @@ Commands.register("hr", {
 	},
 	man: function() {
 		return 'Adds &lt;hr /> tag to the console\'s output panel';
+	},
+	man: {
+		desc: 'Adds &lt;hr /> tag to the console\'s output panel',
+		format: 'hr',
+		examples: [
+			{text: 'Command line', code: 'hr'},
+			{text: 'In script', code: 'hr();'}
+		],
+		returns: 'null',
+		group: 'messages'
 	}	
 })

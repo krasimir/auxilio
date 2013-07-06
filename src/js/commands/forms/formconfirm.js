@@ -1,6 +1,5 @@
 Commands.register("formconfirm", {
 	requiredArguments: 1,
-	format: '<pre>formconfirm [question]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("formconfirm");
@@ -32,7 +31,16 @@ Commands.register("formconfirm", {
 		});
 
 	},
-	man: function() {
-		return 'Shows a text (question) with two options - YES and NO. The callback accepts only one boolean parameter.';
+	man: {
+		desc: 'Shows a text (question) with two options - YES and NO.',
+		format: 'formconfirm [question]',
+		examples: [
+			{text: 'Command line', code: 'formconfirm Are you sure?'},
+			{text: 'In script', code: 'formconfirm(["Are you sure?"], function(res) {\n\
+	console.log(res ? "yes" : "no");\n\
+});'}
+		],
+		returns: 'Boolean (true | false)',
+		group: 'forms'
 	}	
 })

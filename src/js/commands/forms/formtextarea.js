@@ -1,7 +1,6 @@
 Commands.register("formtextarea", {
 	requiredArguments: 0,
 	concatArgs: true,
-	format: '<pre>formtextarea [title]\nformtextarea [title] [text]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("formtextarea");
@@ -48,7 +47,16 @@ Commands.register("formtextarea", {
 		textarea.addEventListener("keydown", onKeyDown);
 
 	},
-	man: function() {
-		return 'Shows a simple form with textarea and button. Use the callback of the command to get the text submitted by the form.';
+	man: {
+		desc: 'Shows a simple form with textarea and button. Use the callback of the command to get the text submitted by the form.',
+		format: 'formtextarea<br />formtextarea [title]<br />formtextarea [title] [text]',
+		examples: [
+			{text: 'Command line', code: 'formtextarea "Please type your bio." "Sample text" && echo'},
+			{text: 'In script', code: 'formtextarea(["Please type your bio.", "Sample text"], function(bio) {\n\
+	console.log(bio);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'forms'
 	}	
 })

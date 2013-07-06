@@ -1,6 +1,5 @@
 Commands.register("tetris", {
 	requiredArguments: 0,
-	format: '<pre>tetris [level to start from]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -133,7 +132,13 @@ Commands.register("tetris", {
 
 		callback();
 	},
-	man: function() {
-		return 'Tetris game.';
+	man: {
+		desc: 'Tetris game.',
+		format: 'tetris<br />tetris [level to start from]',
+		examples: [
+			{text: 'Command line', code: 'tetris'}
+		],
+		returns: 'null',
+		group: 'games'
 	}	
 });

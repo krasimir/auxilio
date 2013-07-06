@@ -1,13 +1,21 @@
 Commands.register("small", {
 	requiredArguments: 1,
-	format: '<pre>small [text]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		App.setOutputPanelContent('<div class="small"><i class="icon-right-hand"></i> ' + this.formatter(args) + '</div>');
 		callback(this.formatter(args));
 	},
-	man: function() {
-		return 'Outputs small message.';
-	}	
+	man: {
+		desc: 'Outputs message.',
+		format: 'small [text]',
+		examples: [
+			{text: 'Command line', code: 'small Hello world!'},
+			{text: 'In script', code: 'small(["Hello world!"], function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'messages'
+	}		
 })

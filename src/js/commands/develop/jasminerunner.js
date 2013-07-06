@@ -1,6 +1,5 @@
 Commands.register("jasminerunner", {
 	requiredArguments: 1,
-	format: '<pre>jasminerunner [path]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -21,8 +20,15 @@ Commands.register("jasminerunner", {
 				jasmineEnv.execute();
 			});
 		})(id);
+		callback();
 	},
-	man: function() {
-		return 'Runs jasmine tests.';
+	man: {
+		desc: 'Runs jasmine tests.',
+		format: 'jasminerunner [path]',
+		examples: [
+			{text: 'Command line', code: 'jasminerunner ./tests'}
+		],
+		returns: 'null',
+		group: 'develop'
 	}	
 })

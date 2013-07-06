@@ -1,6 +1,5 @@
 Commands.register("forminput", {
 	requiredArguments: 0,
-	format: '<pre>forminput [title]\forminput [title] [text]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("forminput");
@@ -47,7 +46,16 @@ Commands.register("forminput", {
 		textarea.addEventListener("keydown", onKeyDown);
 
 	},
-	man: function() {
-		return 'Shows a simple form with input and button. Use the callback of the command to get the text submitted by the form.';
+	man: {
+		desc: 'Shows a simple form with input and button.',
+		format: 'forminput<br />forminput [title]<br />forminput [title] [default text]',
+		examples: [
+			{text: 'Command line', code: 'forminput "Please type your age." 18'},
+			{text: 'In script', code: 'forminput(["Please type your age.", 18], function(age) {\n\
+	console.log(age);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'forms'
 	}	
 })

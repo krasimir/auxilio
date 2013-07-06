@@ -1,6 +1,5 @@
 Commands.register("formfile", {
 	requiredArguments: 0,
-	format: '<pre>formfile [title]</pre>',
 	run: function(args, callback) {
 		
 		var id = _.uniqueId("formfile");
@@ -55,7 +54,16 @@ Commands.register("formfile", {
 		});
 
 	},
-	man: function() {
-		return 'Shows a simple form with input[type="file"] and button. Use the callback of the command to get the content of the file.';
+	man: {
+		desc: 'Shows a simple form with input[type="file"] and button. Use the callback of the command to get the content of the file.',
+		format: 'formfile [title]',
+		examples: [
+			{text: 'Command line', code: 'formfile Please choose a file.'},
+			{text: 'In script', code: 'formfile(["Please choose a file."], function(fileContent) {\n\
+	console.log(fileContent);\n\
+})'}
+		],
+		returns: 'Content of the file',
+		group: 'forms'
 	}	
 })

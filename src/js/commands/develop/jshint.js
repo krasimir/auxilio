@@ -1,6 +1,5 @@
 Commands.register("jshint", {
 	requiredArguments: 1,
-	format: '<pre>jshint [{filePath: ... file path here..., jshint: ... jshint result here ...}]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -26,7 +25,13 @@ Commands.register("jshint", {
 			exec("success JSHint: No errors in <b>" + filePath + "</b>.");
 		}
 	},
-	man: function() {
-		return 'Formats an output of jshint execution.';
+	man: {
+		desc: 'Formats an output of jshint execution. The command is meant to be used together with <i>watch</i>.',
+		format: 'jshint [{filePath: [path], jshint: [jshint]}]',
+		examples: [
+			{text: 'Watching a javascript file for changes and passing the result to jshint.', code: 'watch start ./code.js jshint'}
+		],
+		returns: 'null',
+		group: 'develop'
 	}	
 })

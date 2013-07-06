@@ -142,7 +142,6 @@ var Editor = (function() {
 
 Commands.register("editor", {
 	requiredArguments: 1,
-	format: '<pre>editor [file]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	editor: null,
@@ -151,8 +150,19 @@ Commands.register("editor", {
 		Editor.addFile(args.shift());
 		callback();
 	},
-	man: function() {
-		return 'Opens an editor for changing files.';
+	man: {
+		desc: 'Opens an editor for editing files. Available shortcuts:<br />\
+		Ctrl+S - save<br />\
+		Esc - closing the editor<br />\
+		Ctrl+[ - showing previous file<br />\
+		Ctrl+] - showing next file<br />\
+		',
+		format: 'editor [file]',
+		examples: [
+			{text: 'Open file for editing', code: 'editor ./styles.css'}
+		],
+		returns: 'null',
+		group: 'develop'
 	}	
 });
 
