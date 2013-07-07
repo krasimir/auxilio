@@ -3,27 +3,41 @@ Commands.register("man", {
 	run: function(args, callback) {
 		var commandToViewName = args.shift();
 		if(commandToViewName) {
-			for(var commandName in Commands) {
-				var r = new RegExp(commandToViewName, "g");
-				if(commandName != "get" && commandName != "register" && commandName.match(r)) {
-					this.showCommand(commandName);
+			if(commandToViewName === "exporttomarkdown") {
+				var groups = this.getCommandsSortedByGroup();
+				var markdown = '# Auxilio commands\n\n';
+				for(var groupName in groups) {
+					markdown += '- - -\n\n';
+					markdown += '## ' + groupName + '\n\n';
+					for(var i=0; command = groups[groupName][i]; i++) {
+						markdown += '### ' + command.name + "\n\n";
+						markdown += command.man.desc + "\n\n";
+						markdown += "  - format: " + command.man.format + "\n";
+						markdown += "  - returns: " + command.man.returns + "\n";
+						markdown += "\n#### Examples:\n\n";
+						for(var j=0; example = command.man.examples[j]; j++) {
+							markdown += example.text + "\n";
+							markdown += "&lt;pre>" + example.code.replace(/</g, '&lt;').replace(/&&/g, '&amp;&amp;') + "&lt;/pre>\n";
+						}
+					}
+				}
+				formtextarea("Markdown", markdown);
+			} else {
+				for(var commandName in Commands) {
+					var r = new RegExp(commandToViewName, "g");
+					if(commandName != "get" && commandName != "register" && commandName.match(r)) {
+						this.showCommand(commandName);
+					}
 				}
 			}
 		} else {
-			var groups = {}
-			for(var commandName in Commands) {
-				var c = Commands[commandName];
-				if(c.man && c.man.group) {
-					if(!groups[c.man.group]) groups[c.man.group] = [];
-					groups[c.man.group].push(commandName);
-				}
-			}
+			var groups = this.getCommandsSortedByGroup();
 			var markup = '<h1>Auxilio manual pages</h1><div class="man-holder">';
 			for(var groupName in groups) {
 				markup += '<div class="man-group">';
 				markup += '<h2>' + groupName + '</h2>';
 				for(var i=0; command = groups[groupName][i]; i++) {
-					markup += '<a href="javascript:void(0)" class="man-group-link" data="' + command + '">' + command + '</a><br />';
+					markup += '<a href="javascript:void(0)" class="man-group-link" data="' + command.name + '">' + command.name + '</a><br />';
 				}
 				markup += '</div>';
 			}
@@ -39,6 +53,17 @@ Commands.register("man", {
 			});
 		}
 		callback();
+	},
+	getCommandsSortedByGroup: function() {
+		var groups = {}
+		for(var commandName in Commands) {
+			var c = Commands[commandName];
+			if(c.man && c.man.group) {
+				if(!groups[c.man.group]) groups[c.man.group] = [];
+				groups[c.man.group].push({name: commandName, man: c.man});
+			}
+		}
+		return groups;
 	},
 	showCommand:function(commandName) {
 		var c = Commands.get(commandName);
@@ -71,7 +96,7 @@ Commands.register("man", {
 	},
 	man: {
 		desc: 'Shows manual page about available commands.',
-		format: 'man<br />man [regex | name of a command]',
+		format: 'man<br />man [regex | name of a command]<br />man exporttomarkdown',
 		examples: [
 			{text: 'Command line', code: 'man'}
 		],

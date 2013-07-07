@@ -13,7 +13,6 @@ window.onload = function() {
 			App.command.focus();
 		}
 	});
-	exec("man");
 };
 
 // shortcuts

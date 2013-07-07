@@ -13,3 +13,7 @@ Extension to Google Chrome Developer Tools.
 
   - Check the *Developer mode* option
   - Click on *Load unpacked extension...* and browse the *src* folder
+
+## Documentation
+
+  - [Auxilio commands manual](https://github.com/krasimir/auxilio/blob/master/commands.md)
