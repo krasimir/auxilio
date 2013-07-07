@@ -1,6 +1,5 @@
 Commands.register("shell", {
 	requiredArguments: 0,
-	format: '<pre>shell [command]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -22,7 +21,16 @@ Commands.register("shell", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Executes shell command.';
+	man: {
+		desc: 'Executes shell command. Have in mind that once you type something in the console and it doesn\'t match any of the auxilio\'s commands it is send to the shell',
+		format: 'shell [command]',
+		examples: [
+			{text: 'Command line', code: 'shell ls'},
+			{text: 'In script', code: 'shell("ls", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
 	}	
 })

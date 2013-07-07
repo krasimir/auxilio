@@ -104,7 +104,7 @@ Commands.register("alias", {
 			{text: 'Clearing all aliases', code: 'alias clearallplease'},
 			{text: 'Exporting all aliases', code: 'alias exportallplease'},
 			{text: 'Command line (chaining)', code: 'readfile showing-date.aux && exec'},
-			{text: 'In script', code: 'alias(["my-alias-name", "date && echo"], function() {\n\
+			{text: 'In script', code: 'alias(\'"my-alias-name"\', "date && echo", function() {\n\
 	console.log("Alias added.");\n\
 })'}
 		],

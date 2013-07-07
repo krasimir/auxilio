@@ -11,7 +11,7 @@ Commands.register("info", {
 		format: 'info [text]',
 		examples: [
 			{text: 'Command line', code: 'info Hello world!'},
-			{text: 'In script', code: 'info(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'info("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],

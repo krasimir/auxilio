@@ -52,7 +52,7 @@ Commands.register("formtextarea", {
 		format: 'formtextarea<br />formtextarea [title]<br />formtextarea [title] [text]',
 		examples: [
 			{text: 'Command line', code: 'formtextarea "Please type your bio." "Sample text" && echo'},
-			{text: 'In script', code: 'formtextarea(["Please type your bio.", "Sample text"], function(bio) {\n\
+			{text: 'In script', code: 'formtextarea(\'"Please type your bio."\', \'"Sample text"\', function(bio) {\n\
 	console.log(bio);\n\
 });'}
 		],

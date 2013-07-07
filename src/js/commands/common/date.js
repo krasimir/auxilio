@@ -35,7 +35,7 @@ Commands.register("date", {
 		examples: [
 			{text: 'Command line', code: 'date'},
 			{text: 'Command line (chaining)', code: 'date true && read monthName && info'},
-			{text: 'In script', code: 'date(["true"], function(date) {\n\
+			{text: 'In script', code: 'date("true", function(date) {\n\
 	console.log(date.year);\n\
 })'}
 		],

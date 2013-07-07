@@ -11,7 +11,7 @@ Commands.register("small", {
 		format: 'small [text]',
 		examples: [
 			{text: 'Command line', code: 'small Hello world!'},
-			{text: 'In script', code: 'small(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'small("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],

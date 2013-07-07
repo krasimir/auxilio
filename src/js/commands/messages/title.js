@@ -11,7 +11,7 @@ Commands.register("title", {
 		format: 'title [text]',
 		examples: [
 			{text: 'Command line', code: 'title Hello world!'},
-			{text: 'In script', code: 'title(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'title("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],

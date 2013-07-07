@@ -59,7 +59,7 @@ Commands.register("formfile", {
 		format: 'formfile [title]',
 		examples: [
 			{text: 'Command line', code: 'formfile Please choose a file.'},
-			{text: 'In script', code: 'formfile(["Please choose a file."], function(fileContent) {\n\
+			{text: 'In script', code: 'formfile(\'"Please choose a file."\', function(fileContent) {\n\
 	console.log(fileContent);\n\
 })'}
 		],

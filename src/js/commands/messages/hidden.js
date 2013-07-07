@@ -11,7 +11,7 @@ Commands.register("hidden", {
 		format: 'hidden [text]',
 		examples: [
 			{text: 'Command line', code: 'hidden &lt;input type="hidden" name="property" />'},
-			{text: 'In script', code: 'hidden(["&lt;input type="hidden" name="property" />"], function(res) {\n\
+			{text: 'In script', code: 'hidden("&lt;input type="hidden" name="property" />", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],

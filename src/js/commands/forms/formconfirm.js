@@ -36,7 +36,7 @@ Commands.register("formconfirm", {
 		format: 'formconfirm [question]',
 		examples: [
 			{text: 'Command line', code: 'formconfirm Are you sure?'},
-			{text: 'In script', code: 'formconfirm(["Are you sure?"], function(res) {\n\
+			{text: 'In script', code: 'formconfirm(\'"Are you sure?"\', function(res) {\n\
 	console.log(res ? "yes" : "no");\n\
 });'}
 		],

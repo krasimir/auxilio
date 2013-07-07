@@ -11,7 +11,7 @@ Commands.register("echoshell", {
 		format: 'echoshell [text]',
 		examples: [
 			{text: 'Command line', code: 'echoshell Hello world!'},
-			{text: 'In script', code: 'echoshell(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'echoshell("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],

@@ -3,15 +3,20 @@ var Commands = {
 		this[name] = logic;
 		if(typeof window != 'undefined') {
 			(function(name) {
-				window[name] = function(args, callback) {
+				window[name] = function() {
+					var args = [],
+						callback = function() {};
+					for(var i=0; argument = arguments[i]; i++) {
+						if(i == arguments.length-1 && typeof argument === 'function') {
+							callback = argument;
+						} else {
+							args.push(argument);
+						}
+					}
 					var argsString = '';
 					if(args && args.length > 0) {
 						for(var i=0; arg = args[i]; i++) {
-							if(typeof arg == 'string') {
-								argsString += '"' + arg + '"';
-							} else {
-								argsString += arg;
-							}
+							argsString += arg;
 							if(i < args.length-1) {
 								argsString += ' ';
 							}

@@ -11,7 +11,7 @@ Commands.register("error", {
 		format: 'error [text]',
 		examples: [
 			{text: 'Command line', code: 'error Hello world!'},
-			{text: 'In script', code: 'error(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'error("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],

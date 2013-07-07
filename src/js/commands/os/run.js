@@ -1,6 +1,5 @@
-Commands.register("import", {
+Commands.register("run", {
 	requiredArguments: 1,
-	format: '<pre>import [path]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	totalFiles: 0,
@@ -123,7 +122,21 @@ Commands.register("import", {
 		loadFiles(callback);
 
 	},
-	man: function() {
-		return 'Register or execute commands stored in external files. Accepts just a path.';
+	man: {
+		desc: 'Register or execute commands stored in external files. The files should contain valid javascript which is actually a function definition in the following format:<pre>\
+function nameOfMyFunction(args) {\n\
+...\n\n\
+}\
+</pre>Normally the content of the file is registered as a command, but if the filename starts with <i>exec.</i> the function is executed immediately. For example:<pre>run ./exec.myscript.js</pre>',
+		format: 'run [path]',
+		examples: [
+			{text: 'Importing directory', code: 'run ./files'},
+			{text: 'Importing file', code: 'run ./files/myscript.js'},
+			{text: 'In script', code: 'run("./myfiles", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'Result of the function.',
+		group: 'os'
 	}	
 })

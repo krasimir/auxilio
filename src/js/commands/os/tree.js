@@ -1,7 +1,6 @@
 var TreeCommandIsSoketAdded = false;
 Commands.register("tree", {
 	requiredArguments: 0,
-	format: '<pre>tree [regex | deep] [suppressdisplay]</pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -85,11 +84,19 @@ Commands.register("tree", {
 	    }
 	    return true;
 	},
-	man: function() {
-		return 'Shows a directory tree.<br />\
-		regex - regular expression for filtering the output</i><br />\
-		deep - the depth of the directory tree<br />\
-		suppressdisplay - just return the result in a command\'s callback without to display the result\
-		';
+	man: {
+		desc: 'Shows a directory tree.',
+		format: 'tree<br />tree [regex]<br />tree [deep]<br />tree [suppressdisplay]',
+		examples: [
+			{text: 'Command line', code: 'tree'},
+			{text: 'Showing files by type', code: 'tree \\\.css'},
+			{text: 'Showing only two levels', code: 'tree 2'},
+			{text: 'Suppress the output to the console', code: 'tree suppressdisplay'},
+			{text: 'In script', code: 'tree(2, function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
 	}	
 })

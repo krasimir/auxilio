@@ -1,6 +1,5 @@
 Commands.register("readfile", {
 	requiredArguments: 1,
-	format: '<pre>readfile [file]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -29,7 +28,16 @@ Commands.register("readfile", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Read content of a file.';
+	man: {
+		desc: 'Read content of a file.',
+		format: 'readfile [file]',
+		examples: [
+			{text: 'Command line', code: 'readfile ./README.md'},
+			{text: 'In script', code: 'readfile("./README.md", function(content) {\n\
+	console.log(content);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
 	}	
 })

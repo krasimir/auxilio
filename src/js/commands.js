@@ -61,7 +61,7 @@ Commands.register("compare", {
 		examples: [
 			{text: 'Command line', code: 'compare "Check those values" 10 == 20'},
 			{text: 'Command line (chaining)', code: 'date true && read monthName && compare "Is it July?" July =='},
-			{text: 'In script', code: 'compare(["My title here", 10, "==", 10], function(res) {\n\
+			{text: 'In script', code: 'compare(\'"My title here"\', 10, "==", 10, function(res) {\n\
 	console.log(res);\n\
 })'},
 		],
@@ -106,7 +106,7 @@ Commands.register("date", {
 		examples: [
 			{text: 'Command line', code: 'date'},
 			{text: 'Command line (chaining)', code: 'date true && read monthName && info'},
-			{text: 'In script', code: 'date(["true"], function(date) {\n\
+			{text: 'In script', code: 'date("true", function(date) {\n\
 	console.log(date.year);\n\
 })'}
 		],
@@ -137,7 +137,7 @@ Commands.register("delay", {
 		examples: [
 			{text: 'Command line', code: 'delay 2000'},
 			{text: 'Command line (chaining)', code: 'echo A && delay 2000 && echo B'},
-			{text: 'In script', code: 'delay([2000], function() {\n\
+			{text: 'In script', code: 'delay(2000, function() {\n\
 	console.log("hello");\n\
 })'}
 		],
@@ -222,7 +222,7 @@ Commands.register("diff", {
 			{text: 'Opens a browse window for picking two files', code: 'diff'},
 			{text: 'Comparing two strings', code: 'diff "Hello world!" "Hello world, dude!"'},
 			{text: 'Command line (chaining)', code: 'date true && read monthName && diff "Current month is July"'},
-			{text: 'In script', code: 'diff(["Hello world!", "Hello world dude!"], function(res) {\n\
+			{text: 'In script', code: 'diff(\'"Hello world!"\', \'"Hello world dude!"\', function(res) {\n\
 	console.log(res);\n\
 })'}
 		],
@@ -700,7 +700,7 @@ Commands.register("alias", {
 			{text: 'Clearing all aliases', code: 'alias clearallplease'},
 			{text: 'Exporting all aliases', code: 'alias exportallplease'},
 			{text: 'Command line (chaining)', code: 'readfile showing-date.aux && exec'},
-			{text: 'In script', code: 'alias(["my-alias-name", "date && echo"], function() {\n\
+			{text: 'In script', code: 'alias(\'"my-alias-name"\', "date && echo", function() {\n\
 	console.log("Alias added.");\n\
 })'}
 		],
@@ -1027,40 +1027,6 @@ Commands.register("editor", {
 
 */
 
-Commands.register("jasminerunner", {
-	requiredArguments: 1,
-	lookForQuotes: false,
-	concatArgs: true,
-	run: function(args, callback) {
-		var path = args.join(" ");
-		var id = _.uniqueId("jasminetest");
-		(function(id) {
-			var markup = '<div id="' + id + '"></div>';
-			App.setOutputPanelContent(markup);
-			exec("import " + path, function(totalFilesProcessed) {
-				var jasmineEnv = jasmine.getEnv();
-				var htmlReporter = new jasmine.HtmlReporter(null, document.getElementById(id));
-				jasmineEnv.updateInterval = 1000;
-				jasmineEnv.clearReporters();
-				jasmineEnv.addReporter(htmlReporter);
-				jasmineEnv.specFilter = function(spec) {
-					return htmlReporter.specFilter(spec);
-				};
-				jasmineEnv.execute();
-			});
-		})(id);
-		callback();
-	},
-	man: {
-		desc: 'Runs jasmine tests.',
-		format: 'jasminerunner [path]',
-		examples: [
-			{text: 'Command line', code: 'jasminerunner ./tests'}
-		],
-		returns: 'null',
-		group: 'develop'
-	}	
-})
 Commands.register("jshint", {
 	requiredArguments: 1,
 	lookForQuotes: false,
@@ -1093,6 +1059,40 @@ Commands.register("jshint", {
 		format: 'jshint [{filePath: [path], jshint: [jshint]}]',
 		examples: [
 			{text: 'Watching a javascript file for changes and passing the result to jshint.', code: 'watch start ./code.js jshint'}
+		],
+		returns: 'null',
+		group: 'develop'
+	}	
+})
+Commands.register("runjasmine", {
+	requiredArguments: 1,
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		var path = args.join(" ");
+		var id = _.uniqueId("jasminetest");
+		(function(id) {
+			var markup = '<div id="' + id + '"></div>';
+			App.setOutputPanelContent(markup);
+			exec("run " + path, function(totalFilesProcessed) {
+				var jasmineEnv = jasmine.getEnv();
+				var htmlReporter = new jasmine.HtmlReporter(null, document.getElementById(id));
+				jasmineEnv.updateInterval = 1000;
+				jasmineEnv.clearReporters();
+				jasmineEnv.addReporter(htmlReporter);
+				jasmineEnv.specFilter = function(spec) {
+					return htmlReporter.specFilter(spec);
+				};
+				jasmineEnv.execute();
+			});
+		})(id);
+		callback();
+	},
+	man: {
+		desc: 'Runs jasmine tests.',
+		format: 'runjasmine [path]',
+		examples: [
+			{text: 'Command line', code: 'runjasmine ./tests'}
 		],
 		returns: 'null',
 		group: 'develop'
@@ -1136,7 +1136,7 @@ Commands.register("formconfirm", {
 		format: 'formconfirm [question]',
 		examples: [
 			{text: 'Command line', code: 'formconfirm Are you sure?'},
-			{text: 'In script', code: 'formconfirm(["Are you sure?"], function(res) {\n\
+			{text: 'In script', code: 'formconfirm(\'"Are you sure?"\', function(res) {\n\
 	console.log(res ? "yes" : "no");\n\
 });'}
 		],
@@ -1205,7 +1205,7 @@ Commands.register("formfile", {
 		format: 'formfile [title]',
 		examples: [
 			{text: 'Command line', code: 'formfile Please choose a file.'},
-			{text: 'In script', code: 'formfile(["Please choose a file."], function(fileContent) {\n\
+			{text: 'In script', code: 'formfile(\'"Please choose a file."\', function(fileContent) {\n\
 	console.log(fileContent);\n\
 })'}
 		],
@@ -1266,7 +1266,7 @@ Commands.register("forminput", {
 		format: 'forminput<br />forminput [title]<br />forminput [title] [default text]',
 		examples: [
 			{text: 'Command line', code: 'forminput "Please type your age." 18'},
-			{text: 'In script', code: 'forminput(["Please type your age.", 18], function(age) {\n\
+			{text: 'In script', code: 'forminput(\'"Please type your age."\', 18, function(age) {\n\
 	console.log(age);\n\
 });'}
 		],
@@ -1328,7 +1328,7 @@ Commands.register("formtextarea", {
 		format: 'formtextarea<br />formtextarea [title]<br />formtextarea [title] [text]',
 		examples: [
 			{text: 'Command line', code: 'formtextarea "Please type your bio." "Sample text" && echo'},
-			{text: 'In script', code: 'formtextarea(["Please type your bio.", "Sample text"], function(bio) {\n\
+			{text: 'In script', code: 'formtextarea(\'"Please type your bio."\', \'"Sample text"\', function(bio) {\n\
 	console.log(bio);\n\
 });'}
 		],
@@ -1493,7 +1493,7 @@ Commands.register("echo", {
 		format: 'echo [text]',
 		examples: [
 			{text: 'Command line', code: 'echo Hello world!'},
-			{text: 'In script', code: 'echo(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'echo("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],
@@ -1514,7 +1514,7 @@ Commands.register("echoraw", {
 		format: 'echoraw [text]',
 		examples: [
 			{text: 'Command line', code: 'echoraw Hello world!'},
-			{text: 'In script', code: 'echoraw(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'echoraw("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],
@@ -1535,7 +1535,7 @@ Commands.register("echoshell", {
 		format: 'echoshell [text]',
 		examples: [
 			{text: 'Command line', code: 'echoshell Hello world!'},
-			{text: 'In script', code: 'echoshell(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'echoshell("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],
@@ -1556,7 +1556,7 @@ Commands.register("error", {
 		format: 'error [text]',
 		examples: [
 			{text: 'Command line', code: 'error Hello world!'},
-			{text: 'In script', code: 'error(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'error("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],
@@ -1577,7 +1577,7 @@ Commands.register("hidden", {
 		format: 'hidden [text]',
 		examples: [
 			{text: 'Command line', code: 'hidden &lt;input type="hidden" name="property" />'},
-			{text: 'In script', code: 'hidden(["&lt;input type="hidden" name="property" />"], function(res) {\n\
+			{text: 'In script', code: 'hidden("&lt;input type="hidden" name="property" />", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],
@@ -1620,7 +1620,7 @@ Commands.register("info", {
 		format: 'info [text]',
 		examples: [
 			{text: 'Command line', code: 'info Hello world!'},
-			{text: 'In script', code: 'info(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'info("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],
@@ -1641,7 +1641,7 @@ Commands.register("small", {
 		format: 'small [text]',
 		examples: [
 			{text: 'Command line', code: 'small Hello world!'},
-			{text: 'In script', code: 'small(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'small("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],
@@ -1662,7 +1662,7 @@ Commands.register("success", {
 		format: 'success [text]',
 		examples: [
 			{text: 'Command line', code: 'success Hello world!'},
-			{text: 'In script', code: 'success(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'success("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],
@@ -1683,7 +1683,7 @@ Commands.register("title", {
 		format: 'title [text]',
 		examples: [
 			{text: 'Command line', code: 'title Hello world!'},
-			{text: 'In script', code: 'title(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'title("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],
@@ -1704,7 +1704,7 @@ Commands.register("warning", {
 		format: 'warning [text]',
 		examples: [
 			{text: 'Command line', code: 'warning Hello world!'},
-			{text: 'In script', code: 'warning(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'warning("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],
@@ -1715,7 +1715,6 @@ Commands.register("warning", {
 var CurrentBlockDirectory = null;
 Commands.register("block", {
 	requiredArguments: 0,
-	format: '<pre>block [operation]</pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -1739,26 +1738,86 @@ Commands.register("block", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Sometimes you need to execute a series of commands, but you want to keep the context.<br />\
-		Use <i>block start</i> before the commands\' chain and <i>block end</i> at the end.';
+	man: {
+		desc: 'Sometimes you need to execute a series of commands, but you want to keep the context, i.e. the current directory.',
+		format: 'block [operation]',
+		examples: [
+			{text: 'Command line', code: 'block start && cd ../../ && echo Do some stuff here && block end'},
+			{text: 'In script', code: 'block("start", function() {\n\
+	shell("cd ../../", function() {\n\
+		block("end");\n\
+	});\n\
+});'}
+		],
+		returns: 'null',
+		group: 'os'
 	}	
 })
 Commands.register("cwd", {
 	requiredArguments: 0,
-	format: '<pre>cwd</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
 		callback(Context.get());
 	},
-	man: function() {
-		return 'Returns the current working directory of auxilio-backend.';
+	man: {
+		desc: 'Returns the current working directory of auxilio-backend.',
+		format: 'cwd',
+		examples: [
+			{text: 'Command line', code: 'cwd'},
+			{text: 'In script', code: 'cwd(function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
 	}	
 })
-Commands.register("import", {
+Commands.register("readfile", {
 	requiredArguments: 1,
-	format: '<pre>import [path]</pre>',
+	lookForQuotes: false,
+	concatArgs: true,
+	run: function(args, callback) {
+		var file = args.shift();
+		if(Shell.connected() && Shell.socket()) {
+			var id = _.uniqueId("shellcommand");
+			var onFileRead = function(res) {
+				if(res.id !== id) return;
+				Shell.socket().removeListener("readfile", onFileRead);
+				if(res.error) {
+					if(typeof res.error === 'object') {
+						res.error = JSON.stringify(res.error);
+					}
+					exec("error " + res.error);
+					callback(null);
+				} else if(res.content) {
+					callback(res.content);
+				} else {
+					callback(res);
+				}
+			}
+			Shell.socket().on("readfile", onFileRead);
+			Shell.socket().emit("readfile", {file: file, id: id});
+		} else {
+			NoShellError("readfile: no shell");
+			callback();
+		}
+	},
+	man: {
+		desc: 'Read content of a file.',
+		format: 'readfile [file]',
+		examples: [
+			{text: 'Command line', code: 'readfile ./README.md'},
+			{text: 'In script', code: 'readfile("./README.md", function(content) {\n\
+	console.log(content);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
+	}	
+})
+Commands.register("run", {
+	requiredArguments: 1,
 	lookForQuotes: false,
 	concatArgs: true,
 	totalFiles: 0,
@@ -1881,137 +1940,26 @@ Commands.register("import", {
 		loadFiles(callback);
 
 	},
-	man: function() {
-		return 'Register or execute commands stored in external files. Accepts just a path.';
-	}	
-})
-Commands.register("readfile", {
-	requiredArguments: 1,
-	format: '<pre>readfile [file]</pre>',
-	lookForQuotes: false,
-	concatArgs: true,
-	run: function(args, callback) {
-		var file = args.shift();
-		if(Shell.connected() && Shell.socket()) {
-			var id = _.uniqueId("shellcommand");
-			var onFileRead = function(res) {
-				if(res.id !== id) return;
-				Shell.socket().removeListener("readfile", onFileRead);
-				if(res.error) {
-					if(typeof res.error === 'object') {
-						res.error = JSON.stringify(res.error);
-					}
-					exec("error " + res.error);
-					callback(null);
-				} else if(res.content) {
-					callback(res.content);
-				} else {
-					callback(res);
-				}
-			}
-			Shell.socket().on("readfile", onFileRead);
-			Shell.socket().emit("readfile", {file: file, id: id});
-		} else {
-			NoShellError("readfile: no shell");
-			callback();
-		}
-	},
-	man: function() {
-		return 'Read content of a file.';
-	}	
-})
-Commands.register("readfiles", {
-	requiredArguments: 0,
-	format: '<pre>readfiles [type]</pre>',
-	processing: false,
-	files: null,
-	filesRaw: null,
-	proccessedFiles: -1,
-	commands: [],
-	callback: null,
-	type: 'auxilio',
-	run: function(args, callback) {
-		this.type = args.length > 0 ? args.shift() : 'auxilio';
-		this.callback = callback;
-		if(this.processing) {
-			exec("error Sorry but <b>readfiles</b> command is working right now. Try again later.");
-			this.callback();
-			return;
-		}
-		this.reset();
-		var id = _.uniqueId("files");
-		var self = this;
-		var input = 'Choose a file(s): <input type="file" id="' + id + '" name="files[]" multiple />';
-		exec('echo ' + input);
-		this.inputElement = document.getElementById(id);
-		this.inputElement.addEventListener('change', function(e) {
-			self.processing = true;
-			self.handleFileSelected(e);
-		}, false);
-		this.inputElement.focus();
-		this.inputElement.click();
-	},
-	handleFileSelected: function(e) {
-		this.files = e.target.files;
-		var message = '<b>Selected file(s):</b><br />';
-		var self = this;
-		for(var i=0, f; f=this.files[i]; i++) {
-			message += f.name + "<br />";
-			var reader = new FileReader();
-			(function(reader, f) {
-				reader.onload = function(e) {
-					if(e.target.result) {
-						switch(self.type) {
-							case 'raw': self.handleFileReadRaw(f, e.target.result); break;
-							default: self.handleFileRead(f, e.target.result); break;
-						}						
-					}
-				};
-				reader.readAsText(f);
-			})(reader, f);
-		}
-		exec('echo ' + message);
-	},
-	handleFileRead: function(file, content) {
-		var fileCommands = content.split("\n");
-		for(var i=0, c; c = fileCommands[i]; i++) {
-			this.commands.push(c.replace(/\n/g, '').replace(/\r/g, ''));
-		}
-		this.proccessedFiles += 1;
-		if(this.proccessedFiles == this.files.length-1) {
-			var commandsString = this.commands.join(" && ");
-			this.inputElement.style.display = "none";
-			App.setFocus();
-			this.callback(commandsString);
-			this.reset();
-		}
-	},
-	handleFileReadRaw: function(file, content) {
-		if(!this.filesRaw) this.filesRaw = [];
-		this.filesRaw.push({file: file, content: content});
-		this.proccessedFiles += 1;
-		if(this.proccessedFiles == this.files.length-1) {			
-			this.inputElement.style.display = "none";
-			App.setFocus();
-			this.callback(this.filesRaw);
-			this.reset();
-		}
-	},
-	reset: function() {
-		this.processing = false;
-		this.files = null;
-		this.proccessedFiles = -1;
-		this.commands = [];
-		this.filesRaw = null;
-	},
-	man: function() {
-		return 'Inject external javascript to be run in the context of Auxilio and current page. By default the command works with <i>type=auxilio</i>.\
-		It could be also <i>type=raw</i>. Then instead of string the callback is called with an object containing the files.';
+	man: {
+		desc: 'Register or execute commands stored in external files. The files should contain valid javascript which is actually a function definition in the following format:<pre>\
+function nameOfMyFunction(args) {\n\
+...\n\n\
+}\
+</pre>Normally the content of the file is registered as a command, but if the filename starts with <i>exec.</i> the function is executed immediately. For example:<pre>run ./exec.myscript.js</pre>',
+		format: 'run [path]',
+		examples: [
+			{text: 'Importing directory', code: 'run ./files'},
+			{text: 'Importing file', code: 'run ./files/myscript.js'},
+			{text: 'In script', code: 'run("./myfiles", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'Result of the function.',
+		group: 'os'
 	}	
 })
 Commands.register("shell", {
 	requiredArguments: 0,
-	format: '<pre>shell [command]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -2033,14 +1981,22 @@ Commands.register("shell", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Executes shell command.';
+	man: {
+		desc: 'Executes shell command. Have in mind that once you type something in the console and it doesn\'t match any of the auxilio\'s commands it is send to the shell',
+		format: 'shell [command]',
+		examples: [
+			{text: 'Command line', code: 'shell ls'},
+			{text: 'In script', code: 'shell("ls", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
 	}	
 })
 var TreeCommandIsSoketAdded = false;
 Commands.register("tree", {
 	requiredArguments: 0,
-	format: '<pre>tree [regex | deep] [suppressdisplay]</pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -2124,12 +2080,20 @@ Commands.register("tree", {
 	    }
 	    return true;
 	},
-	man: function() {
-		return 'Shows a directory tree.<br />\
-		regex - regular expression for filtering the output</i><br />\
-		deep - the depth of the directory tree<br />\
-		suppressdisplay - just return the result in a command\'s callback without to display the result\
-		';
+	man: {
+		desc: 'Shows a directory tree.',
+		format: 'tree<br />tree [regex]<br />tree [deep]<br />tree [suppressdisplay]',
+		examples: [
+			{text: 'Command line', code: 'tree'},
+			{text: 'Showing files by type', code: 'tree \\\.css'},
+			{text: 'Showing only two levels', code: 'tree 2'},
+			{text: 'Suppress the output to the console', code: 'tree suppressdisplay'},
+			{text: 'In script', code: 'tree(2, function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
 	}	
 })
 var WatchHelper = (function() {
@@ -2204,7 +2168,7 @@ var WatchHelper = (function() {
 
 Commands.register("watch", {
 	requiredArguments: 0,
-	format: '<pre>watch [operation] [id or path] [callback command]</pre>',
+	format: '<pre></pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -2227,21 +2191,25 @@ Commands.register("watch", {
 			}, callback);
 		}
 	},
-	man: function() {
-		return 'Watch directory or file for changes.\
-		<br />Operations:\
-		<br />a) watch (without arguments) - shows the current watched file or directory\
-		<br />b) watch start [path to file or directory] [callback command] - start watching.\
-		<br />Have in mind that you can pass multiple callbacks like for example:\
-		<i>watch start ./ "read jshint.errors[0], info"</i>\
-		<br />c) watch stop [id] - stop watching. Use a) to find out the ids\
-		<br />d) watch stopall - stop the all watchers\
-		';
+	man: {
+		desc: 'Watch directory or file for changes.',
+		format: 'watch [operation] [id or path] [callback command]',
+		examples: [
+			{text: 'Get the current watchers and their ids', code: 'watch'},
+			{text: 'Start watching', code: 'watch start ./ echo'},
+			{text: 'Start watching and call multiple callbacks', code: 'watch start ./ "jshint, echo"'},
+			{text: 'Stop watcher', code: 'watch stop 1'},
+			{text: 'Stop all watchers', code: 'watch stopall'},
+			{text: 'In script', code: 'watch("start", "./", "echo", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
 	}	
 })
 Commands.register("writefile", {
 	requiredArguments: 1,
-	format: '<pre>writefile [file] [content]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -2264,8 +2232,17 @@ Commands.register("writefile", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Write content to a file.';
+	man: {
+		desc: 'Write content to a file.',
+		format: 'writefile [file] [content]',
+		examples: [
+			{text: 'Command line', code: 'writefile ./test.txt Sample text here.'},
+			{text: 'In script', code: 'writefile("./test.txt", "Sample text here", function(res) {\n\
+	console.log("File saved successfully.");\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
 	}	
 })
 Commands.register("pageclick", {

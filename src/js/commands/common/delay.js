@@ -12,7 +12,7 @@ Commands.register("delay", {
 		examples: [
 			{text: 'Command line', code: 'delay 2000'},
 			{text: 'Command line (chaining)', code: 'echo A && delay 2000 && echo B'},
-			{text: 'In script', code: 'delay([2000], function() {\n\
+			{text: 'In script', code: 'delay(2000, function() {\n\
 	console.log("hello");\n\
 })'}
 		],

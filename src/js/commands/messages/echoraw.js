@@ -11,7 +11,7 @@ Commands.register("echoraw", {
 		format: 'echoraw [text]',
 		examples: [
 			{text: 'Command line', code: 'echoraw Hello world!'},
-			{text: 'In script', code: 'echoraw(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'echoraw("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],

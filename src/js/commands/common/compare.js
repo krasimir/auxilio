@@ -45,7 +45,7 @@ Commands.register("compare", {
 		examples: [
 			{text: 'Command line', code: 'compare "Check those values" 10 == 20'},
 			{text: 'Command line (chaining)', code: 'date true && read monthName && compare "Is it July?" July =='},
-			{text: 'In script', code: 'compare(["My title here", 10, "==", 10], function(res) {\n\
+			{text: 'In script', code: 'compare(\'"My title here"\', 10, "==", 10, function(res) {\n\
 	console.log(res);\n\
 })'},
 		],

@@ -75,7 +75,7 @@ Commands.register("diff", {
 			{text: 'Opens a browse window for picking two files', code: 'diff'},
 			{text: 'Comparing two strings', code: 'diff "Hello world!" "Hello world, dude!"'},
 			{text: 'Command line (chaining)', code: 'date true && read monthName && diff "Current month is July"'},
-			{text: 'In script', code: 'diff(["Hello world!", "Hello world dude!"], function(res) {\n\
+			{text: 'In script', code: 'diff(\'"Hello world!"\', \'"Hello world dude!"\', function(res) {\n\
 	console.log(res);\n\
 })'}
 		],

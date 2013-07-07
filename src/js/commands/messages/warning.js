@@ -11,7 +11,7 @@ Commands.register("warning", {
 		format: 'warning [text]',
 		examples: [
 			{text: 'Command line', code: 'warning Hello world!'},
-			{text: 'In script', code: 'warning(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'warning("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],

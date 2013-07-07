@@ -1,6 +1,5 @@
 Commands.register("writefile", {
 	requiredArguments: 1,
-	format: '<pre>writefile [file] [content]</pre>',
 	lookForQuotes: false,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -23,7 +22,16 @@ Commands.register("writefile", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Write content to a file.';
+	man: {
+		desc: 'Write content to a file.',
+		format: 'writefile [file] [content]',
+		examples: [
+			{text: 'Command line', code: 'writefile ./test.txt Sample text here.'},
+			{text: 'In script', code: 'writefile("./test.txt", "Sample text here", function(res) {\n\
+	console.log("File saved successfully.");\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
 	}	
 })

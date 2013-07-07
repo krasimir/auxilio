@@ -11,7 +11,7 @@ Commands.register("success", {
 		format: 'success [text]',
 		examples: [
 			{text: 'Command line', code: 'success Hello world!'},
-			{text: 'In script', code: 'success(["Hello world!"], function(res) {\n\
+			{text: 'In script', code: 'success("Hello world!", function(res) {\n\
 	console.log(res);\n\
 });'}
 		],

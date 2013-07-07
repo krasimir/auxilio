@@ -51,7 +51,7 @@ Commands.register("forminput", {
 		format: 'forminput<br />forminput [title]<br />forminput [title] [default text]',
 		examples: [
 			{text: 'Command line', code: 'forminput "Please type your age." 18'},
-			{text: 'In script', code: 'forminput(["Please type your age.", 18], function(age) {\n\
+			{text: 'In script', code: 'forminput(\'"Please type your age."\', 18, function(age) {\n\
 	console.log(age);\n\
 });'}
 		],

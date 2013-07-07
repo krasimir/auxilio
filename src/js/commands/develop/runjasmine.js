@@ -1,4 +1,4 @@
-Commands.register("jasminerunner", {
+Commands.register("runjasmine", {
 	requiredArguments: 1,
 	lookForQuotes: false,
 	concatArgs: true,
@@ -8,7 +8,7 @@ Commands.register("jasminerunner", {
 		(function(id) {
 			var markup = '<div id="' + id + '"></div>';
 			App.setOutputPanelContent(markup);
-			exec("import " + path, function(totalFilesProcessed) {
+			exec("run " + path, function(totalFilesProcessed) {
 				var jasmineEnv = jasmine.getEnv();
 				var htmlReporter = new jasmine.HtmlReporter(null, document.getElementById(id));
 				jasmineEnv.updateInterval = 1000;
@@ -24,9 +24,9 @@ Commands.register("jasminerunner", {
 	},
 	man: {
 		desc: 'Runs jasmine tests.',
-		format: 'jasminerunner [path]',
+		format: 'runjasmine [path]',
 		examples: [
-			{text: 'Command line', code: 'jasminerunner ./tests'}
+			{text: 'Command line', code: 'runjasmine ./tests'}
 		],
 		returns: 'null',
 		group: 'develop'

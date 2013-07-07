@@ -1,7 +1,6 @@
 var CurrentBlockDirectory = null;
 Commands.register("block", {
 	requiredArguments: 0,
-	format: '<pre>block [operation]</pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -25,8 +24,18 @@ Commands.register("block", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Sometimes you need to execute a series of commands, but you want to keep the context.<br />\
-		Use <i>block start</i> before the commands\' chain and <i>block end</i> at the end.';
+	man: {
+		desc: 'Sometimes you need to execute a series of commands, but you want to keep the context, i.e. the current directory.',
+		format: 'block [operation]',
+		examples: [
+			{text: 'Command line', code: 'block start && cd ../../ && echo Do some stuff here && block end'},
+			{text: 'In script', code: 'block("start", function() {\n\
+	shell("cd ../../", function() {\n\
+		block("end");\n\
+	});\n\
+});'}
+		],
+		returns: 'null',
+		group: 'os'
 	}	
 })

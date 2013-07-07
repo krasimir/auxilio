@@ -70,7 +70,7 @@ var WatchHelper = (function() {
 
 Commands.register("watch", {
 	requiredArguments: 0,
-	format: '<pre>watch [operation] [id or path] [callback command]</pre>',
+	format: '<pre></pre>',
 	lookForQuotes: true,
 	concatArgs: true,
 	run: function(args, callback) {
@@ -93,15 +93,20 @@ Commands.register("watch", {
 			}, callback);
 		}
 	},
-	man: function() {
-		return 'Watch directory or file for changes.\
-		<br />Operations:\
-		<br />a) watch (without arguments) - shows the current watched file or directory\
-		<br />b) watch start [path to file or directory] [callback command] - start watching.\
-		<br />Have in mind that you can pass multiple callbacks like for example:\
-		<i>watch start ./ "read jshint.errors[0], info"</i>\
-		<br />c) watch stop [id] - stop watching. Use a) to find out the ids\
-		<br />d) watch stopall - stop the all watchers\
-		';
+	man: {
+		desc: 'Watch directory or file for changes.',
+		format: 'watch [operation] [id or path] [callback command]',
+		examples: [
+			{text: 'Get the current watchers and their ids', code: 'watch'},
+			{text: 'Start watching', code: 'watch start ./ echo'},
+			{text: 'Start watching and call multiple callbacks', code: 'watch start ./ "jshint, echo"'},
+			{text: 'Stop watcher', code: 'watch stop 1'},
+			{text: 'Stop all watchers', code: 'watch stopall'},
+			{text: 'In script', code: 'watch("start", "./", "echo", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'os'
 	}	
 })
