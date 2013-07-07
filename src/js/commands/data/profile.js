@@ -4,7 +4,7 @@ var Profile = (function() {
 		var onSocketConnect = function() {
 			exec("profile", function(path) {
 				if(path && path !== '') {
-					exec("import " + path);
+					exec("run " + path);
 				}
 			});
 			Shell.socket().removeListener("updatecontext", onSocketConnect);
@@ -46,7 +46,7 @@ Commands.register("profile", {
 		}
 	},
 	man: {
-		desc: 'Manages your current profile file. Every time when you start auxilio the extension reads the files of the given directory (recursively). It searches for files which start with <i>function </i> and register them as commands. If the file starts with <i>exec.</i> directly executes the function inside the file. Check <i>man import</i> for more information.',
+		desc: 'Manages your current profile file. Every time when you start auxilio the extension reads the files of the given directory (recursively). It searches for files which start with <i>function </i> and register them as commands. If the file starts with <i>exec.</i> directly executes the function inside the file. Check <i>man run</i> for more information.',
 		format: 'profile [path]',
 		examples: [
 			{text: 'Getting current profile path', code: 'profile'},

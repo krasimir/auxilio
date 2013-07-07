@@ -308,7 +308,7 @@ Commands.register("l", {
 Commands.register("man", {
 	requiredArguments: 0,
 	run: function(args, callback) {
-		var commandToViewName = args[0];
+		var commandToViewName = args.shift();
 		if(commandToViewName) {
 			for(var commandName in Commands) {
 				var r = new RegExp(commandToViewName, "g");
@@ -317,11 +317,33 @@ Commands.register("man", {
 				}
 			}
 		} else {
+			var groups = {}
 			for(var commandName in Commands) {
-				if(commandName != "get" && commandName != "register") {
-					this.showCommand(commandName);
+				var c = Commands[commandName];
+				if(c.man && c.man.group) {
+					if(!groups[c.man.group]) groups[c.man.group] = [];
+					groups[c.man.group].push(commandName);
 				}
 			}
+			var markup = '<h1>Auxilio manual pages</h1><div class="man-holder">';
+			for(var groupName in groups) {
+				markup += '<div class="man-group">';
+				markup += '<h2>' + groupName + '</h2>';
+				for(var i=0; command = groups[groupName][i]; i++) {
+					markup += '<a href="javascript:void(0)" class="man-group-link" data="' + command + '">' + command + '</a><br />';
+				}
+				markup += '</div>';
+			}
+			markup += '<br class="clear" />';
+			markup += '</div>';
+			exec("echo " + markup, function() {
+				var links = document.querySelectorAll(".man-group-link");
+				for(var i=0; link=links[i]; i++) {
+					link.addEventListener("click", function(e) {
+						exec("man " + e.target.getAttribute("data"));
+					})
+				}
+			});
 		}
 		callback();
 	},
@@ -714,7 +736,7 @@ var Profile = (function() {
 		var onSocketConnect = function() {
 			exec("profile", function(path) {
 				if(path && path !== '') {
-					exec("import " + path);
+					exec("run " + path);
 				}
 			});
 			Shell.socket().removeListener("updatecontext", onSocketConnect);
@@ -756,7 +778,7 @@ Commands.register("profile", {
 		}
 	},
 	man: {
-		desc: 'Manages your current profile file. Every time when you start auxilio the extension reads the files of the given directory (recursively). It searches for files which start with <i>function </i> and register them as commands. If the file starts with <i>exec.</i> directly executes the function inside the file. Check <i>man import</i> for more information.',
+		desc: 'Manages your current profile file. Every time when you start auxilio the extension reads the files of the given directory (recursively). It searches for files which start with <i>function </i> and register them as commands. If the file starts with <i>exec.</i> directly executes the function inside the file. Check <i>man run</i> for more information.',
 		format: 'profile [path]',
 		examples: [
 			{text: 'Getting current profile path', code: 'profile'},

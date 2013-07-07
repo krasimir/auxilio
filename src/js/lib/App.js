@@ -211,7 +211,7 @@ var App = {
 			"writefile",
 			"profile",
 			"tree",
-			"import"
+			"run"
 		];
 		return _.indexOf(commandsToAvoid, command) >= 0;
 	},
