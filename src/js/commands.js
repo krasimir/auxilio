@@ -323,12 +323,14 @@ Commands.register("man", {
 						markdown += "  - returns: " + command.man.returns + "\n";
 						markdown += "\n#### Examples:\n\n";
 						for(var j=0; example = command.man.examples[j]; j++) {
+							var code = example.code.replace(/</g, '&lt;').replace(/&&/g, '&amp;&amp;');
 							markdown += example.text + "\n";
-							markdown += "&lt;pre>" + example.code.replace(/</g, '&lt;').replace(/&&/g, '&amp;&amp;') + "&lt;/pre>\n";
+							markdown += "&lt;pre>" + code + "&lt;/pre>\n";
 						}
 					}
 				}
-				formtextarea("Markdown", markdown);
+				writefile("commands.md", markdown, callback);
+				return;
 			} else {
 				for(var commandName in Commands) {
 					var r = new RegExp(commandToViewName, "g");
