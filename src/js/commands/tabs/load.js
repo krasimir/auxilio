@@ -1,6 +1,6 @@
 Commands.register("load", {
 	requiredArguments: 1,
-	format: '<pre>load [url]</pre>',
+	format: '<pre></pre>',
 	run: function(args, callback) {
 		var url = args[0];
 		if(url.indexOf("http") == -1) url = "http://" + url;
@@ -13,7 +13,16 @@ Commands.register("load", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Loads another page in the current tab.';
+	man: {
+		desc: 'Loads another page in the current tab.',
+		format: 'load [url]',
+		examples: [
+			{text: 'Command line', code: 'load github.com'},
+			{text: 'In script', code: 'load("github.com", function() {\n\
+	console.log("new page loaded");\n\
+});'}
+		],
+		returns: 'null',
+		group: 'tabs'
 	}	
 })

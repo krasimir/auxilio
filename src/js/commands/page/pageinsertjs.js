@@ -1,6 +1,5 @@
 Commands.register("pageinsertjs", {
 	requiredArguments: 1,
-	format: '<pre>pageinsertjs [js code]</pre>',
 	lookForQuotes: false,
 	run: function(args, callback) {
 		var jscode = args.join(" ");
@@ -16,9 +15,16 @@ Commands.register("pageinsertjs", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Executes javascript code in the context of the current page<br />\
-		Example:<br />\
-		pageinsertjs "document.querySelector(\'body\').click();"';
+	man: {
+		desc: 'Executes javascript code in the context of the current page',
+		format: 'pageinsertjs [js code]',
+		examples: [
+			{text: 'Command line', code: 'pageinsertjs "document.querySelector(\'body\').click();"'},
+			{text: 'In script', code: 'pageinsertjs("document.querySelector(\'body\').click();", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'page'
 	}	
 })

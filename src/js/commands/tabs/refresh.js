@@ -1,6 +1,5 @@
 Commands.register("refresh", {
 	requiredArguments: 0,
-	format: '<pre>refresh</pre>',
 	run: function(args, callback) {
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "refresh"}, function() {
@@ -11,7 +10,16 @@ Commands.register("refresh", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Refreshes the current tab\'s page';
+	man: {
+		desc: 'Refreshes the current tab\'s page',
+		format: 'refresh',
+		examples: [
+			{text: 'Command line', code: 'refresh'},
+			{text: 'In script', code: 'refresh(function() {\n\
+	console.log("The current page is refreshed.");\n\
+});'}
+		],
+		returns: 'null',
+		group: 'tabs'
 	}	
 })

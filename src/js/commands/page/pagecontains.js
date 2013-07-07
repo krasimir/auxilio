@@ -1,6 +1,5 @@
 Commands.register("pagecontains", {
 	requiredArguments: 2,
-	format: '<pre>pagecontains [selector] [text]</pre>',
 	run: function(args, callback) {
 		var selector = args.shift();
 		var text = args.join(" ");
@@ -29,9 +28,16 @@ Commands.register("pagecontains", {
 			}			
 		});
 	},
-	man: function() {
-		return 'Checks if there is an element matching the provided selector and containing the provided text.<br />\
-		Example:<br />\
-		pagecontains "body > a" "my link"';
+	man: {
+		desc: 'Checks if there is an element matching the provided selector and containing the provided text.',
+		format: 'pagecontains [selector] [text]',
+		examples: [
+			{text: 'Command line', code: 'pagecontains "body > a" "my link"'},
+			{text: 'In script', code: 'pagecontains("body > a", "my link", function(res) {\n\
+	console.log(res ? "yes" : "no");\n\
+});'}
+		],
+		returns: 'Boolean (true | false)',
+		group: 'page'
 	}	
 })

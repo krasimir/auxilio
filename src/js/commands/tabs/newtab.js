@@ -1,6 +1,5 @@
 Commands.register("newtab", {
 	requiredArguments: 0,
-	format: '<pre>newtab\nnewtab [url] [active (true | false)]</pre>',
 	run: function(args, callback) {
 		if(chrome && chrome.runtime) {
 			if(args[0]) {
@@ -19,7 +18,16 @@ Commands.register("newtab", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Creates a new tab.';
+	man: {
+		desc: 'Creates a new tab.',
+		format: 'newtab<br />newtab [url] [active (true | false)]',
+		examples: [
+			{text: 'Command line', code: 'newtab github.com'},
+			{text: 'In script', code: 'newtab("github.com", "false", function() {\n\
+	console.log("new tab loaded");\n\
+});'}
+		],
+		returns: 'null',
+		group: 'tabs'
 	}	
 })

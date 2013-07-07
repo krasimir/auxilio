@@ -2247,7 +2247,6 @@ Commands.register("writefile", {
 })
 Commands.register("pageclick", {
 	requiredArguments: 1,
-	format: '<pre>pageclick [selector] [filter]</pre>',
 	run: function(args, callback) {
 		var selector = args.shift();
 		var filter = args.length > 0 ? args.join(" ") : null;
@@ -2259,14 +2258,22 @@ Commands.register("pageclick", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Clicks an element on the page and returns the result immediately.<br />\
-		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.';
+	man: {
+		desc: 'Clicks an element on the page and returns the result immediately. Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.',
+		format: 'pageclick [selector] [filter]',
+		examples: [
+			{text: 'Command line', code: 'pageclick "body > .my-link-class"'},
+			{text: 'Filter the selected elements', code: 'pageclick "body > .my-link-class" "link label"'},
+			{text: 'In script', code: 'pageclick("body > .my-link-class", function(res) {\n\
+	console.log("Element clicked.");\n\
+});'}
+		],
+		returns: 'Object containing the matched elements.',
+		group: 'page'
 	}
 })
 Commands.register("pageclickw", {
 	requiredArguments: 1,
-	format: '<pre>pageclickw [selector] [filter]</pre>',
 	run: function(args, callback) {
 		var selector = args.shift();
 		var filter = args.length > 0 ? args.join(" ") : null;
@@ -2278,14 +2285,22 @@ Commands.register("pageclickw", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Clicks an element on the page and waits till the page is updated (i.e. a new url is fully loaded).<br />\
-		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.';
+	man: {
+		desc: 'Clicks an element on the page and waits till the page is updated. Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.',
+		format: 'pageclickw [selector] [filter]',
+		examples: [
+			{text: 'Command line', code: 'pageclickw "body > .my-link-class"'},
+			{text: 'Filter the selected elements', code: 'pageclickw "body > .my-link-class" "link label"'},
+			{text: 'In script', code: 'pageclickw("body > .my-link-class", function() {\n\
+	console.log("Element clicked.");\n\
+});'}
+		],
+		returns: 'Object containing the matched elements.',
+		group: 'page'
 	}	
 })
 Commands.register("pagecontains", {
 	requiredArguments: 2,
-	format: '<pre>pagecontains [selector] [text]</pre>',
 	run: function(args, callback) {
 		var selector = args.shift();
 		var text = args.join(" ");
@@ -2314,15 +2329,21 @@ Commands.register("pagecontains", {
 			}			
 		});
 	},
-	man: function() {
-		return 'Checks if there is an element matching the provided selector and containing the provided text.<br />\
-		Example:<br />\
-		pagecontains "body > a" "my link"';
+	man: {
+		desc: 'Checks if there is an element matching the provided selector and containing the provided text.',
+		format: 'pagecontains [selector] [text]',
+		examples: [
+			{text: 'Command line', code: 'pagecontains "body > a" "my link"'},
+			{text: 'In script', code: 'pagecontains("body > a", "my link", function(res) {\n\
+	console.log(res ? "yes" : "no");\n\
+});'}
+		],
+		returns: 'Boolean (true | false)',
+		group: 'page'
 	}	
 })
 Commands.register("pageexpect", {
 	requiredArguments: 1,
-	format: '<pre>pageexpect [selector] [filter]</pre>',
 	run: function(args, callback) {
 		var selector = args.shift();
 		var filter = args.length > 0 ? args.join(" ") : null;
@@ -2341,14 +2362,22 @@ Commands.register("pageexpect", {
 			}			
 		});
 	},
-	man: function() {
-		return 'Checks if there is an element matching the provided selector.<br />\
-		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element';
+	man: {
+		desc: 'Checks if there is an element matching the provided selector. Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element',
+		format: 'pageexpect [selector] [filter]',
+		examples: [
+			{text: 'Command line', code: 'pageexpect a.my-link-class label'},
+			{text: 'In script', code: 'pageexpect("a.my-link-class", "label, function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'Object containing the matched elements.',
+		group: 'page'
 	}	
 })
 Commands.register("pagehighlight", {
 	requiredArguments: 1,
-	format: '<pre>pagehighlight [selector] [filter]</pre>',
+	format: '<pre></pre>',
 	run: function(args, callback) {
 		var selector = args.shift();
 		var filter = args.length > 0 ? args.join(" ") : null;
@@ -2360,14 +2389,22 @@ Commands.register("pagehighlight", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Highlights element/elements on the page.<br />\
-		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.';
+	man: {
+		desc: 'Highlights element/elements on the page. Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.',
+		format: 'pagehighlight [selector] [filter]',
+		examples: [
+			{text: 'Command line', code: 'pagehighlight a'},
+			{text: 'In script', code: 'pagehighlight("a", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'Object containing the matched elements.',
+		group: 'page'
 	}	
 })
 Commands.register("pageinsertcss", {
 	requiredArguments: 1,
-	format: '<pre>pageinsertcss [css code]</pre>',
+	format: '<pre></pre>',
 	lookForQuotes: false,
 	run: function(args, callback) {
 		var csscode = args.join(" ");
@@ -2379,15 +2416,21 @@ Commands.register("pageinsertcss", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Inserts css code in the context of the current page<br />\
-		Example:<br />\
-		pageinsertcss body { background: #F00; }';
+	man: {
+		desc: 'Inserts css code in the context of the current page',
+		format: 'pageinsertcss [css code]',
+		examples: [
+			{text: 'Command line', code: 'pageinsertcss body { background: #F00 !important; }'},
+			{text: 'In script', code: 'pageinsertcss("body { background: #F00 !important; }", function() {\n\
+	console.log("CSS applied.");\n\
+});'}
+		],
+		returns: 'string',
+		group: 'page'
 	}	
 })
 Commands.register("pageinsertjs", {
 	requiredArguments: 1,
-	format: '<pre>pageinsertjs [js code]</pre>',
 	lookForQuotes: false,
 	run: function(args, callback) {
 		var jscode = args.join(" ");
@@ -2403,15 +2446,21 @@ Commands.register("pageinsertjs", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Executes javascript code in the context of the current page<br />\
-		Example:<br />\
-		pageinsertjs "document.querySelector(\'body\').click();"';
+	man: {
+		desc: 'Executes javascript code in the context of the current page',
+		format: 'pageinsertjs [js code]',
+		examples: [
+			{text: 'Command line', code: 'pageinsertjs "document.querySelector(\'body\').click();"'},
+			{text: 'In script', code: 'pageinsertjs("document.querySelector(\'body\').click();", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'page'
 	}	
 })
 Commands.register("pageinsertjsw", {
 	requiredArguments: 1,
-	format: '<pre>pageinsertjsw [js code]</pre>',
 	lookForQuotes: false,
 	run: function(args, callback) {
 		var jscode = args.join(" ");
@@ -2427,15 +2476,21 @@ Commands.register("pageinsertjsw", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Executes javascript code in the context of the current page and waits till the current page is updated<br />\
-		Example:<br />\
-		pageinsertjsw "document.querySelector(\'form\').submit();"';
+	man: {
+		desc: 'Executes javascript code in the context of the current page and waits till the current page is updated',
+		format: 'pageinsertjsw [js code]',
+		examples: [
+			{text: 'Command line', code: 'pageinsertjsw "document.querySelector(\'body\').click();"'},
+			{text: 'In script', code: 'pageinsertjsw("document.querySelector(\'body\').click();", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'page'
 	}	
 })
 Commands.register("pagequery", {
 	requiredArguments: 1,
-	format: '<pre>pagequery [selector] [filter]</pre>',
 	run: function(args, callback) {
 		var selector = args.shift();
 		var filter = args.length > 0 ? args.join(" ") : null;		
@@ -2447,15 +2502,22 @@ Commands.register("pagequery", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Returns the number of matched elements and the elements in raw html string format.<br />\
-		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.\
-		Example: {"elements": 1, "raw": ["&lt;a href=\"#\">test&lt;/a>"]}';
+	man: {
+		desc: 'Returns the number of matched elements and the elements in raw html string format. Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.',
+		format: 'pagequery [selector] [filter]',
+		examples: [
+			{text: 'Command line', code: 'pagequery a "label of the link"'},
+			{text: 'In script (checks if there is links on the page)', code: 'pagequery("a", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'Object containing the matched elements.',
+		group: 'page'
 	}	
 })
 Commands.register("load", {
 	requiredArguments: 1,
-	format: '<pre>load [url]</pre>',
+	format: '<pre></pre>',
 	run: function(args, callback) {
 		var url = args[0];
 		if(url.indexOf("http") == -1) url = "http://" + url;
@@ -2468,13 +2530,21 @@ Commands.register("load", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Loads another page in the current tab.';
+	man: {
+		desc: 'Loads another page in the current tab.',
+		format: 'load [url]',
+		examples: [
+			{text: 'Command line', code: 'load github.com'},
+			{text: 'In script', code: 'load("github.com", function() {\n\
+	console.log("new page loaded");\n\
+});'}
+		],
+		returns: 'null',
+		group: 'tabs'
 	}	
 })
 Commands.register("newtab", {
 	requiredArguments: 0,
-	format: '<pre>newtab\nnewtab [url] [active (true | false)]</pre>',
 	run: function(args, callback) {
 		if(chrome && chrome.runtime) {
 			if(args[0]) {
@@ -2493,13 +2563,21 @@ Commands.register("newtab", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Creates a new tab.';
+	man: {
+		desc: 'Creates a new tab.',
+		format: 'newtab<br />newtab [url] [active (true | false)]',
+		examples: [
+			{text: 'Command line', code: 'newtab github.com'},
+			{text: 'In script', code: 'newtab("github.com", "false", function() {\n\
+	console.log("new tab loaded");\n\
+});'}
+		],
+		returns: 'null',
+		group: 'tabs'
 	}	
 })
 Commands.register("refresh", {
 	requiredArguments: 0,
-	format: '<pre>refresh</pre>',
 	run: function(args, callback) {
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "refresh"}, function() {
@@ -2510,13 +2588,21 @@ Commands.register("refresh", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Refreshes the current tab\'s page';
+	man: {
+		desc: 'Refreshes the current tab\'s page',
+		format: 'refresh',
+		examples: [
+			{text: 'Command line', code: 'refresh'},
+			{text: 'In script', code: 'refresh(function() {\n\
+	console.log("The current page is refreshed.");\n\
+});'}
+		],
+		returns: 'null',
+		group: 'tabs'
 	}	
 })
 Commands.register("screenshot", {
 	requiredArguments: 0,
-	format: '<pre>screenshot</pre>',
 	run: function(args, callback) {
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "screenshot"}, function(data) {
@@ -2532,7 +2618,16 @@ Commands.register("screenshot", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Makes a screenshot of the current tab and loads it in a new tab.';
+	man: {
+		desc: 'Makes a screenshot of the current tab and loads it in a new tab.',
+		format: 'screenshot',
+		examples: [
+			{text: 'Command line', code: 'screenshot'},
+			{text: 'In script', code: 'screenshot(function() {\n\
+	console.log("The screenshot is made.");\n\
+});'}
+		],
+		returns: 'null',
+		group: 'tabs'
 	}	
 })

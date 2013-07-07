@@ -1,6 +1,5 @@
 Commands.register("screenshot", {
 	requiredArguments: 0,
-	format: '<pre>screenshot</pre>',
 	run: function(args, callback) {
 		if(chrome && chrome.runtime) {
 			chrome.runtime.sendMessage({type: "screenshot"}, function(data) {
@@ -16,7 +15,16 @@ Commands.register("screenshot", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Makes a screenshot of the current tab and loads it in a new tab.';
+	man: {
+		desc: 'Makes a screenshot of the current tab and loads it in a new tab.',
+		format: 'screenshot',
+		examples: [
+			{text: 'Command line', code: 'screenshot'},
+			{text: 'In script', code: 'screenshot(function() {\n\
+	console.log("The screenshot is made.");\n\
+});'}
+		],
+		returns: 'null',
+		group: 'tabs'
 	}	
 })

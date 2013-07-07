@@ -1,6 +1,5 @@
 Commands.register("pageinsertjsw", {
 	requiredArguments: 1,
-	format: '<pre>pageinsertjsw [js code]</pre>',
 	lookForQuotes: false,
 	run: function(args, callback) {
 		var jscode = args.join(" ");
@@ -16,9 +15,16 @@ Commands.register("pageinsertjsw", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Executes javascript code in the context of the current page and waits till the current page is updated<br />\
-		Example:<br />\
-		pageinsertjsw "document.querySelector(\'form\').submit();"';
+	man: {
+		desc: 'Executes javascript code in the context of the current page and waits till the current page is updated',
+		format: 'pageinsertjsw [js code]',
+		examples: [
+			{text: 'Command line', code: 'pageinsertjsw "document.querySelector(\'body\').click();"'},
+			{text: 'In script', code: 'pageinsertjsw("document.querySelector(\'body\').click();", function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'string',
+		group: 'page'
 	}	
 })

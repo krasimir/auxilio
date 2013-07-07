@@ -1,6 +1,5 @@
 Commands.register("pageexpect", {
 	requiredArguments: 1,
-	format: '<pre>pageexpect [selector] [filter]</pre>',
 	run: function(args, callback) {
 		var selector = args.shift();
 		var filter = args.length > 0 ? args.join(" ") : null;
@@ -19,8 +18,16 @@ Commands.register("pageexpect", {
 			}			
 		});
 	},
-	man: function() {
-		return 'Checks if there is an element matching the provided selector.<br />\
-		Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element';
+	man: {
+		desc: 'Checks if there is an element matching the provided selector. Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element',
+		format: 'pageexpect [selector] [filter]',
+		examples: [
+			{text: 'Command line', code: 'pageexpect a.my-link-class label'},
+			{text: 'In script', code: 'pageexpect("a.my-link-class", "label, function(res) {\n\
+	console.log(res);\n\
+});'}
+		],
+		returns: 'Object containing the matched elements.',
+		group: 'page'
 	}	
 })

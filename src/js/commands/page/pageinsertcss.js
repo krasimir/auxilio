@@ -1,6 +1,6 @@
 Commands.register("pageinsertcss", {
 	requiredArguments: 1,
-	format: '<pre>pageinsertcss [css code]</pre>',
+	format: '<pre></pre>',
 	lookForQuotes: false,
 	run: function(args, callback) {
 		var csscode = args.join(" ");
@@ -12,9 +12,16 @@ Commands.register("pageinsertcss", {
 			callback();
 		}
 	},
-	man: function() {
-		return 'Inserts css code in the context of the current page<br />\
-		Example:<br />\
-		pageinsertcss body { background: #F00; }';
+	man: {
+		desc: 'Inserts css code in the context of the current page',
+		format: 'pageinsertcss [css code]',
+		examples: [
+			{text: 'Command line', code: 'pageinsertcss body { background: #F00 !important; }'},
+			{text: 'In script', code: 'pageinsertcss("body { background: #F00 !important; }", function() {\n\
+	console.log("CSS applied.");\n\
+});'}
+		],
+		returns: 'string',
+		group: 'page'
 	}	
 })
