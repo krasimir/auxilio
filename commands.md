@@ -14,9 +14,9 @@ Clearing the current console's output.
 #### Examples:
 
 
-&lt;pre>clear&lt;/pre>
+<pre>clear</pre>
 In script
-&lt;pre>clear()&lt;/pre>
+<pre>clear()</pre>
 ### compare
 
 Compares values. (Have in mind that it works only with strings and numbers.)
@@ -27,13 +27,13 @@ Compares values. (Have in mind that it works only with strings and numbers.)
 #### Examples:
 
 Command line
-&lt;pre>compare "Check those values" 10 == 20&lt;/pre>
+<pre>compare "Check those values" 10 == 20</pre>
 Command line (chaining)
-&lt;pre>date true &amp;&amp; read monthName &amp;&amp; compare "Is it July?" July ==&lt;/pre>
+<pre>date true &amp;&amp; read monthName &amp;&amp; compare "Is it July?" July ==</pre>
 In script
-&lt;pre>compare('"My title here"', 10, "==", 10, function(res) {
+<pre>compare('"My title here"', 10, "==", 10, function(res) {
 	console.log(res);
-})&lt;/pre>
+})</pre>
 ### date
 
 Gets the current date.
@@ -51,13 +51,13 @@ Gets the current date.
 #### Examples:
 
 Command line
-&lt;pre>date&lt;/pre>
+<pre>date</pre>
 Command line (chaining)
-&lt;pre>date true &amp;&amp; read monthName &amp;&amp; info&lt;/pre>
+<pre>date true &amp;&amp; read monthName &amp;&amp; info</pre>
 In script
-&lt;pre>date("true", function(date) {
+<pre>date("true", function(date) {
 	console.log(date.year);
-})&lt;/pre>
+})</pre>
 ### delay
 
 Delays the next command
@@ -68,13 +68,13 @@ Delays the next command
 #### Examples:
 
 Command line
-&lt;pre>delay 2000&lt;/pre>
+<pre>delay 2000</pre>
 Command line (chaining)
-&lt;pre>echo A &amp;&amp; delay 2000 &amp;&amp; echo B&lt;/pre>
+<pre>echo A &amp;&amp; delay 2000 &amp;&amp; echo B</pre>
 In script
-&lt;pre>delay(2000, function() {
+<pre>delay(2000, function() {
 	console.log("hello");
-})&lt;/pre>
+})</pre>
 ### diff
 
 Comparison of files (text and json) or strings.
@@ -85,15 +85,15 @@ Comparison of files (text and json) or strings.
 #### Examples:
 
 Opens a browse window for picking two files
-&lt;pre>diff&lt;/pre>
+<pre>diff</pre>
 Comparing two strings
-&lt;pre>diff "Hello world!" "Hello world, dude!"&lt;/pre>
+<pre>diff "Hello world!" "Hello world, dude!"</pre>
 Command line (chaining)
-&lt;pre>date true &amp;&amp; read monthName &amp;&amp; diff "Current month is July"&lt;/pre>
+<pre>date true &amp;&amp; read monthName &amp;&amp; diff "Current month is July"</pre>
 In script
-&lt;pre>diff('"Hello world!"', '"Hello world dude!"', function(res) {
+<pre>diff('"Hello world!"', '"Hello world dude!"', function(res) {
 	console.log(res);
-})&lt;/pre>
+})</pre>
 ### exec
 
 Executes a given command. Accepts commands separated by <i>&&</i>.
@@ -104,13 +104,13 @@ Executes a given command. Accepts commands separated by <i>&&</i>.
 #### Examples:
 
 Command line
-&lt;pre>exec echo "test"&lt;/pre>
+<pre>exec echo "test"</pre>
 Command line (chaining)
-&lt;pre>readfile showing-date.aux &amp;&amp; exec&lt;/pre>
+<pre>readfile showing-date.aux &amp;&amp; exec</pre>
 In script
-&lt;pre>exec("echo Hello world! &amp;&amp; date true", function(res) {
+<pre>exec("echo Hello world! &amp;&amp; date true", function(res) {
 	console.log(res);
-})&lt;/pre>
+})</pre>
 ### history
 
 Outputs the current console's history.
@@ -121,7 +121,7 @@ Outputs the current console's history.
 #### Examples:
 
 Command line
-&lt;pre>history&lt;/pre>
+<pre>history</pre>
 ### l
 
 Clearing the current console's output.
@@ -132,7 +132,7 @@ Clearing the current console's output.
 #### Examples:
 
 Just type <i>l</i> and press Enter
-&lt;pre>l&lt;/pre>
+<pre>l</pre>
 ### man
 
 Shows manual page about available commands.
@@ -143,7 +143,7 @@ Shows manual page about available commands.
 #### Examples:
 
 Command line
-&lt;pre>man&lt;/pre>
+<pre>man</pre>
 ### marker
 
 Gives you ability to place markers on the current page. <i>screenshot</i> command could be used after that.
@@ -154,7 +154,7 @@ Gives you ability to place markers on the current page. <i>screenshot</i> comman
 #### Examples:
 
 Command line
-&lt;pre>marker&lt;/pre>
+<pre>marker</pre>
 ### middleman
 
 The command simply passes the given argument to its callback
@@ -165,7 +165,7 @@ The command simply passes the given argument to its callback
 #### Examples:
 
 Command line (chaining)
-&lt;pre>date &amp;&amp; middleman &amp;&amp; echo&lt;/pre>
+<pre>date &amp;&amp; middleman &amp;&amp; echo</pre>
 ### pass
 
 Sometimes is needed to stop passing a result from one command to another. This command simply calls its callback without any arguments.
@@ -176,7 +176,7 @@ Sometimes is needed to stop passing a result from one command to another. This c
 #### Examples:
 
 Command line (chaining)
-&lt;pre>date true &amp;&amp; pass &amp;&amp; echo That's a string without date.&lt;/pre>
+<pre>date true &amp;&amp; pass &amp;&amp; echo That's a string without date.</pre>
 ### read
 
 Extracts a value from json object
@@ -187,9 +187,9 @@ Extracts a value from json object
 #### Examples:
 
 Command line (chaining)
-&lt;pre>date true &amp;&amp; read day &amp;&amp; success Today is &lt;/pre>
+<pre>date true &amp;&amp; read day &amp;&amp; success Today is </pre>
 If you have a complex object like this one {data: { users: [10, 11, 12] }}
-&lt;pre>read data.users[1]&lt;/pre>
+<pre>read data.users[1]</pre>
 ### request
 
 Sends ajax request and returns the result.
@@ -200,11 +200,11 @@ Sends ajax request and returns the result.
 #### Examples:
 
 Command line
-&lt;pre>request github.com &amp;&amp; echo&lt;/pre>
+<pre>request github.com &amp;&amp; echo</pre>
 Getting raw html
-&lt;pre>request github.com true &amp;&amp; echo&lt;/pre>
+<pre>request github.com true &amp;&amp; echo</pre>
 In script
-&lt;pre>This command is not supported in external scripts.&lt;/pre>
+<pre>This command is not supported in external scripts.</pre>
 ### stringify
 
 Just bypasses the given arguments as string
@@ -215,7 +215,7 @@ Just bypasses the given arguments as string
 #### Examples:
 
 Command line
-&lt;pre>date true &amp;&amp; stringify &amp;&amp; info&lt;/pre>
+<pre>date true &amp;&amp; stringify &amp;&amp; info</pre>
 ### var
 
 Define a variable.
@@ -226,11 +226,11 @@ Define a variable.
 #### Examples:
 
 Command line
-&lt;pre>var n 10
-echo $$n is a great position&lt;/pre>
+<pre>var n 10
+echo $$n is a great position</pre>
 Command line (chaining)
-&lt;pre>date &amp;&amp; var currentDate
-echo Current date is $$currentDate&lt;/pre>
+<pre>date &amp;&amp; var currentDate
+echo Current date is $$currentDate</pre>
 - - -
 
 ## data
@@ -245,21 +245,21 @@ Managing aliases.
 #### Examples:
 
 Showing current added aliases
-&lt;pre>alias&lt;/pre>
+<pre>alias</pre>
 Opening an editor for adding alias
-&lt;pre>alias my-alias-name&lt;/pre>
+<pre>alias my-alias-name</pre>
 Directly pass the content of the alias
-&lt;pre>alias my-alias-name date &amp;&amp; echo&lt;/pre>
+<pre>alias my-alias-name date &amp;&amp; echo</pre>
 Clearing all aliases
-&lt;pre>alias clearallplease&lt;/pre>
+<pre>alias clearallplease</pre>
 Exporting all aliases
-&lt;pre>alias exportallplease&lt;/pre>
+<pre>alias exportallplease</pre>
 Command line (chaining)
-&lt;pre>readfile showing-date.aux &amp;&amp; exec&lt;/pre>
+<pre>readfile showing-date.aux &amp;&amp; exec</pre>
 In script
-&lt;pre>alias('"my-alias-name"', "date &amp;&amp; echo", function() {
+<pre>alias('"my-alias-name"', "date &amp;&amp; echo", function() {
 	console.log("Alias added.");
-})&lt;/pre>
+})</pre>
 ### profile
 
 Manages your current profile file. Every time when you start auxilio the extension reads the files of the given directory (recursively). It searches for files which start with <i>function </i> and register them as commands. If the file starts with <i>exec.</i> directly executes the function inside the file. Check <i>man run</i> for more information.
@@ -270,11 +270,11 @@ Manages your current profile file. Every time when you start auxilio the extensi
 #### Examples:
 
 Getting current profile path
-&lt;pre>profile&lt;/pre>
+<pre>profile</pre>
 Setting profile
-&lt;pre>profile D:/work/auxilio/profile&lt;/pre>
+<pre>profile D:/work/auxilio/profile</pre>
 Clearing profile
-&lt;pre>profile clear&lt;/pre>
+<pre>profile clear</pre>
 ### storage
 
 Stores key-value pairs by using chrome.storage.sync API.
@@ -285,13 +285,13 @@ Stores key-value pairs by using chrome.storage.sync API.
 #### Examples:
 
 Storing variable
-&lt;pre>storage put username Auxilio&lt;/pre>
+<pre>storage put username Auxilio</pre>
 Getting variable
-&lt;pre>storage get username&lt;/pre>
+<pre>storage get username</pre>
 Removing variable
-&lt;pre>storage remove username&lt;/pre>
+<pre>storage remove username</pre>
 Get all variable
-&lt;pre>storage get&lt;/pre>
+<pre>storage get</pre>
 - - -
 
 ## develop
@@ -306,7 +306,7 @@ Opens an editor for editing files. Available shortcuts:<br />		Ctrl+S - save<br 
 #### Examples:
 
 Open file for editing
-&lt;pre>editor ./styles.css&lt;/pre>
+<pre>editor ./styles.css</pre>
 ### jshint
 
 Formats an output of jshint execution. The command is meant to be used together with <i>watch</i>.
@@ -317,7 +317,7 @@ Formats an output of jshint execution. The command is meant to be used together 
 #### Examples:
 
 Watching a javascript file for changes and passing the result to jshint.
-&lt;pre>watch start ./code.js jshint&lt;/pre>
+<pre>watch start ./code.js jshint</pre>
 ### runjasmine
 
 Runs jasmine tests.
@@ -328,7 +328,7 @@ Runs jasmine tests.
 #### Examples:
 
 Command line
-&lt;pre>runjasmine ./tests&lt;/pre>
+<pre>runjasmine ./tests</pre>
 - - -
 
 ## forms
@@ -343,11 +343,11 @@ Shows a text (question) with two options - YES and NO.
 #### Examples:
 
 Command line
-&lt;pre>formconfirm Are you sure?&lt;/pre>
+<pre>formconfirm Are you sure?</pre>
 In script
-&lt;pre>formconfirm('"Are you sure?"', function(res) {
+<pre>formconfirm('"Are you sure?"', function(res) {
 	console.log(res ? "yes" : "no");
-});&lt;/pre>
+});</pre>
 ### formfile
 
 Shows a simple form with input[type="file"] and button. Use the callback of the command to get the content of the file.
@@ -358,11 +358,11 @@ Shows a simple form with input[type="file"] and button. Use the callback of the 
 #### Examples:
 
 Command line
-&lt;pre>formfile Please choose a file.&lt;/pre>
+<pre>formfile Please choose a file.</pre>
 In script
-&lt;pre>formfile('"Please choose a file."', function(fileContent) {
+<pre>formfile('"Please choose a file."', function(fileContent) {
 	console.log(fileContent);
-})&lt;/pre>
+})</pre>
 ### forminput
 
 Shows a simple form with input and button.
@@ -373,11 +373,11 @@ Shows a simple form with input and button.
 #### Examples:
 
 Command line
-&lt;pre>forminput "Please type your age." 18&lt;/pre>
+<pre>forminput "Please type your age." 18</pre>
 In script
-&lt;pre>forminput('"Please type your age."', 18, function(age) {
+<pre>forminput('"Please type your age."', 18, function(age) {
 	console.log(age);
-});&lt;/pre>
+});</pre>
 ### formtextarea
 
 Shows a simple form with textarea and button. Use the callback of the command to get the text submitted by the form.
@@ -388,11 +388,11 @@ Shows a simple form with textarea and button. Use the callback of the command to
 #### Examples:
 
 Command line
-&lt;pre>formtextarea "Please type your bio." "Sample text" &amp;&amp; echo&lt;/pre>
+<pre>formtextarea "Please type your bio." "Sample text" &amp;&amp; echo</pre>
 In script
-&lt;pre>formtextarea('"Please type your bio."', '"Sample text"', function(bio) {
+<pre>formtextarea('"Please type your bio."', '"Sample text"', function(bio) {
 	console.log(bio);
-});&lt;/pre>
+});</pre>
 - - -
 
 ## games
@@ -407,7 +407,7 @@ Tetris game.
 #### Examples:
 
 Command line
-&lt;pre>tetris&lt;/pre>
+<pre>tetris</pre>
 - - -
 
 ## messages
@@ -422,11 +422,11 @@ Outputs message.
 #### Examples:
 
 Command line
-&lt;pre>echo Hello world!&lt;/pre>
+<pre>echo Hello world!</pre>
 In script
-&lt;pre>echo("Hello world!", function(res) {
+<pre>echo("Hello world!", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### echoraw
 
 Outputs message in raw format. Even the html is shown as string.
@@ -437,11 +437,11 @@ Outputs message in raw format. Even the html is shown as string.
 #### Examples:
 
 Command line
-&lt;pre>echoraw Hello world!&lt;/pre>
+<pre>echoraw Hello world!</pre>
 In script
-&lt;pre>echoraw("Hello world!", function(res) {
+<pre>echoraw("Hello world!", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### echoshell
 
 Outputs message.
@@ -452,11 +452,11 @@ Outputs message.
 #### Examples:
 
 Command line
-&lt;pre>echoshell Hello world!&lt;/pre>
+<pre>echoshell Hello world!</pre>
 In script
-&lt;pre>echoshell("Hello world!", function(res) {
+<pre>echoshell("Hello world!", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### error
 
 Outputs message.
@@ -467,11 +467,11 @@ Outputs message.
 #### Examples:
 
 Command line
-&lt;pre>error Hello world!&lt;/pre>
+<pre>error Hello world!</pre>
 In script
-&lt;pre>error("Hello world!", function(res) {
+<pre>error("Hello world!", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### hidden
 
 Outputs invisible content. I.e. useful when you have to add hidden html markup.
@@ -482,11 +482,11 @@ Outputs invisible content. I.e. useful when you have to add hidden html markup.
 #### Examples:
 
 Command line
-&lt;pre>hidden &lt;input type="hidden" name="property" />&lt;/pre>
+<pre>hidden &lt;input type="hidden" name="property" /></pre>
 In script
-&lt;pre>hidden("&lt;input type="hidden" name="property" />", function(res) {
+<pre>hidden("&lt;input type="hidden" name="property" />", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### hr
 
 Adds &lt;hr /> tag to the console's output panel
@@ -497,9 +497,9 @@ Adds &lt;hr /> tag to the console's output panel
 #### Examples:
 
 Command line
-&lt;pre>hr&lt;/pre>
+<pre>hr</pre>
 In script
-&lt;pre>hr();&lt;/pre>
+<pre>hr();</pre>
 ### info
 
 Outputs message.
@@ -510,11 +510,11 @@ Outputs message.
 #### Examples:
 
 Command line
-&lt;pre>info Hello world!&lt;/pre>
+<pre>info Hello world!</pre>
 In script
-&lt;pre>info("Hello world!", function(res) {
+<pre>info("Hello world!", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### small
 
 Outputs message.
@@ -525,11 +525,11 @@ Outputs message.
 #### Examples:
 
 Command line
-&lt;pre>small Hello world!&lt;/pre>
+<pre>small Hello world!</pre>
 In script
-&lt;pre>small("Hello world!", function(res) {
+<pre>small("Hello world!", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### success
 
 Outputs message.
@@ -540,11 +540,11 @@ Outputs message.
 #### Examples:
 
 Command line
-&lt;pre>success Hello world!&lt;/pre>
+<pre>success Hello world!</pre>
 In script
-&lt;pre>success("Hello world!", function(res) {
+<pre>success("Hello world!", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### title
 
 Outputs message.
@@ -555,11 +555,11 @@ Outputs message.
 #### Examples:
 
 Command line
-&lt;pre>title Hello world!&lt;/pre>
+<pre>title Hello world!</pre>
 In script
-&lt;pre>title("Hello world!", function(res) {
+<pre>title("Hello world!", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### warning
 
 Outputs message.
@@ -570,11 +570,11 @@ Outputs message.
 #### Examples:
 
 Command line
-&lt;pre>warning Hello world!&lt;/pre>
+<pre>warning Hello world!</pre>
 In script
-&lt;pre>warning("Hello world!", function(res) {
+<pre>warning("Hello world!", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 - - -
 
 ## os
@@ -589,13 +589,13 @@ Sometimes you need to execute a series of commands, but you want to keep the con
 #### Examples:
 
 Command line
-&lt;pre>block start &amp;&amp; cd ../../ &amp;&amp; echo Do some stuff here &amp;&amp; block end&lt;/pre>
+<pre>block start &amp;&amp; cd ../../ &amp;&amp; echo Do some stuff here &amp;&amp; block end</pre>
 In script
-&lt;pre>block("start", function() {
+<pre>block("start", function() {
 	shell("cd ../../", function() {
 		block("end");
 	});
-});&lt;/pre>
+});</pre>
 ### cwd
 
 Returns the current working directory of auxilio-backend.
@@ -606,11 +606,11 @@ Returns the current working directory of auxilio-backend.
 #### Examples:
 
 Command line
-&lt;pre>cwd&lt;/pre>
+<pre>cwd</pre>
 In script
-&lt;pre>cwd(function(res) {
+<pre>cwd(function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### readfile
 
 Read content of a file.
@@ -621,11 +621,11 @@ Read content of a file.
 #### Examples:
 
 Command line
-&lt;pre>readfile ./README.md&lt;/pre>
+<pre>readfile ./README.md</pre>
 In script
-&lt;pre>readfile("./README.md", function(content) {
+<pre>readfile("./README.md", function(content) {
 	console.log(content);
-});&lt;/pre>
+});</pre>
 ### run
 
 Register or execute commands stored in external files. The files should contain valid javascript which is actually a function definition in the following format:<pre>function nameOfMyFunction(args) {
@@ -639,13 +639,13 @@ Register or execute commands stored in external files. The files should contain 
 #### Examples:
 
 Importing directory
-&lt;pre>run ./files&lt;/pre>
+<pre>run ./files</pre>
 Importing file
-&lt;pre>run ./files/myscript.js&lt;/pre>
+<pre>run ./files/myscript.js</pre>
 In script
-&lt;pre>run("./myfiles", function(res) {
+<pre>run("./myfiles", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### shell
 
 Executes shell command. Have in mind that once you type something in the console and it doesn't match any of the auxilio's commands it is send to the shell
@@ -656,11 +656,11 @@ Executes shell command. Have in mind that once you type something in the console
 #### Examples:
 
 Command line
-&lt;pre>shell ls&lt;/pre>
+<pre>shell ls</pre>
 In script
-&lt;pre>shell("ls", function(res) {
+<pre>shell("ls", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### tree
 
 Shows a directory tree.
@@ -671,17 +671,17 @@ Shows a directory tree.
 #### Examples:
 
 Command line
-&lt;pre>tree&lt;/pre>
+<pre>tree</pre>
 Showing files by type
-&lt;pre>tree \.css&lt;/pre>
+<pre>tree \.css</pre>
 Showing only two levels
-&lt;pre>tree 2&lt;/pre>
+<pre>tree 2</pre>
 Suppress the output to the console
-&lt;pre>tree suppressdisplay&lt;/pre>
+<pre>tree suppressdisplay</pre>
 In script
-&lt;pre>tree(2, function(res) {
+<pre>tree(2, function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### watch
 
 Watch directory or file for changes.
@@ -692,19 +692,19 @@ Watch directory or file for changes.
 #### Examples:
 
 Get the current watchers and their ids
-&lt;pre>watch&lt;/pre>
+<pre>watch</pre>
 Start watching
-&lt;pre>watch start ./ echo&lt;/pre>
+<pre>watch start ./ echo</pre>
 Start watching and call multiple callbacks
-&lt;pre>watch start ./ "jshint, echo"&lt;/pre>
+<pre>watch start ./ "jshint, echo"</pre>
 Stop watcher
-&lt;pre>watch stop 1&lt;/pre>
+<pre>watch stop 1</pre>
 Stop all watchers
-&lt;pre>watch stopall&lt;/pre>
+<pre>watch stopall</pre>
 In script
-&lt;pre>watch("start", "./", "echo", function(res) {
+<pre>watch("start", "./", "echo", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### writefile
 
 Write content to a file.
@@ -715,11 +715,11 @@ Write content to a file.
 #### Examples:
 
 Command line
-&lt;pre>writefile ./test.txt Sample text here.&lt;/pre>
+<pre>writefile ./test.txt Sample text here.</pre>
 In script
-&lt;pre>writefile("./test.txt", "Sample text here", function(res) {
+<pre>writefile("./test.txt", "Sample text here", function(res) {
 	console.log("File saved successfully.");
-});&lt;/pre>
+});</pre>
 - - -
 
 ## page
@@ -734,13 +734,13 @@ Clicks an element on the page and returns the result immediately. Use <i>filter<
 #### Examples:
 
 Command line
-&lt;pre>pageclick "body > .my-link-class"&lt;/pre>
+<pre>pageclick "body > .my-link-class"</pre>
 Filter the selected elements
-&lt;pre>pageclick "body > .my-link-class" "link label"&lt;/pre>
+<pre>pageclick "body > .my-link-class" "link label"</pre>
 In script
-&lt;pre>pageclick("body > .my-link-class", function(res) {
+<pre>pageclick("body > .my-link-class", function(res) {
 	console.log("Element clicked.");
-});&lt;/pre>
+});</pre>
 ### pageclickw
 
 Clicks an element on the page and waits till the page is updated. Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.
@@ -751,13 +751,13 @@ Clicks an element on the page and waits till the page is updated. Use <i>filter<
 #### Examples:
 
 Command line
-&lt;pre>pageclickw "body > .my-link-class"&lt;/pre>
+<pre>pageclickw "body > .my-link-class"</pre>
 Filter the selected elements
-&lt;pre>pageclickw "body > .my-link-class" "link label"&lt;/pre>
+<pre>pageclickw "body > .my-link-class" "link label"</pre>
 In script
-&lt;pre>pageclickw("body > .my-link-class", function() {
+<pre>pageclickw("body > .my-link-class", function() {
 	console.log("Element clicked.");
-});&lt;/pre>
+});</pre>
 ### pagecontains
 
 Checks if there is an element matching the provided selector and containing the provided text.
@@ -768,11 +768,11 @@ Checks if there is an element matching the provided selector and containing the 
 #### Examples:
 
 Command line
-&lt;pre>pagecontains "body > a" "my link"&lt;/pre>
+<pre>pagecontains "body > a" "my link"</pre>
 In script
-&lt;pre>pagecontains("body > a", "my link", function(res) {
+<pre>pagecontains("body > a", "my link", function(res) {
 	console.log(res ? "yes" : "no");
-});&lt;/pre>
+});</pre>
 ### pageexpect
 
 Checks if there is an element matching the provided selector. Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element
@@ -783,11 +783,11 @@ Checks if there is an element matching the provided selector. Use <i>filter</i> 
 #### Examples:
 
 Command line
-&lt;pre>pageexpect a.my-link-class label&lt;/pre>
+<pre>pageexpect a.my-link-class label</pre>
 In script
-&lt;pre>pageexpect("a.my-link-class", "label, function(res) {
+<pre>pageexpect("a.my-link-class", "label, function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### pagehighlight
 
 Highlights element/elements on the page. Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.
@@ -798,11 +798,11 @@ Highlights element/elements on the page. Use <i>filter</i> parameter to filter t
 #### Examples:
 
 Command line
-&lt;pre>pagehighlight a&lt;/pre>
+<pre>pagehighlight a</pre>
 In script
-&lt;pre>pagehighlight("a", function(res) {
+<pre>pagehighlight("a", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### pageinsertcss
 
 Inserts css code in the context of the current page
@@ -813,11 +813,11 @@ Inserts css code in the context of the current page
 #### Examples:
 
 Command line
-&lt;pre>pageinsertcss body { background: #F00 !important; }&lt;/pre>
+<pre>pageinsertcss body { background: #F00 !important; }</pre>
 In script
-&lt;pre>pageinsertcss("body { background: #F00 !important; }", function() {
+<pre>pageinsertcss("body { background: #F00 !important; }", function() {
 	console.log("CSS applied.");
-});&lt;/pre>
+});</pre>
 ### pageinsertjs
 
 Executes javascript code in the context of the current page
@@ -828,11 +828,11 @@ Executes javascript code in the context of the current page
 #### Examples:
 
 Command line
-&lt;pre>pageinsertjs "document.querySelector('body').click();"&lt;/pre>
+<pre>pageinsertjs "document.querySelector('body').click();"</pre>
 In script
-&lt;pre>pageinsertjs("document.querySelector('body').click();", function(res) {
+<pre>pageinsertjs("document.querySelector('body').click();", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### pageinsertjsw
 
 Executes javascript code in the context of the current page and waits till the current page is updated
@@ -843,11 +843,11 @@ Executes javascript code in the context of the current page and waits till the c
 #### Examples:
 
 Command line
-&lt;pre>pageinsertjsw "document.querySelector('body').click();"&lt;/pre>
+<pre>pageinsertjsw "document.querySelector('body').click();"</pre>
 In script
-&lt;pre>pageinsertjsw("document.querySelector('body').click();", function(res) {
+<pre>pageinsertjsw("document.querySelector('body').click();", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 ### pagequery
 
 Returns the number of matched elements and the elements in raw html string format. Use <i>filter</i> parameter to filter the selected elements. Actually performs <i>indexOf</i> method agains the html markup of the selected element.
@@ -858,11 +858,11 @@ Returns the number of matched elements and the elements in raw html string forma
 #### Examples:
 
 Command line
-&lt;pre>pagequery a "label of the link"&lt;/pre>
+<pre>pagequery a "label of the link"</pre>
 In script (checks if there is links on the page)
-&lt;pre>pagequery("a", function(res) {
+<pre>pagequery("a", function(res) {
 	console.log(res);
-});&lt;/pre>
+});</pre>
 - - -
 
 ## tabs
@@ -877,11 +877,11 @@ Loads another page in the current tab.
 #### Examples:
 
 Command line
-&lt;pre>load github.com&lt;/pre>
+<pre>load github.com</pre>
 In script
-&lt;pre>load("github.com", function() {
+<pre>load("github.com", function() {
 	console.log("new page loaded");
-});&lt;/pre>
+});</pre>
 ### newtab
 
 Creates a new tab.
@@ -892,11 +892,11 @@ Creates a new tab.
 #### Examples:
 
 Command line
-&lt;pre>newtab github.com&lt;/pre>
+<pre>newtab github.com</pre>
 In script
-&lt;pre>newtab("github.com", "false", function() {
+<pre>newtab("github.com", "false", function() {
 	console.log("new tab loaded");
-});&lt;/pre>
+});</pre>
 ### refresh
 
 Refreshes the current tab's page
@@ -907,11 +907,11 @@ Refreshes the current tab's page
 #### Examples:
 
 Command line
-&lt;pre>refresh&lt;/pre>
+<pre>refresh</pre>
 In script
-&lt;pre>refresh(function() {
+<pre>refresh(function() {
 	console.log("The current page is refreshed.");
-});&lt;/pre>
+});</pre>
 ### screenshot
 
 Makes a screenshot of the current tab and loads it in a new tab.
@@ -922,8 +922,8 @@ Makes a screenshot of the current tab and loads it in a new tab.
 #### Examples:
 
 Command line
-&lt;pre>screenshot&lt;/pre>
+<pre>screenshot</pre>
 In script
-&lt;pre>screenshot(function() {
+<pre>screenshot(function() {
 	console.log("The screenshot is made.");
-});&lt;/pre>
+});</pre>

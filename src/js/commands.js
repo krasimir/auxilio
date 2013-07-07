@@ -325,7 +325,7 @@ Commands.register("man", {
 						for(var j=0; example = command.man.examples[j]; j++) {
 							var code = example.code.replace(/</g, '&lt;').replace(/&&/g, '&amp;&amp;');
 							markdown += example.text + "\n";
-							markdown += "&lt;pre>" + code + "&lt;/pre>\n";
+							markdown += "<pre>" + code + "</pre>\n";
 						}
 					}
 				}
