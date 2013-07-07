@@ -1876,16 +1876,16 @@ Commands.register("run", {
 		var _path = args.join(" ");
 
 		var evalJSCode = function(js, parameter, callback) {
-			var funcResult = null;
 			try {
 				eval("var auxilioFunction=" + js);
 				if(typeof auxilioFunction !== "undefined") {
-					funcResult = auxilioFunction(parameter);
+					auxilioFunction(parameter, callback);
+					return;
 				}
 			} catch(e) {
 				exec("error Error executing<pre>" + js + "</pre>" + e.message + "<pre>" + e.stack + "</pre>");
-			}
-			if(callback) callback(funcResult);
+				if(callback) callback();
+			}			
 		}
 		var execFile = function(path, callback) {
 			exec("readfile " + path, function(content) {
