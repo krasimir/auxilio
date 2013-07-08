@@ -25,12 +25,4 @@ var attachGotoEvents = function() {
 	};
 	setTimeout(attachGotoEvents, 500);
 }
-var chain = function(funcs, callback) {
-	if(funcs.length === 0) {
-		callback();
-		return;
-	}
-	var f = funcs.shift();
-	f();
-}
 attachGotoEvents();

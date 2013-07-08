@@ -1936,8 +1936,15 @@ Commands.register("run", {
 					run: function(args, callback) {
 						evalJSCode(js, args, callback);
 					},
-					man: function() {
-						return '';
+					man: {
+						desc: fileName,
+						format: fileName,
+						examples: [
+							{text: 'Command line', code: fileName},
+							{text: 'Source code', code: content},
+						],
+						returns: 'unknown',
+						group: 'add-ons'
 					}	
 				});
 				Autocomplete.prepareDictionary();
