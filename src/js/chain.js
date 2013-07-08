@@ -61,28 +61,3 @@ var Chain = (function() {
 	}
 
 })();
-
-/* Example */
-
-/*
-var chainFinished = function(res) {
-	console.log("End", res);
-}
-var customFunc = function(arg1, arg2, callback) {
-	console.log("customFunc", arg1, arg2);
-	callback("result(customFunc)");
-}
-
-Chain.on("done", chainFinished).run(
-	function(res, next) {
-		console.log("A", res);
-		setTimeout(function() {
-			next("result(A)");
-		}, 2000)		
-	},
-	[customFunc, "Hello", "World"],
-	function(res, next) {
-		console.log("B", res);
-		next("result(B)");
-	}
-);*/

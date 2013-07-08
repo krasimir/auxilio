@@ -4,6 +4,10 @@
 
 Extension to Google Chrome Developer Tools.
 
+## In Google Chrome web store
+
+[Auxilio](https://chrome.google.com/webstore/detail/auxilio/ddkgloamdhkoohfgmopdicfcinddpnhh)
+
 ## Installation
 
   - Download the source code of the extension (you will use the content of the *src* folder)
