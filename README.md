@@ -2,7 +2,7 @@
 
 - - -
 
-Extension to Google Chrome Developer Tools. If you wonder what you can do with it simple open Auxilio tab in DevTools and type *man*.
+Extension to Google Chrome Developer Tools. If you wonder what you can do with it, simply open Auxilio tab in DevTools and type *man*.
 
 ## In Google Chrome web store
 
