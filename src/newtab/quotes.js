@@ -188,5 +188,7 @@ quotes =[
 	["80-90% of the end-user response time is spent downloading all the components in the page: images, stylesheets, scripts, Flash, etc.", "Yahoo"],
 	["When you are finished changing, you’re finished.", "Benjamin Franklin"],
 	["Web developers are masters at taking something created for one purpose and using it to accomplish other things.", "Tyson Matanich"],
-	["There are no tiny features when you’re doing things properly.", "insideintercom.io"]
+	["There are no tiny features when you’re doing things properly.", "insideintercom.io"],
+	["To find the reason causing the bug is more valuable then fixing the bug itself. Isn't it?", "Krasimir Tsonev"],
+	["Knowing \"HTML5\" is the equivalent of yesteryear's \"Web 2.0\"", "David Walsh"]
 ];
