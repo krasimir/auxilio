@@ -8,9 +8,10 @@ function testingGitHubSearching(args, callback) {
 		it("load github.com", function(done) {
 			load("github.com", done);
 		});
-		it("shoud check something", function() {
+		it("shoud check something", function(done) {
 			expect(1 == 1).toBe(true);
 			done();
-		})
-	})	
+		});
+	});
+	callback();
 }

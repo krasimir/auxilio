@@ -1,4 +1,4 @@
-function jasmineTest(args) {
+function jasmineTest(args, callback) {
 	describe("A test suite", function() {
 		it("should echo something to the console", function(done) {
 			exec("echo That's coming from a jasmine test.", function() {
@@ -11,5 +11,6 @@ function jasmineTest(args) {
 				done();
 			})
 		});
-	})	
+	});
+	callback();
 }
