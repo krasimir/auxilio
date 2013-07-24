@@ -30,7 +30,6 @@ Commands.register("profile", {
 				if(data.profiledata && data.profiledata !== "") {
 					callback(data.profiledata);
 				} else {
-					exec('info There is no profile set.');
 					callback(null);
 				}
 			});
