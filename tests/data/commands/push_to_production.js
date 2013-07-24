@@ -4,7 +4,7 @@ function nameOfCommand(args, callback) {
 		error("Sorry, please type a commit message.");
 		callback();
 	} else {
-		echo("Pushing to production");
+		echo("Pushing to production with message = '" + commitMessage + "'");
 		callback();
 	}    
 }
