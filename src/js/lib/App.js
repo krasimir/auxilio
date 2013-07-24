@@ -4,6 +4,7 @@
 var App = {
 	commandsStoreInHistory: 50,
 	global: {}, // storage for global variables
+	commandsToHide: 0,
 	init: function() {
 		this.command = document.getElementById("js-command");
 		this.output = document.getElementById("js-console-output-content");
@@ -134,11 +135,18 @@ var App = {
 				// outputing the command
 				if(!self.isHiddenCommand(command)) {
 					var linkId = _.uniqueId("commandlink");
-					exec("small <a href='#' id='" + linkId + "'>" + str + "</a>");
+					if(self.commandsToHide === 0) {
+						exec("small <a href='#' id='" + linkId + "'>" + str + "</a>");
+					} else {
+						self.commandsToHide -= 1;
+					}
 					(function(command, linkId){
-						document.querySelector("#" + linkId).addEventListener("click", function() {
-							exec(command);
-						});
+						var commandElement = document.querySelector("#" + linkId);
+						if(commandElement) {
+							document.querySelector("#" + linkId).addEventListener("click", function() {
+								exec(command);
+							});
+						}
 					})(str, linkId);
 				}
 
@@ -264,5 +272,8 @@ var App = {
 	},
 	commandInputFocus: function() {
 		this.command.focus();
+	},
+	hideNextCommands: function(num) {
+		this.commandsToHide = num;
 	}
 }

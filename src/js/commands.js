@@ -1947,6 +1947,7 @@ Commands.register("run", {
 			var self = this;
 			Shell.suppressErrorsOnce(); // suppress the errors if cd to a file
 			this.totalFiles = this.totalFilesProcessed = 0;
+			App.hideNextCommands(2);
 			exec("cd " + dir, function(res) {
 				if(res.stderr && res.stderr != '') {
 					// tries to import a specific file
