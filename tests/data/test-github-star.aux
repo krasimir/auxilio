@@ -1,8 +1,0 @@
-load https://github.com/krasimir/auxilio
-var getLinkTagValue "function f(tag) { var regex = /(<([^>]+)>)/ig; var result = tag.replace(regex, ''); return result; }"
-pagequery ".starring-container .social-count" && read raw[0] && execjs $$getLinkTagValue && var currentStarValue
-load https://github.com/krasimir/auxilio
-pageclick "a[title='Star this repo']"
-delay 1500
-refresh
-pagequery ".starring-container .social-count" && read raw[0] && execjs $$getLinkTagValue && compare "Result:" $$currentStarValue <

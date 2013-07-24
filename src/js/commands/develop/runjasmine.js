@@ -1,4 +1,4 @@
-Commands.register("runjasmine", {
+Commands.register("jasmine", {
 	requiredArguments: 1,
 	lookForQuotes: false,
 	concatArgs: true,
