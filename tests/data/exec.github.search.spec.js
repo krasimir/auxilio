@@ -1,9 +1,9 @@
 function testingGitHubSearching(args, callback) {
 	describe("Testing GitHub searching", function() {
-		it("load github.com", function(done) {
+		it("should load github.com", function(done) {
 			load("github.com", done);
 		});
-		it("shoud type auxilio in the search bar", function(done) {
+		it("shoud type 'auxilio' in the search bar", function(done) {
 			pageinsertjs('document.querySelector("#js-command-bar-field").value="auxilio";', done);
 		});
 		it("shoud submit the form", function(done) {
