@@ -13,6 +13,7 @@ function testingGitHubSearching(args, callback) {
 			pagequery('h3', 'krasimir/auxilio', function(res) {
 				expect(res.elements >= 1).toBe(true);
 				done();
+				screenshot();
 			})
 		});
 	});
