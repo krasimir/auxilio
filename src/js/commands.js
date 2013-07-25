@@ -1983,6 +1983,7 @@ Commands.register("run", {
 									}
 								}
 							}
+							App.hideNextCommands(2);
 							exec("cd " + cwd, function() {
 								parseDir(res.result, dir);
 							});
