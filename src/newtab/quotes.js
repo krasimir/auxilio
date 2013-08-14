@@ -190,5 +190,7 @@ quotes =[
 	["Web developers are masters at taking something created for one purpose and using it to accomplish other things.", "Tyson Matanich"],
 	["There are no tiny features when you’re doing things properly.", "insideintercom.io"],
 	["To find the reason causing the bug is more valuable then fixing the bug itself. Isn't it?", "Krasimir Tsonev"],
-	["Knowing \"HTML5\" is the equivalent of yesteryear's \"Web 2.0\"", "David Walsh"]
+	["Knowing \"HTML5\" is the equivalent of yesteryear's \"Web 2.0\"", "David Walsh"],
+	["Content management isn't technical problem. It's a people problem.", "Mark Boulton"],
+	["Don't Comment Your Code - Write Better Code", "Sam Koblenski"]
 ];
