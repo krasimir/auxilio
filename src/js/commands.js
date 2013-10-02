@@ -1884,8 +1884,8 @@ Commands.register("run", {
 	totalFiles: 0,
 	totalFilesProcessed: 0,
 	run: function(args, callback) {
-
-		var _path = args.join(" ");
+		
+		var _path = args.shift();
 
 		var evalJSCode = function(js, parameter, callback) {
 			try {
@@ -1907,7 +1907,7 @@ Commands.register("run", {
 					callback();
 					return;
 				}
-				evalJSCode(js, null, callback);
+				evalJSCode(js, args, callback);
 			});
 		}
 		var registerFile = function(path, callback) {

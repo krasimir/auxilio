@@ -192,5 +192,10 @@ quotes =[
 	["To find the reason causing the bug is more valuable then fixing the bug itself. Isn't it?", "Krasimir Tsonev"],
 	["Knowing \"HTML5\" is the equivalent of yesteryear's \"Web 2.0\"", "David Walsh"],
 	["Content management isn't technical problem. It's a people problem.", "Mark Boulton"],
-	["Don't Comment Your Code - Write Better Code", "Sam Koblenski"]
+	["Don't Comment Your Code - Write Better Code", "Sam Koblenski"],
+	["A developed country is not a place where the poor have cars. It’s where the rich use public transportation.", "Enrique Peñalosa"]
+	["The most reusable components are those with class names that are independent of the content.", "Nicolas Gallagher"],
+	["Writing code means always having to say you're sorry.", "Paul Ford"],
+	["Success is getting what you want. Happiness is wanting what you get.", "Joshua Davidson"],
+	["Keep things as simple as possible. But not simpler.", "Albert Einstein"]
 ];
