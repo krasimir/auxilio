@@ -5,6 +5,10 @@ module.exports = function(grunt) {
 			commands: {
 				src: ['src/js/commands/**/*.js'],
 				dest: 'src/js/commands.js'
+			},
+			readme: {
+				src: ['tpl/README.md', 'commands.md'],
+				dest: 'README.md'	
 			}
 		},
 		less: {

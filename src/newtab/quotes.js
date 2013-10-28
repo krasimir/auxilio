@@ -197,5 +197,6 @@ quotes =[
 	["The most reusable components are those with class names that are independent of the content.", "Nicolas Gallagher"],
 	["Writing code means always having to say you're sorry.", "Paul Ford"],
 	["Success is getting what you want. Happiness is wanting what you get.", "Joshua Davidson"],
-	["Keep things as simple as possible. But not simpler.", "Albert Einstein"]
+	["Keep things as simple as possible. But not simpler.", "Albert Einstein"],
+	[" We all need to be open to new learnings, new approaches, new best practices and we need to be able to share them.", "Not rules, tools."]
 ];

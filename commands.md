@@ -1,7 +1,3 @@
-# Auxilio commands
-
-- - -
-
 ## common
 
 ### clear
