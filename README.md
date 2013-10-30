@@ -2,7 +2,69 @@
 
 - - -
 
-Extension to Google Chrome Developer Tools. If you wonder what you can do with it, simply open Auxilio tab in DevTools and type *man*.
+I'll be honest and I'll say that I'm a bit lazy sometimes. I'm one of those developers which don't like to repeat same actions again and again. There are dozen of things which I have to do while working on a project. Very often I'm covering the development of several applications and have to switch between them. It's really annoying process. I hate to have many opened tabs in my browser, many consoles or several code editors. I always try to improve my productivity by automating tasks. I think that even switching between opened applications takes too much time.
+
+[Auxilio](https://chrome.google.com/webstore/detail/auxilio/ddkgloamdhkoohfgmopdicfcinddpnhh) is an extension for [Google Chrome](https://www.google.com/intl/en/chrome/browser/) which helps me to solve some of the above problems. During the development I realize that it's much more then a tool for workflow optimization. Here is what I'm using it for:
+
+  - interactive shell/console
+  
+  - file browser
+  - front-end testing
+  - real-time code editing
+  - git helper
+  - project manager / workflow optimization
+  - profiling
+  - marker
+  - playing tetris :)
+
+Before to give you more details about every of the items above, let me clarify how everything works. [Auxilio](https://chrome.google.com/webstore/detail/auxilio/ddkgloamdhkoohfgmopdicfcinddpnhh) has two parts. The first one is of course an extension of my favorite browser and the second one is a nodejs application, which I called *auxilio-backend*. The extension uses web sockets ([socket.io](http://socket.io/)) and connects to the node app. You can do a lot of stuff inside your browser. However, there are some tasks which are not permitted. For example you can't watch file for changes or execute shell commands. For these things I decided to use node, because:
+  
+  - it's simply JavaScript and I'm able to write whatever I want 
+  - it has a lot of modules, which I can use.
+
+If I need to do something inside the browser I'm using the [Google's APIs](https://developer.chrome.com/extensions/getstarted.html), while the back-end is taking care about the OS related stuff. The extension just sends commands and gets response.
+
+![Auxilio](http://krasimirtsonev.com/blog/articles/Auxilio/architecture.jpg)
+
+## Installation
+
+### Auxilio back-end
+
+First of all install NodeJS. It's pretty easy. Just go to [nodejs.org](http://nodejs.org/) and click the big green button. The back-end is distributed as node [package](http://npmjs.org), so you can easily install it via the node package manager.
+
+  npm install -g auxilio-backend
+
+Once everything completes simply run it via
+
+  auxilio-backend
+
+You should see
+
+    info  - socket.io started
+    Auxilio back-end started.
+
+### Auxilio Chrome extension
+
+There are two ways to use an extension for Chrome.
+
+  - Open [this url](https://chrome.google.com/webstore/detail/auxilio/ddkgloamdhkoohfgmopdicfcinddpnhh) and click *Add to Chrome* button in the upper right corner.<br />
+  ![Auxilio](http://krasimirtsonev.com/blog/articles/Auxilio/installing1.jpg)
+  - Download the source code from [the GitHub repo](https://github.com/krasimir/auxilio). Open *chrome://extensions* page and check *Developer mode*. After that click on *Load unpacked extension* and browse the */src* directory.<br />
+  ![Auxilio](http://krasimirtsonev.com/blog/articles/Auxilio/installing2.jpg)
+
+## Usage
+
+### New tab page
+
+When you open a new tab Chrome usually shows most visited pages. There are some other things like recent closed pages or installed apps, but actually I didn't use them very often. That's why I decided to customize that part of the browser. The new page shows the current date and time, good quotes made by smart developers and of course a button which points to the old page if needed.
+
+![Auxilio](http://krasimirtsonev.com/blog/articles/Auxilio/newtab.jpg) 
+
+### DevTools tab
+
+DevTools is a great instrument for programmers. Luckily there is an [API](https://developer.chrome.com/extensions/devtools.html) which we can use to add new tabs. It is also good that you can open the panel with shortcuts like *Ctrl + J* or *Ctrl + I*. However, there is no way to associate a shortcut to your custom tab. So, what I'm doing is to open DevTools and use *Ctrl + [* or *Ctrl + ]* to navigation between the tools.
+
+![Auxilio](http://krasimirtsonev.com/blog/articles/Auxilio/devtools.jpg)
 
 ## In Google Chrome web store
 
@@ -25,6 +87,7 @@ Follow the link above and click the green button *Add to Chrome* or check the st
 	npm install -g auxilio-backend
 
 # Documentation
+
 ## common
 
 ### clear
