@@ -86,6 +86,10 @@ Follow the link above and click the green button *Add to Chrome* or check the st
 
 	npm install -g auxilio-backend
 
+# Resources
+
+An in-depth article about the extension - [link](http://krasimirtsonev.com/blog/article/Auxilio-Chrome-extension-or-how-I-boost-my-productivity)
+
 # Documentation
 
 ## common
